@@ -76,3 +76,7 @@ include = [
 	"build.rs",
 	"Cargo.toml",
 ]
+
+[features]
+default = []
+Debug = ["unbug/enable"]
