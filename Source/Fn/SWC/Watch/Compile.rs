@@ -1,6 +1,7 @@
 #[tracing::instrument(skip(Option))]
 pub async fn Fn(Option:super::Option) -> Result<()> {
 	let (Allow, mut Mark) = mpsc::unbounded_channel();
+
 	let Queue = FuturesUnordered::new();
 
 	let Compiler = Arc::new(crate::Struct::SWC::Compiler::new(Option.config.clone()));
@@ -31,6 +32,7 @@ pub async fn Fn(Option:super::Option) -> Result<()> {
 						},
 						Err(e) => {
 							error!("Compilation error for {}: {}", file, e);
+
 							if let Err(e) = Allow.send((file.clone(), Err(e))) {
 								error!("Cannot send compilation error: {}", e);
 							}
@@ -39,6 +41,7 @@ pub async fn Fn(Option:super::Option) -> Result<()> {
 				},
 				Err(e) => {
 					error!("Failed to read file {}: {}", file, e);
+
 					if let Err(e) = Allow.send((file.clone(), Err(e.into()))) {
 						error!("Cannot send file read error: {}", e);
 					}
@@ -49,20 +52,24 @@ pub async fn Fn(Option:super::Option) -> Result<()> {
 
 	tokio::spawn(async move {
 		Queue.collect::<Vec<_>>().await;
+
 		drop(Allow);
 	});
 
 	let mut Count = 0;
+
 	let mut Error = 0;
 
 	while let Some((file, result)) = Mark.recv().await {
 		match result {
 			Ok(output) => {
 				info!("Compiled: {} -> {}", file, output);
+
 				Count += 1;
 			},
 			Err(e) => {
 				warn!("Failed to compile {}: {}", file, e);
+
 				Error += 1;
 			},
 		}

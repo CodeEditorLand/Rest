@@ -101,7 +101,9 @@ impl Compiler {
 		let Elapsed = Begin.elapsed();
 
 		let mut Outlook = self.Outlook.lock().await;
+
 		Outlook.Count += 1;
+
 		Outlook.Elapsed += Elapsed;
 
 		debug!("Compiled {} in {:?}", File, Elapsed);

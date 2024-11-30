@@ -2,8 +2,10 @@ async fn Fn() -> anyhow::Result<()> {
 	tracing_subscriber::fmt::init();
 
 	let args:Vec<String> = std::env::args().collect();
+
 	if args.len() != 2 {
 		error!("Usage: {} <directory>", args[0]);
+
 		std::process::exit(1);
 	}
 
@@ -24,6 +26,7 @@ async fn Fn() -> anyhow::Result<()> {
 
 	// Initial compilation
 	info!("Starting initial compilation...");
+
 	Watch::Compile::Fn(options.clone()).await?;
 
 	info!("Initial compilation complete. Watching for changes...");

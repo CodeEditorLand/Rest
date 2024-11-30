@@ -33,6 +33,7 @@
 /// results.
 pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 	let (Allow, mut Mark) = tokio::sync::mpsc::unbounded_channel();
+
 	let Queue = futures::stream::FuturesUnordered::new();
 
 	for Entry in Entry
@@ -65,6 +66,7 @@ pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 
 	tokio::spawn(async move {
 		Queue.collect::<Vec<_>>().await;
+
 		drop(Allow);
 	});
 
