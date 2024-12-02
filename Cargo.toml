@@ -7,21 +7,21 @@ name = "Rest"
 path = "Source/Library.rs"
 
 [dependencies]
-clap = { features = ["derive"], version = "4.5.18" }
+clap = { features = ["derive"], version = "4.5.21" }
 walkdir = "2.5.0"
-futures = "0.3.30"
+futures = "0.3.31"
 rayon = "1.10.0"
-tokio = { version = "1.40.0", features = ["full"] }
+tokio = { version = "1.41.1", features = ["full"] }
 git2 = { version = "0.19.0" }
 num_cpus = "1.16.0"
-regex = "1.10.6"
+regex = "1.11.1"
 dashmap = "6.1.0"
 itertools = "0.13.0"
 chrono = "0.4.38"
-notify = "6.1.1"
+notify = "7.0.0"
 globset = "0.4.15"
-tracing = "0.1.40"
-tracing-subscriber = "0.3.18"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
 
 # swc_common = { version = "*", path = "../../Dependency/SWC/Dependency/SWC/crates/swc_common" }
 # swc_ecma_ast = { version = "*", path = "../../Dependency/SWC/Dependency/SWC/crates/swc_ecma_ast" }
@@ -34,22 +34,22 @@ tracing-subscriber = "0.3.18"
 # swc_ecma_transforms_typescript = { version = "*", path = "../../Dependency/SWC/Dependency/SWC/crates/swc_ecma_transforms_typescript" }
 # swc_ecma_visit = { version = "*", path = "../../Dependency/SWC/Dependency/SWC/crates/swc_ecma_visit" }
 
-swc_common = { version = "1.0.0" }
-swc_ecma_ast = { version = "1.0.0" }
-swc_ecma_codegen = { version = "1.0.0" }
-swc_ecma_parser = { version = "1.0.1" }
-swc_ecma_transforms_proposal = { version = "1.0.1" }
-swc_ecma_transforms_typescript = { version = "1.0.1" }
-swc_ecma_visit = { version = "1.0.0" }
-swc_ecma_transforms_base = { version = "1.0.0", features = ["concurrent"] }
+swc_common = { version = "5.0.0" }
+swc_ecma_ast = { version = "5.0.0" }
+swc_ecma_codegen = { version = "5.0.0" }
+swc_ecma_parser = { version = "6.0.0" }
+swc_ecma_transforms_proposal = { version = "6.0.0" }
+swc_ecma_transforms_typescript = { version = "6.0.0" }
+swc_ecma_visit = { version = "5.0.0" }
+swc_ecma_transforms_base = { version = "6.0.0", features = ["concurrent"] }
 
-serde = "1.0.210"
-anyhow = "1.0.89"
-serde_json = "1.0.128"
+serde = "1.0.215"
+anyhow = "1.0.93"
+serde_json = "1.0.133"
 unbug = { version = "0.3.0", features = ["enable"] }
 
 [build-dependencies]
-serde = { version = "1.0.210", features = ["derive"] }
+serde = { version = "1.0.215", features = ["derive"] }
 toml = "0.8.19"
 
 [lib]
