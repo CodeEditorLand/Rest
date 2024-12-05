@@ -1,5 +1,3 @@
-#![allow(non_snake_case)]
-
 #[derive(Deserialize)]
 struct Toml {
 	package:Package,
@@ -15,13 +13,11 @@ fn main() {
 
 	println!(
 		"cargo:rustc-env=CARGO_PKG_VERSION={}",
-		(toml::from_str::<Toml>(&fs::read_to_string("Cargo.toml").expect("Cannot Cargo.toml."))
-			.expect("Cannot toml."))
-		.package
-		.version
+		toml::from_str::<Toml>(&std::fs::read_to_string("Cargo.toml").expect("Cannot Cargo.toml."))
+			.expect("Cannot toml.")
+			.package
+			.version
 	);
 }
-
-use std::fs;
 
 use serde::Deserialize;
