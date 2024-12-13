@@ -7,7 +7,7 @@ name = "Rest"
 path = "Source/Library.rs"
 
 [dependencies]
-clap = { features = ["derive"], version = "4.5.22" }
+clap = { features = ["derive"], version = "4.5.23" }
 walkdir = { version = "2.5.0" }
 futures = { version = "0.3.31" }
 rayon = { version = "1.10.0" }
@@ -17,7 +17,7 @@ num_cpus = { version = "1.16.0" }
 regex = { version = "1.11.1" }
 dashmap = { version = "6.1.0" }
 itertools = { version = "0.13.0" }
-chrono = { version = "0.4.38" }
+chrono = { version = "0.4.39" }
 notify = { version = "7.0.0" }
 globset = { version = "0.4.15" }
 tracing = { version = "0.1.41" }
@@ -41,15 +41,15 @@ swc_ecma_parser = { version = "6.0.0" }
 swc_ecma_transforms_proposal = { version = "6.0.0" }
 swc_ecma_transforms_typescript = { version = "6.0.0" }
 swc_ecma_visit = { version = "5.0.0" }
-swc_ecma_transforms_base = { version = "6.0.1", features = ["concurrent"] }
+swc_ecma_transforms_base = { version = "6.0.2", features = ["concurrent"] }
 
-serde = { version = "1.0.215" }
+serde = { version = "1.0.216" }
 anyhow = { version = "1.0.94" }
 serde_json = { version = "1.0.133" }
-unbug = { version = "0.3.0", features = ["enable"] }
+unbug = { version = "0.4.0", features = ["enable"] }
 
 [build-dependencies]
-serde = { version = "1.0.215", features = ["derive"] }
+serde = { version = "1.0.216", features = ["derive"] }
 toml = { version = "0.8.19" }
 
 [lib]
