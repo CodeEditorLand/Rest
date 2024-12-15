@@ -48,18 +48,18 @@ use std::{
 use futures::stream::FuturesUnordered;
 use notify::{Config, RecommendedWatcher, RecursiveMode};
 use serde::{Deserialize, Serialize};
-use swc_common::{FileName, FilePathMapping, Mark, SourceMap, Span, DUMMY_SP};
+use swc_common::{DUMMY_SP, FileName, FilePathMapping, Mark, SourceMap, Span};
 use swc_ecma_ast::EsVersion;
-use swc_ecma_codegen::{text_writer::JsWriter, Emitter};
-use swc_ecma_parser::{lexer::Lexer, Parser, StringInput, Syntax, TsConfig};
+use swc_ecma_codegen::{Emitter, text_writer::JsWriter};
+use swc_ecma_parser::{Parser, StringInput, Syntax, TsConfig, lexer::Lexer};
 use swc_ecma_transforms_base::{
-	helpers::{inject_helpers, InjectHelpers},
+	helpers::{InjectHelpers, inject_helpers},
 	resolver,
 };
 use swc_ecma_transforms_proposal::decorators;
 use tokio::{
 	fs,
-	sync::{mpsc, Mutex},
+	sync::{Mutex, mpsc},
 	task,
 };
 use tracing::{debug, error, info, instrument, warn};
