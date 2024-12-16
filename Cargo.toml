@@ -80,4 +80,3 @@ include = [
 
 [features]
 default = []
-Debug = ["unbug/enable"]
