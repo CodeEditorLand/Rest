@@ -46,7 +46,7 @@ swc_ecma_transforms_base = { version = "6.0.2", features = ["concurrent"] }
 serde = { version = "1.0.216" }
 anyhow = { version = "1.0.94" }
 serde_json = { version = "1.0.133" }
-unbug = { version = "0.4.0", features = ["enable"] }
+unbug = { version = "0.4.0" }
 
 [build-dependencies]
 serde = { version = "1.0.216", features = ["derive"] }
