@@ -44,8 +44,8 @@ swc_ecma_visit = { version = "5.0.0" }
 swc_ecma_transforms_base = { version = "6.0.2", features = ["concurrent"] }
 
 serde = { version = "1.0.216" }
-anyhow = { version = "1.0.94" }
-serde_json = { version = "1.0.133" }
+anyhow = { version = "1.0.95" }
+serde_json = { version = "1.0.134" }
 unbug = { version = "0.4.0" }
 
 [build-dependencies]
