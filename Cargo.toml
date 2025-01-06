@@ -12,11 +12,11 @@ walkdir = { version = "2.5.0" }
 futures = { version = "0.3.31" }
 rayon = { version = "1.10.0" }
 tokio = { version = "1.42.0", features = ["full"] }
-git2 = { version = "0.19.0" }
+git2 = { version = "0.20.0" }
 num_cpus = { version = "1.16.0" }
 regex = { version = "1.11.1" }
 dashmap = { version = "6.1.0" }
-itertools = { version = "0.13.0" }
+itertools = { version = "0.14.0" }
 chrono = { version = "0.4.39" }
 notify = { version = "7.0.0" }
 globset = { version = "0.4.15" }
@@ -35,21 +35,21 @@ tracing-subscriber = "0.3.19"
 # swc_ecma_visit = { version = "*", path = "../../Dependency/SWC/Dependency/SWC/crates/swc_ecma_visit" }
 
 swc_common = { version = "5.0.0" }
-swc_ecma_ast = { version = "5.0.0" }
-swc_ecma_codegen = { version = "5.0.0" }
+swc_ecma_ast = { version = "5.0.1" }
+swc_ecma_codegen = { version = "5.0.1" }
 swc_ecma_parser = { version = "6.0.1" }
 swc_ecma_transforms_proposal = { version = "6.0.0" }
 swc_ecma_transforms_typescript = { version = "6.0.0" }
 swc_ecma_visit = { version = "5.0.0" }
 swc_ecma_transforms_base = { version = "6.0.2", features = ["concurrent"] }
 
-serde = { version = "1.0.216" }
+serde = { version = "1.0.217" }
 anyhow = { version = "1.0.95" }
 serde_json = { version = "1.0.134" }
 unbug = { version = "0.4.0" }
 
 [build-dependencies]
-serde = { version = "1.0.216", features = ["derive"] }
+serde = { version = "1.0.217", features = ["derive"] }
 toml = { version = "0.8.19" }
 
 [lib]
