@@ -18,7 +18,7 @@ regex = { version = "1.11.1" }
 dashmap = { version = "6.1.0" }
 itertools = { version = "0.14.0" }
 chrono = { version = "0.4.39" }
-notify = { version = "7.0.0" }
+notify = { version = "8.0.0" }
 globset = { version = "0.4.15" }
 tracing = { version = "0.1.41" }
 tracing-subscriber = "0.3.19"
@@ -41,7 +41,7 @@ swc_ecma_parser = { version = "6.0.2" }
 swc_ecma_transforms_proposal = { version = "7.0.0" }
 swc_ecma_transforms_typescript = { version = "7.0.0" }
 swc_ecma_visit = { version = "5.0.0" }
-swc_ecma_transforms_base = { version = "7.0.0", features = ["concurrent"] }
+swc_ecma_transforms_base = { version = "7.1.0", features = ["concurrent"] }
 
 serde = { version = "1.0.217" }
 anyhow = { version = "1.0.95" }
