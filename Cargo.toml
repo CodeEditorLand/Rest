@@ -7,7 +7,7 @@ name = "Rest"
 path = "Source/Library.rs"
 
 [dependencies]
-clap = { features = ["derive"], version = "4.5.26" }
+clap = { features = ["derive"], version = "4.5.27" }
 walkdir = { version = "2.5.0" }
 futures = { version = "0.3.31" }
 rayon = { version = "1.10.0" }
@@ -35,17 +35,17 @@ tracing-subscriber = "0.3.19"
 # swc_ecma_visit = { version = "*", path = "../../Dependency/SWC/Dependency/SWC/crates/swc_ecma_visit" }
 
 swc_common = { version = "5.0.0" }
-swc_ecma_ast = { version = "5.0.2" }
+swc_ecma_ast = { version = "5.0.3" }
 swc_ecma_codegen = { version = "5.1.0" }
 swc_ecma_parser = { version = "6.0.2" }
 swc_ecma_transforms_proposal = { version = "7.0.1" }
 swc_ecma_transforms_typescript = { version = "7.0.0" }
 swc_ecma_visit = { version = "5.0.0" }
-swc_ecma_transforms_base = { version = "7.1.0", features = ["concurrent"] }
+swc_ecma_transforms_base = { version = "7.1.1", features = ["concurrent"] }
 
 serde = { version = "1.0.217" }
 anyhow = { version = "1.0.95" }
-serde_json = { version = "1.0.135" }
+serde_json = { version = "1.0.137" }
 unbug = { version = "0.4.0" }
 
 [build-dependencies]
