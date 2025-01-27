@@ -38,7 +38,7 @@ pub fn Fn() -> ArgMatches {
 	Command::new("Rest")
 		.version(env!("CARGO_PKG_VERSION"))
 		.author("Source 🖋️ Open 👐🏻 <Source/Open@PlayForm.LTD>")
-		.about("⛱️ Rest —")
+		.about("Rest ⛱️")
 		.arg(
 			Arg::new("Exclude")
 				.short('E')
@@ -46,7 +46,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(4)
 				.value_name("EXCLUDE")
 				.required(false)
-				.help("🚫 Exclude —")
+				.help("Exclude 🚫")
 				.default_value("node_modules"),
 		)
 		.arg(
@@ -57,7 +57,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(2)
 				.value_name("PARALLEL")
 				.required(false)
-				.help("⏩ Parallel —"),
+				.help("Parallel ⏩"),
 		)
 		.arg(
 			Arg::new("Pattern")
@@ -65,7 +65,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(5)
 				.value_name("PATTERN")
 				.required(false)
-				.help("🔍 Pattern —")
+				.help("Pattern 🔍")
 				.default_value(".git"),
 		)
 		.arg(
@@ -75,7 +75,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(3)
 				.value_name("ROOT")
 				.required(false)
-				.help("📂 Root —")
+				.help("Root 📂")
 				.default_value("."),
 		)
 		.get_matches()

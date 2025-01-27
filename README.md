@@ -11,15 +11,15 @@ cargo install BinaryRest
 ## 🛠️ Usage
 
 ```
-⛱️ Rest —
+Rest ⛱️
 
 Usage: Rest [OPTIONS]
 
 Options:
-  -P, --Parallel           ⏩ Parallel —
-  -R, --Root <ROOT>        📂 Root — [default: .]
-  -E, --Exclude <EXCLUDE>  🚫 Exclude — [default: node_modules]
-      --Pattern <PATTERN>  🔍 Pattern — [default: .]
+  -P, --Parallel           Parallel ⏩
+  -R, --Root <ROOT>        Root 📂 [default: .]
+  -E, --Exclude <EXCLUDE>  Exclude 🚫 [default: node_modules]
+      --Pattern <PATTERN>  Pattern 🔍 [default: .]
   -h, --help               Print help
   -V, --version            Print version
 ```
