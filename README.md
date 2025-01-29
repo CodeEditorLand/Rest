@@ -1,8 +1,8 @@
-# ⛱️ [Rest] —
+# [Rest] ⛱️
 
 [Rest]: HTTPS://crates.io/crates/BinaryRest
 
-## 🚀 Installation
+## Installation 🚀
 
 ```sh
 cargo install BinaryRest
