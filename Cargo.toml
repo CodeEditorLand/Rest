@@ -8,12 +8,12 @@ path = "Source/Library.rs"
 
 [build-dependencies]
 serde = { version = "1.0.217", features = ["derive"] }
-toml = { version = "0.8.19" }
+toml = { version = "0.8.20" }
 
 [dependencies]
 anyhow = { version = "1.0.95" }
 chrono = { version = "0.4.39" }
-clap = { features = ["derive"], version = "4.5.27" }
+clap = { features = ["derive"], version = "4.5.30" }
 dashmap = { version = "6.1.0" }
 futures = { version = "0.3.31" }
 git2 = { version = "0.20.0" }
@@ -25,14 +25,14 @@ rayon = { version = "1.10.0" }
 regex = { version = "1.11.1" }
 serde = { version = "1.0.217" }
 serde_json = { version = "1.0.138" }
-swc_common = { version = "5.0.1" }
-swc_ecma_ast = { version = "5.1.0" }
-swc_ecma_codegen = { version = "5.1.0" }
-swc_ecma_parser = { version = "7.0.1" }
-swc_ecma_transforms_base = { version = "8.0.0", features = ["concurrent"] }
-swc_ecma_transforms_proposal = { version = "8.0.0" }
-swc_ecma_transforms_typescript = { version = "8.0.0" }
-swc_ecma_visit = { version = "5.0.0" }
+swc_common = { version = "7.0.0" }
+swc_ecma_ast = { version = "7.0.0" }
+swc_ecma_codegen = { version = "7.0.0" }
+swc_ecma_parser = { version = "9.0.0" }
+swc_ecma_transforms_base = { version = "10.0.0", features = ["concurrent"] }
+swc_ecma_transforms_proposal = { version = "10.0.0" }
+swc_ecma_transforms_typescript = { version = "10.0.0" }
+swc_ecma_visit = { version = "7.0.0" }
 tokio = { version = "1.43.0", features = ["full"] }
 tracing = { version = "0.1.41" }
 tracing-subscriber = "0.3.19"
@@ -54,7 +54,7 @@ autoexamples = false
 autotests = false
 default-run = "Rest"
 description = "Rest ⛱️"
-edition = "2021"
+edition = "2024"
 include = [
 	"Source/**/*",
 	"LICENSE",
