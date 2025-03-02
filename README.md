@@ -74,14 +74,14 @@ Rest -P --Root .
 
 [Rest] relies on several Rust crates to provide its functionality:
 
--   `clap` - For parsing command-line arguments.
--   `futures` - For asynchronous programming abstractions.
--   `git2` - For `Git` repository operations.
--   `num_cpus` - For determining the number of CPUs for parallel processing.
--   `rayon` - For parallel processing.
--   `regex` - For pattern matching and text manipulation.
--   `tokio` - For asynchronous runtime.
--   `walkdir` - For efficient filesystem traversal.
+- `clap` - For parsing command-line arguments.
+- `futures` - For asynchronous programming abstractions.
+- `git2` - For `Git` repository operations.
+- `num_cpus` - For determining the number of CPUs for parallel processing.
+- `rayon` - For parallel processing.
+- `regex` - For pattern matching and text manipulation.
+- `tokio` - For asynchronous runtime.
+- `walkdir` - For efficient filesystem traversal.
 
 [Rest]: HTTPS://crates.io/crates/psummary
 
