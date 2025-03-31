@@ -1,5 +1,5 @@
 #[tracing::instrument(skip(Option))]
-pub async fn Fn(Option:super::Option) -> Result<()> {
+pub async fn Fn(Option: super::Option) -> Result<()> {
 	let (Allow, mut Mark) = mpsc::unbounded_channel();
 
 	let Queue = FuturesUnordered::new();
@@ -23,21 +23,19 @@ pub async fn Fn(Option:super::Option) -> Result<()> {
 
 		Queue.push(tokio::spawn(async move {
 			match fs::read_to_string(&file).await {
-				Ok(input) => {
-					match Compiler.compile_file(&file, input).await {
-						Ok(output) => {
-							if let Err(e) = Allow.send((file.clone(), Ok(output))) {
-								error!("Cannot send compilation result: {}", e);
-							}
-						},
-						Err(e) => {
-							error!("Compilation error for {}: {}", file, e);
+				Ok(input) => match Compiler.compile_file(&file, input).await {
+					Ok(output) => {
+						if let Err(e) = Allow.send((file.clone(), Ok(output))) {
+							error!("Cannot send compilation result: {}", e);
+						}
+					},
+					Err(e) => {
+						error!("Compilation error for {}: {}", file, e);
 
-							if let Err(e) = Allow.send((file.clone(), Err(e))) {
-								error!("Cannot send compilation error: {}", e);
-							}
-						},
-					}
+						if let Err(e) = Allow.send((file.clone(), Err(e))) {
+							error!("Cannot send compilation error: {}", e);
+						}
+					},
 				},
 				Err(e) => {
 					error!("Failed to read file {}: {}", file, e);

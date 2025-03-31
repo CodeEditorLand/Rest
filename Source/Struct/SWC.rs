@@ -1,56 +1,56 @@
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileInfo {
-	path:PathBuf,
-	last_modified:SystemTime,
+	path: PathBuf,
+	last_modified: SystemTime,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CompilerConfig {
-	Target:String,
-	Module:String,
-	Strict:bool,
-	EmitDecoratorsMetadata:bool,
+	Target: String,
+	Module: String,
+	Strict: bool,
+	EmitDecoratorsMetadata: bool,
 }
 
 #[derive(Debug, Clone)]
 pub struct Option {
-	pub entry:Vec<Vec<String>>,
-	pub separator:char,
-	pub pattern:String,
-	pub config:CompilerConfig,
+	pub entry: Vec<Vec<String>>,
+	pub separator: char,
+	pub pattern: String,
+	pub config: CompilerConfig,
 }
 
 #[derive(Debug, Default)]
 pub struct CompilerMetrics {
-	Count:usize,
-	Elapsed:Duration,
-	Error:usize,
+	Count: usize,
+	Elapsed: Duration,
+	Error: usize,
 }
 
 impl Default for CompilerConfig {
 	fn default() -> Self {
 		Self {
-			Target:"es2022".to_string(),
-			Module:"commonjs".to_string(),
-			Strict:true,
-			EmitDecoratorsMetadata:true,
+			Target: "es2022".to_string(),
+			Module: "commonjs".to_string(),
+			Strict: true,
+			EmitDecoratorsMetadata: true,
 		}
 	}
 }
 
 #[derive(Debug)]
 pub struct Compiler {
-	config:CompilerConfig,
-	Outlook:Arc<Mutex<CompilerMetrics>>,
+	config: CompilerConfig,
+	Outlook: Arc<Mutex<CompilerMetrics>>,
 }
 
 impl Compiler {
-	pub fn new(config:CompilerConfig) -> Self {
-		Self { config, Outlook:Arc::new(Mutex::new(CompilerMetrics::default())) }
+	pub fn new(config: CompilerConfig) -> Self {
+		Self { config, Outlook: Arc::new(Mutex::new(CompilerMetrics::default())) }
 	}
 
 	#[tracing::instrument(skip(self, input))]
-	async fn compile_file(&self, File:&str, input:String) -> Result<String> {
+	async fn compile_file(&self, File: &str, input: String) -> Result<String> {
 		let Begin = Instant::now();
 
 		let cm = SourceMap::new(FilePathMapping::empty());
@@ -58,7 +58,7 @@ impl Compiler {
 		let source_file = cm.new_source_file(FileName::Real(File.into()), input);
 
 		let mut parser = Parser::new_from(Lexer::new(
-			Syntax::Typescript(TsConfig { decorators:true, ..Default::default() }),
+			Syntax::Typescript(TsConfig { decorators: true, ..Default::default() }),
 			EsVersion::Es2022,
 			StringInput::from(&*source_file),
 			None,
@@ -75,9 +75,9 @@ impl Compiler {
 		Parsed = Parsed.fold_with(&mut swc_ecma_transforms_typescript::strip(Unresolved, Top));
 
 		Parsed = Parsed.fold_with(&mut decorators::decorators(decorators::Config {
-			legacy:false,
-			emit_metadata:self.config.EmitDecoratorsMetadata,
-			use_define_for_class_fields:true,
+			legacy: false,
+			emit_metadata: self.config.EmitDecoratorsMetadata,
+			use_define_for_class_fields: true,
 			..Default::default()
 		}));
 
@@ -86,10 +86,10 @@ impl Compiler {
 		let mut Output = vec![];
 
 		let mut Emitter = Emitter {
-			cfg:swc_ecma_codegen::Config::default(),
-			cm:cm.into().clone(),
-			comments:None,
-			wr:JsWriter::new(cm.into(), "\n", &mut Output, None),
+			cfg: swc_ecma_codegen::Config::default(),
+			cm: cm.into().clone(),
+			comments: None,
+			wr: JsWriter::new(cm.into(), "\n", &mut Output, None),
 		};
 
 		Emitter.emit_module(&Parsed).expect("Failed to emit JavaScript")?;

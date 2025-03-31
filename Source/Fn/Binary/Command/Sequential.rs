@@ -31,7 +31,7 @@
 ///
 /// This function will log errors if it fails to generate summaries or send
 /// results.
-pub async fn Fn(Option { Entry, Pattern, Separator, .. }:Option) {
+pub async fn Fn(Option { Entry, Pattern, Separator, .. }: Option) {
 	let Queue = futures::future::join_all(
 		Entry
 			.into_iter()
@@ -41,14 +41,10 @@ pub async fn Fn(Option { Entry, Pattern, Separator, .. }:Option) {
 					.filter(|Last| *Last == &Pattern)
 					.map(|_| Entry[0..Entry.len() - 1].join(&Separator.to_string()))
 			})
-			.map(|Entry| {
-				async move {
-					match crate::Fn::Build::Fn(&Entry).await {
-						Ok(Build) => Ok((Entry, Build)),
-						Err(_Error) => {
-							Err(format!("Error generating summary for {}: {}", Entry, _Error))
-						},
-					}
+			.map(|Entry| async move {
+				match crate::Fn::Build::Fn(&Entry).await {
+					Ok(Build) => Ok((Entry, Build)),
+					Err(_Error) => Err(format!("Error generating summary for {}: {}", Entry, _Error)),
 				}
 			}),
 	)
