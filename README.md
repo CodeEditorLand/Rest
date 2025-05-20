@@ -1,6 +1,6 @@
 # [Rest] ⛱️
 
-[Rest]: HTTPS://crates.io/crates/BinaryRest
+[Rest]: https://crates.io/crates/BinaryRest
 
 ## Installation 🚀
 
@@ -83,7 +83,7 @@ Rest -P --Root .
 - `tokio` - For asynchronous runtime.
 - `walkdir` - For efficient filesystem traversal.
 
-[Rest]: HTTPS://crates.io/crates/psummary
+[Rest]: https://crates.io/crates/psummary
 
 ## Changelog
 
