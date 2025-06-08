@@ -7,7 +7,7 @@
 /// 2. Spawns asynchronous tasks to generate summaries for each entry.
 /// 3. Collects the results and outputs them.
 ///
-/// # Arguments
+/// # Argument
 ///
 /// * `Option` - A struct containing the following fields:
 ///   - `Entry`: A vector of vectors, where each inner vector contains the

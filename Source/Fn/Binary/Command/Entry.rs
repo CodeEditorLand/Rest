@@ -1,7 +1,7 @@
 /// Generates a list of file paths from the specified root directory, excluding
 /// paths that match any of the specified exclude patterns.
 ///
-/// # Arguments
+/// # Argument
 ///
 /// * `Option` - A reference to an `Option` struct containing the following
 ///   fields:

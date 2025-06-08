@@ -10,7 +10,7 @@
 /// Returns an `ArgMatches` instance containing the parsed command-line
 /// arguments.
 ///
-/// # Arguments
+/// # Argument
 ///
 /// * `Exclude` - An optional argument to specify patterns to exclude. Default
 ///   is "node_modules".

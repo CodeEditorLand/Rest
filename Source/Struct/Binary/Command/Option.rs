@@ -27,7 +27,7 @@ impl Struct {
 	/// generating the exclude patterns, omit patterns, parallel flag, pattern,
 	/// root directory, and separator from the options.
 	///
-	/// # Arguments
+	/// # Argument
 	///
 	/// * `Option` - A reference to an Option struct containing initialization
 	///   parameters.

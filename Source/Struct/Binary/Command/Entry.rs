@@ -25,7 +25,7 @@ impl Struct {
 	/// generating the entry paths and cloning the omit patterns, parallel
 	/// flag, pattern, and separator from the options.
 	///
-	/// # Arguments
+	/// # Argument
 	///
 	/// * `Option` - A reference to an Option struct containing initialization
 	///   parameters.
