@@ -2,29 +2,32 @@
 ///
 /// This struct holds various fields related to the command options, including
 /// exclude patterns, omit patterns, parallel execution flag, pattern to match,
+
 /// root directory, and separator for file paths.
 pub struct Struct {
 	/// A vector of strings representing patterns to exclude.
-	pub Exclude: Vec<String>,
+	pub Exclude:Vec<String>,
 
 	/// A flag indicating whether to execute commands in parallel.
-	pub Parallel: Parallel,
+	pub Parallel:Parallel,
 
 	/// A string pattern to match against the last element of each entry.
-	pub Pattern: Pattern,
+	pub Pattern:Pattern,
 
 	/// The root directory to start the walk from.
-	pub Root: String,
+	pub Root:String,
 
 	/// The separator used for file paths.
-	pub Separator: Separator,
+	pub Separator:Separator,
 }
 
 impl Struct {
 	/// Creates a new instance of the Struct.
 	///
 	/// This function initializes the Struct with the provided options,
+
 	/// generating the exclude patterns, omit patterns, parallel flag, pattern,
+
 	/// root directory, and separator from the options.
 	///
 	/// # Argument
@@ -35,17 +38,21 @@ impl Struct {
 	/// # Returns
 	///
 	/// Returns a new instance of Struct.
-	pub fn Fn(Option { Separator, .. }: Option) -> Self {
+	pub fn Fn(Option { Separator, .. }:Option) -> Self {
 		Self {
-			Exclude: Command()
+			Exclude:Command()
 				.get_one::<String>("Exclude")
 				.expect("Cannot Exclude.")
 				.split(" ")
 				.map(|Exclude| Exclude.to_string())
 				.collect::<Vec<_>>(),
-			Parallel: Command().get_flag("Parallel"),
-			Pattern: Command().get_one::<String>("Pattern").expect("Cannot Pattern.").to_owned(),
-			Root: Command().get_one::<String>("Root").expect("Cannot Root.").to_owned(),
+
+			Parallel:Command().get_flag("Parallel"),
+
+			Pattern:Command().get_one::<String>("Pattern").expect("Cannot Pattern.").to_owned(),
+
+			Root:Command().get_one::<String>("Root").expect("Cannot Root.").to_owned(),
+
 			Separator,
 		}
 	}

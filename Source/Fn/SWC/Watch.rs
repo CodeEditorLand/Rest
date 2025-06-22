@@ -1,7 +1,7 @@
 pub mod Compile;
 
 #[tracing::instrument]
-pub async fn Fn(Path: PathBuf, Option: Option) -> notify::Result<()> {
+pub async fn Fn(Path:PathBuf, Option:Option) -> notify::Result<()> {
 	let (tx, mut rx) = mpsc::unbounded_channel();
 
 	notify::recommended_watcher::new(
@@ -19,6 +19,7 @@ pub async fn Fn(Path: PathBuf, Option: Option) -> notify::Result<()> {
 			Ok(event) => {
 				if let notify::Event {
 					kind: notify::EventKind::Modify(notify::event::ModifyKind::Data(_)),
+
 					paths,
 					..
 				} = event
@@ -27,7 +28,8 @@ pub async fn Fn(Path: PathBuf, Option: Option) -> notify::Result<()> {
 						if path.extension().map_or(false, |ext| ext == "ts") {
 							tokio::task::spawn(async move {
 								if let Err(e) = Compile::Fn(Option {
-									entry: vec![vec![path.to_string_lossy().to_string()]],
+									entry:vec![vec![path.to_string_lossy().to_string()]],
+
 									..Option.clone()
 								})
 								.await

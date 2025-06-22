@@ -2,6 +2,7 @@
 /// application.
 ///
 /// This function sets up the command-line interface using the `clap` crate,
+
 /// defining various arguments and their properties such as short and long
 /// names, help messages, default values, and whether they are required.
 ///
@@ -24,12 +25,17 @@
 ///
 /// ```rust
 /// let matches = Fn();
+
 /// let exclude = matches.value_of("Exclude").unwrap_or("node_modules");
+
 /// let parallel = matches.is_present("Parallel");
+
 /// let pattern = matches.value_of("Pattern").unwrap_or(".git");
+
 /// let root = matches.value_of("Root").unwrap_or(".");
+
 /// ```
-///
+/// 
 /// # Errors
 ///
 /// This function will panic if there are issues with the argument definitions
@@ -84,5 +90,7 @@ pub fn Fn() -> ArgMatches {
 use clap::{Arg, ArgAction::SetTrue, ArgMatches, Command};
 
 pub mod Entry;
+
 pub mod Parallel;
+
 pub mod Sequential;
