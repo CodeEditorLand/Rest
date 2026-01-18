@@ -7,35 +7,35 @@ name = "Rest"
 path = "Source/Library.rs"
 
 [build-dependencies]
-serde = { version = "1.0.219", features = ["derive"] }
-toml = { version = "0.9.0" }
+serde = { version = "1.0.228", features = ["derive"] }
+toml = { version = "0.9.11" }
 
 [dependencies]
-anyhow = { version = "1.0.98" }
-chrono = { version = "0.4.41" }
-clap = { features = ["derive"], version = "4.5.40" }
+anyhow = { version = "1.0.100" }
+chrono = { version = "0.4.43" }
+clap = { features = ["derive"], version = "4.5.54" }
 dashmap = { version = "6.1.0" }
 futures = { version = "0.3.31" }
-git2 = { version = "0.20.2" }
-globset = { version = "0.4.16" }
+git2 = { version = "0.20.3" }
+globset = { version = "0.4.18" }
 itertools = { version = "0.14.0" }
-notify = { version = "8.1.0" }
+notify = { version = "8.2.0" }
 num_cpus = { version = "1.17.0" }
-rayon = { version = "1.10.0" }
-regex = { version = "1.11.1" }
-serde = { version = "1.0.219" }
-serde_json = { version = "1.0.140" }
-swc_common = { version = "13.0.4" }
-swc_ecma_ast = { version = "13.0.1" }
-swc_ecma_codegen = { version = "15.0.2" }
-swc_ecma_parser = { version = "19.0.0" }
-swc_ecma_transforms_base = { version = "20.0.0", features = ["concurrent"] }
-swc_ecma_transforms_proposal = { version = "20.0.0" }
-swc_ecma_transforms_typescript = { version = "22.0.0" }
-swc_ecma_visit = { version = "13.0.0" }
-tokio = { version = "1.46.1", features = ["full"] }
-tracing = { version = "0.1.41" }
-tracing-subscriber = "0.3.19"
+rayon = { version = "1.11.0" }
+regex = { version = "1.12.2" }
+serde = { version = "1.0.228" }
+serde_json = { version = "1.0.149" }
+swc_common = { version = "18.0.1" }
+swc_ecma_ast = { version = "20.0.0" }
+swc_ecma_codegen = { version = "22.0.0" }
+swc_ecma_parser = { version = "33.0.0" }
+swc_ecma_transforms_base = { version = "36.0.0", features = ["concurrent"] }
+swc_ecma_transforms_proposal = { version = "36.0.0" }
+swc_ecma_transforms_typescript = { version = "39.0.0" }
+swc_ecma_visit = { version = "20.0.0" }
+tokio = { version = "1.49.0", features = ["full"] }
+tracing = { version = "0.1.44" }
+tracing-subscriber = "0.3.22"
 unbug = { version = "0.4.0" }
 walkdir = { version = "2.5.0" }
 
