@@ -2,4 +2,3 @@
 path = Documentation/Rust
 url = ssh://git@github.com/CodeEditorLand/RustDocumentationRestLand.git
 ignore = all
-
