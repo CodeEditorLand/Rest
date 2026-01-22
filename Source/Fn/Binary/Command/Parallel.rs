@@ -43,10 +43,14 @@ pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 
 	let Queue = futures::stream::FuturesUnordered::new();
 
+	let glob = globset::Glob::new(&Pattern)
+		.expect("Invalid pattern")
+		.compile_matcher();
+
 	for Entry in Entry
 		.into_par_iter()
 		.filter_map(|Entry| {
-			if globset::GlobSet.is_match(&Entry.join(&Separator.to_string())) {
+			if glob.is_match(&Entry.join(&Separator.to_string())) {
 				Some(Entry[0..Entry.len() - 1].join(&Separator.to_string()))
 			} else {
 				None
@@ -59,7 +63,7 @@ pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 		Queue.push(tokio::spawn(async move {
 			match crate::Fn::Build::Fn(&Entry).await {
 				Ok(Build) => {
-					if let Err(_Error) = Allow.send((Entry, Build)) {
+					if let Err(_Error) = Allow.send((Entry, format!("{:?}", Build))) {
 						eprintln!("Cannot Allow: {}", _Error);
 					}
 				},
