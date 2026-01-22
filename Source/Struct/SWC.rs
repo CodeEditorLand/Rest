@@ -64,7 +64,7 @@ impl Compiler {
 			None,
 		));
 
-		let mut module = parser.parse_module().map_err(|e| anyhow::anyhow!("Failed to parse TypeScript module: {:?}", e))?;
+		let module = parser.parse_module().map_err(|e| anyhow::anyhow!("Failed to parse TypeScript module: {:?}", e))?;
 
 		let Unresolved = Mark::new();
 		let Top = Mark::new();
