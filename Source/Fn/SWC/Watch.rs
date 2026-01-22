@@ -1,7 +1,7 @@
 pub mod Compile;
 
 #[tracing::instrument]
-pub async fn Fn(Path: PathBuf, Option: Option) -> notify::Result<()> {
+pub async fn Fn(Path: PathBuf, Option: Option) -> anyhow::Result<()> {
 	let (tx, mut rx) = mpsc::unbounded_channel();
 
 	let mut watcher = notify::RecommendedWatcher::new(
@@ -28,15 +28,18 @@ pub async fn Fn(Path: PathBuf, Option: Option) -> notify::Result<()> {
 					for path in paths {
 						if path.extension().map_or(false, |ext| ext == "ts") {
 							let Option = Option.clone();
-							tokio::task::spawn(async move {
-								if let Err(e) = Compile::Fn(crate::Struct::SWC::Option {
-									entry: vec![vec![path.to_string_lossy().to_string()]],
-									..Option
+							tokio::task::spawn_blocking(move || {
+								let rt = tokio::runtime::Handle::current();
+								rt.block_on(async {
+									if let Err(e) = Compile::Fn(crate::Struct::SWC::Option {
+										entry: vec![vec![path.to_string_lossy().to_string()]],
+										..Option
+									})
+									.await
+									{
+										error!("Compilation error: {}", e);
+									}
 								})
-								.await
-								{
-									error!("Compilation error: {}", e);
-								}
 							});
 						}
 					}
