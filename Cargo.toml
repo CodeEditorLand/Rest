@@ -17,6 +17,7 @@ globset = { version = "0.4.18" }
 itertools = { version = "0.14.0" }
 notify = { version = "8.2.0" }
 num_cpus = { version = "1.17.0" }
+par-core = { version = "2.0.0", features = ["rayon"] }
 rayon = { version = "1.11.0" }
 regex = { version = "1.12.2" }
 serde = { version = "1.0.228" }
