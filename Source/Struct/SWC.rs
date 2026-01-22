@@ -50,7 +50,7 @@ impl Compiler {
 	}
 
 	#[tracing::instrument(skip(self, input))]
-	pub async fn compile_file(&self, File: &str, input: String) -> anyhow::Result<String> {
+	pub fn compile_file(&self, File: &str, input: String) -> anyhow::Result<String> {
 		let Begin = Instant::now();
 
 		let cm = Arc::new(SourceMap::new(FilePathMapping::empty()));
@@ -122,7 +122,7 @@ impl Compiler {
 
 		let Path = Path::new(File).with_extension("js");
 
-		tokio::fs::write(&Path, &Output).await?;
+		std::fs::write(&Path, &Output)?;
 
 		let Elapsed = Begin.elapsed();
 
@@ -144,9 +144,8 @@ use std::time::{Duration, Instant, SystemTime};
 use serde::{Deserialize, Serialize};
 use tracing::debug;
 use swc_common::{SourceMap, FilePathMapping, FileName, Mark};
-use swc_ecma_ast::{EsVersion, Pass}; // Added Pass trait import
+use swc_ecma_ast::{EsVersion, Pass};
 use swc_ecma_parser::{Parser, StringInput, Syntax, lexer::Lexer};
 use swc_ecma_codegen::{Emitter, text_writer::JsWriter};
 use swc_ecma_transforms_base::helpers::inject_helpers;
 use swc_ecma_transforms_proposal::decorators;
-// Removed unused swc_ecma_visit imports that caused trait errors
