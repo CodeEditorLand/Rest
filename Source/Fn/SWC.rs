@@ -1,3 +1,4 @@
+#[allow(unused)]
 async fn Fn() -> anyhow::Result<()> {
 	tracing_subscriber::fmt::init();
 
