@@ -51,7 +51,7 @@ pub async fn Fn(Option { Entry, Pattern, Separator, .. }:Option) {
 			.map(|Entry| {
 				async move {
 					match crate::Fn::Build::Fn(&Entry).await {
-						Ok(Build) => Ok((Entry, Build)),
+						Ok(Build) => Ok((Entry, format!("{:?}", Build))),
 
 						Err(_Error) => Err(format!("Error generating summary for {}: {}", Entry, _Error)),
 					}
