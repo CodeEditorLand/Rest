@@ -58,31 +58,56 @@ impl Compiler {
 		let source_file = cm.new_source_file(FileName::Real(File.into()).into(), input);
 
 		let mut parser = Parser::new_from(Lexer::new(
-			Syntax::Typescript(swc_ecma_parser::TsConfig {
-				decorators: true,
-				..Default::default()
-			}),
+			Syntax::Typescript(Default::default()),
 			EsVersion::Es2022,
 			StringInput::from(&*source_file),
 			None,
 		));
 
-		let mut Parsed = parser.parse_module().map_err(|e| anyhow::anyhow!("Failed to parse TypeScript module: {:?}", e))?;
+		let mut module = parser.parse_module().map_err(|e| anyhow::anyhow!("Failed to parse TypeScript module: {:?}", e))?;
 
 		let Unresolved = Mark::new();
 		let Top = Mark::new();
 
-		Parsed = Parsed.fold_with(&mut swc_ecma_transforms_base::resolver(Unresolved, Top, true));
-		Parsed = Parsed.fold_with(&mut swc_ecma_transforms_typescript::strip(Unresolved, Top));
-		
-		Parsed = Parsed.fold_with(&mut decorators::decorators(decorators::Config {
-			legacy: false,
-			emit_metadata: self.config.EmitDecoratorsMetadata,
-			use_define_for_class_fields: true,
-			..Default::default()
-		}));
+		// Convert module to program to apply passes
+		let mut program = swc_ecma_ast::Program::Module(module);
 
-		Parsed = Parsed.fold_with(&mut inject_helpers(Unresolved));
+		// Apply transforms using process() or visit_mut_with()
+		
+		// 1. Resolver
+		{
+			let mut pass = swc_ecma_transforms_base::resolver(Unresolved, Top, true);
+			pass.process(&mut program);
+		}
+
+		// 2. Strip TypeScript
+		{
+			let mut pass = swc_ecma_transforms_typescript::strip(Unresolved, Top);
+			pass.process(&mut program);
+		}
+		
+		// 3. Decorators
+		{
+			let mut pass = decorators::decorators(decorators::Config {
+				legacy: false,
+				emit_metadata: self.config.EmitDecoratorsMetadata,
+				use_define_for_class_fields: true,
+				..Default::default()
+			});
+			pass.process(&mut program);
+		}
+
+		// 4. Inject Helpers
+		{
+			let mut pass = inject_helpers(Unresolved);
+			pass.process(&mut program);
+		}
+
+		// Convert back to module for emitting
+		let module = match program {
+			swc_ecma_ast::Program::Module(m) => m,
+			_ => return Err(anyhow::anyhow!("Unexpected script")),
+		};
 
 		let mut Output = vec![];
 
@@ -93,7 +118,7 @@ impl Compiler {
 			wr: JsWriter::new(cm.clone(), "\n", &mut Output, None),
 		};
 
-		Emitter.emit_module(&Parsed).map_err(|e| anyhow::anyhow!("Failed to emit JavaScript: {:?}", e))?;
+		Emitter.emit_module(&module).map_err(|e| anyhow::anyhow!("Failed to emit JavaScript: {:?}", e))?;
 
 		let Path = Path::new(File).with_extension("js");
 
@@ -119,9 +144,9 @@ use std::time::{Duration, Instant, SystemTime};
 use serde::{Deserialize, Serialize};
 use tracing::debug;
 use swc_common::{SourceMap, FilePathMapping, FileName, Mark};
-use swc_ecma_ast::EsVersion;
+use swc_ecma_ast::{EsVersion, Pass}; // Added Pass trait import
 use swc_ecma_parser::{Parser, StringInput, Syntax, lexer::Lexer};
 use swc_ecma_codegen::{Emitter, text_writer::JsWriter};
 use swc_ecma_transforms_base::helpers::inject_helpers;
 use swc_ecma_transforms_proposal::decorators;
-use swc_ecma_visit::FoldWith;
+// Removed unused swc_ecma_visit imports that caused trait errors
