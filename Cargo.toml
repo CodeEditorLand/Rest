@@ -1,8 +1,4 @@
 [[bin]]
-name = "BinaryRest"
-path = "Source/Library.rs"
-
-[[bin]]
 name = "Rest"
 path = "Source/Library.rs"
 
@@ -29,9 +25,9 @@ swc_common = { version = "18.0.1" }
 swc_ecma_ast = { version = "20.0.0" }
 swc_ecma_codegen = { version = "22.0.0" }
 swc_ecma_parser = { version = "33.0.0" }
-swc_ecma_transforms_base = { version = "36.0.0", features = ["concurrent"] }
+swc_ecma_transforms_base = { version = "36.0.1", features = ["concurrent"] }
 swc_ecma_transforms_proposal = { version = "36.0.0" }
-swc_ecma_transforms_typescript = { version = "39.0.0" }
+swc_ecma_transforms_typescript = { version = "39.0.1" }
 swc_ecma_visit = { version = "20.0.0" }
 tokio = { version = "1.49.0", features = ["full"] }
 tracing = { version = "0.1.44" }
@@ -65,7 +61,7 @@ include = [
 ]
 license-file = "LICENSE"
 name = "Rest"
-repository = "https://github.com/BinaryRest/Rest.git"
+repository = "https://github.com/CodeEditorLand/Rest.git"
 version = "0.0.1"
 
 [package.metadata.docs.rs]
