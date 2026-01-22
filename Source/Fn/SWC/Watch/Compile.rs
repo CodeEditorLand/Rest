@@ -21,18 +21,32 @@ pub async fn Fn(Option: super::Option) -> anyhow::Result<()> {
 		Queue.push(tokio::spawn(async move {
 			match tokio::fs::read_to_string(&file).await {
 				Ok(input) => {
-					match Compiler.compile_file(&file, input).await {
-						Ok(output) => {
-							if let Err(e) = Allow.send((file.clone(), Ok(output))) {
-								error!("Cannot send compilation result: {}", e);
-							}
+					// Use spawn_blocking for CPU-intensive compilation
+					let file_clone = file.clone();
+					let result = tokio::task::spawn_blocking(move || {
+						Compiler.compile_file(&file_clone, input)
+					}).await;
+
+					match result {
+						Ok(inner_result) => match inner_result {
+							Ok(output) => {
+								if let Err(e) = Allow.send((file.clone(), Ok(output))) {
+									error!("Cannot send compilation result: {}", e);
+								}
+							},
+							Err(e) => {
+								error!("Compilation error for {}: {}", file, e);
+								if let Err(e) = Allow.send((file.clone(), Err(e))) {
+									error!("Cannot send compilation error: {}", e);
+								}
+							},
 						},
-						Err(e) => {
-							error!("Compilation error for {}: {}", file, e);
-							if let Err(e) = Allow.send((file.clone(), Err(e))) {
-								error!("Cannot send compilation error: {}", e);
+						Err(join_err) => {
+							error!("Task join error for {}: {}", file, join_err);
+							if let Err(e) = Allow.send((file.clone(), Err(anyhow::anyhow!(join_err)))) {
+								error!("Cannot send join error: {}", e);
 							}
-						},
+						}
 					}
 				},
 				Err(e) => {
