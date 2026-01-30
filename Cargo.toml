@@ -3,25 +3,25 @@ name = "Rest"
 path = "Source/Library.rs"
 
 [build-dependencies]
-serde = { workspace = true, features = ["derive"] }
-toml = { workspace = true }
+serde = { version = "1.0.228", features = ["derive"] }
+toml = { version = "0.9.11" }
 
 [dependencies]
-anyhow = { workspace = true }
-chrono = { workspace = true }
-clap = { workspace = true, features = ["derive"] }
-dashmap = { workspace = true }
-futures = { workspace = true }
+anyhow = { version = "1.0.100" }
+chrono = { version = "0.4.43" }
+clap = { features = ["derive"], version = "4.5.55" }
+dashmap = { version = "6.1.0" }
+futures = { version = "0.3.31" }
 git2 = { version = "0.20.3" }
-globset = { workspace = true }
+globset = { version = "0.4.18" }
 itertools = { version = "0.14.0" }
 notify = { version = "8.2.0" }
-num_cpus = { workspace = true }
+num_cpus = { version = "1.17.0" }
 par-core = { version = "2.0.0", features = ["rayon"] }
 rayon = { version = "1.11.0" }
-regex = { workspace = true }
-serde = { workspace = true }
-serde_json = { workspace = true }
+regex = { version = "1.12.2" }
+serde = { version = "1.0.228" }
+serde_json = { version = "1.0.149" }
 swc_common = { version = "18.0.1" }
 swc_ecma_ast = { version = "20.0.1" }
 swc_ecma_codegen = { version = "23.0.0" }
@@ -30,10 +30,10 @@ swc_ecma_transforms_base = { version = "36.0.1", features = ["concurrent"] }
 swc_ecma_transforms_proposal = { version = "36.0.1" }
 swc_ecma_transforms_typescript = { version = "40.0.0" }
 swc_ecma_visit = { version = "20.0.0" }
-tokio = { workspace = true, features = ["full"] }
+tokio = { version = "1.49.0", features = ["full"] }
 tracing = { version = "0.1.44" }
 tracing-subscriber = "0.3.22"
-unbug = { workspace = true }
+unbug = { version = "0.4.0" }
 walkdir = { version = "2.5.0" }
 
 [features]
