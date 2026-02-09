@@ -1,5 +1,5 @@
 #[tracing::instrument(skip(Option))]
-pub async fn Fn(Option: super::Option) -> anyhow::Result<()> {
+pub async fn Fn(Option:super::Option) -> anyhow::Result<()> {
 	let (Allow, mut Mark) = mpsc::unbounded_channel();
 	let Queue = FuturesUnordered::new();
 	let Compiler = Arc::new(crate::Struct::SWC::Compiler::new(Option.config.clone()));
@@ -23,30 +23,30 @@ pub async fn Fn(Option: super::Option) -> anyhow::Result<()> {
 				Ok(input) => {
 					// Use spawn_blocking for CPU-intensive compilation
 					let file_clone = file.clone();
-					let result = tokio::task::spawn_blocking(move || {
-						Compiler.compile_file(&file_clone, input)
-					}).await;
+					let result = tokio::task::spawn_blocking(move || Compiler.compile_file(&file_clone, input)).await;
 
 					match result {
-						Ok(inner_result) => match inner_result {
-							Ok(output) => {
-								if let Err(e) = Allow.send((file.clone(), Ok(output))) {
-									error!("Cannot send compilation result: {}", e);
-								}
-							},
-							Err(e) => {
-								error!("Compilation error for {}: {}", file, e);
-								if let Err(e) = Allow.send((file.clone(), Err(e))) {
-									error!("Cannot send compilation error: {}", e);
-								}
-							},
+						Ok(inner_result) => {
+							match inner_result {
+								Ok(output) => {
+									if let Err(e) = Allow.send((file.clone(), Ok(output))) {
+										error!("Cannot send compilation result: {}", e);
+									}
+								},
+								Err(e) => {
+									error!("Compilation error for {}: {}", file, e);
+									if let Err(e) = Allow.send((file.clone(), Err(e))) {
+										error!("Cannot send compilation error: {}", e);
+									}
+								},
+							}
 						},
 						Err(join_err) => {
 							error!("Task join error for {}: {}", file, join_err);
 							if let Err(e) = Allow.send((file.clone(), Err(anyhow::anyhow!(join_err)))) {
 								error!("Cannot send join error: {}", e);
 							}
-						}
+						},
 					}
 				},
 				Err(e) => {
@@ -91,6 +91,7 @@ pub async fn Fn(Option: super::Option) -> anyhow::Result<()> {
 }
 
 use std::sync::Arc;
+
 use futures::stream::{FuturesUnordered, StreamExt};
 use rayon::prelude::{IntoParallelIterator, ParallelIterator};
 use tokio::sync::mpsc;

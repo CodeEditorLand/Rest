@@ -1,7 +1,7 @@
 pub mod Compile;
 
 #[tracing::instrument]
-pub async fn Fn(Path: PathBuf, Option: Option) -> anyhow::Result<()> {
+pub async fn Fn(Path:PathBuf, Option:Option) -> anyhow::Result<()> {
 	let (tx, mut rx) = mpsc::unbounded_channel();
 
 	let mut watcher = notify::RecommendedWatcher::new(
@@ -12,7 +12,7 @@ pub async fn Fn(Path: PathBuf, Option: Option) -> anyhow::Result<()> {
 		},
 		notify::Config::default(),
 	)?;
-	
+
 	use notify::Watcher; // trait import
 	watcher.watch(Path.as_ref(), notify::RecursiveMode::Recursive)?;
 
@@ -32,7 +32,7 @@ pub async fn Fn(Path: PathBuf, Option: Option) -> anyhow::Result<()> {
 								let rt = tokio::runtime::Handle::current();
 								rt.block_on(async {
 									if let Err(e) = Compile::Fn(crate::Struct::SWC::Option {
-										entry: vec![vec![path.to_string_lossy().to_string()]],
+										entry:vec![vec![path.to_string_lossy().to_string()]],
 										..Option
 									})
 									.await
@@ -53,6 +53,8 @@ pub async fn Fn(Path: PathBuf, Option: Option) -> anyhow::Result<()> {
 }
 
 use std::path::PathBuf;
+
 use tokio::sync::mpsc;
 use tracing::error;
+
 use crate::Struct::SWC::Option;

@@ -43,9 +43,7 @@ pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 
 	let Queue = futures::stream::FuturesUnordered::new();
 
-	let glob = globset::Glob::new(&Pattern)
-		.expect("Invalid pattern")
-		.compile_matcher();
+	let glob = globset::Glob::new(&Pattern).expect("Invalid pattern").compile_matcher();
 
 	for Entry in Entry
 		.into_par_iter()

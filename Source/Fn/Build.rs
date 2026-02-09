@@ -7,7 +7,7 @@ pub async fn Fn(_Entry:&str) -> Result<DashMap<u64, (String, String)>, Box<dyn s
 }
 
 pub mod Group {
-	pub fn Fn(output: Vec<(String, String)>) {
+	pub fn Fn(output:Vec<(String, String)>) {
 		println!("Processed {} files", output.len());
 	}
 }
