@@ -87,7 +87,7 @@ Rest -P --Root .
 
 ## Changelog
 
-See [`CHANGELOG.md`](CHANGELOG.md) for a history of changes to this CLI.
+See [`CHANGELOG.md`](https://github.com/CodeEditorLand/Rest/tree/Current/) for a history of changes to this CLI.
 
 ## Funding
 
