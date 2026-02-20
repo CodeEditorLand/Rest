@@ -35,7 +35,7 @@ Land
 
 ---
 
-# **Rest** ⛱️ The JavaScript/TypeScript Bundler for Land 🏞️
+# **Rest** ⛱️ The JavaScript/TypeScript Bundler for Land 🏞️
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Rest/tree/Current/LICENSE)
 [![Crates.io](https://img.shields.io/crates/v/Rest.svg)](https://crates.io/crates/Rest)
@@ -61,7 +61,7 @@ support.
 
 ---
 
-## Key Features 🔐
+## Key Features 🔐
 
 - **SWC Compiler Stack:** Leverages the full SWC ecosystem for fast parsing,
   transformation, and code generation of JavaScript/TypeScript.
@@ -76,7 +76,7 @@ support.
 
 ---
 
-## Core Architecture Principles 🏗️
+## Core Architecture Principles 🏗️
 
 | Principle              | Description                                                                             | Key Components Involved                           |
 | :--------------------- | :-------------------------------------------------------------------------------------- | :------------------------------------------------ |
@@ -87,7 +87,7 @@ support.
 
 ---
 
-## `Rest` in the Land Ecosystem ⛱️ + 🏞️
+## `Rest` in the Land Ecosystem ⛱️ + 🏞️
 
 | Component                  | Role & Key Responsibilities                                                                     |
 | :------------------------- | :---------------------------------------------------------------------------------------------- |
@@ -97,7 +97,7 @@ support.
 
 ---
 
-## Getting Started 🚀
+## Getting Started 🚀
 
 ### Installation
 
@@ -143,13 +143,13 @@ Rest is a Rust-based JavaScript/TypeScript bundler and build system CLI tool. It
 leverages the SWC (Speedy Web Compiler) ecosystem for fast compilation and
 transformation of JavaScript and TypeScript code.
 
-## Installation 🚀
+## Installation 🚀
 
 ```sh
 cargo install Rest
 ```
 
-## 🛠️ Usage
+## 🛠️ Usage
 
 Rest uses a command structure based on `Struct::Binary::Command` pattern. The
 main entry point executes via:
@@ -163,7 +163,7 @@ async fn main() {
 
 ---
 
-## System Architecture Diagram 🏗️
+## System Architecture Diagram 🏗️
 
 This diagram illustrates `Rest`'s role in the Land build pipeline.
 
@@ -200,7 +200,7 @@ BuildGroups --> OutputBundle
 
 ---
 
-## Features 🔐
+## Features 🔐
 
 - **Parallel Processing**: Multi-threaded file processing using rayon
 - **SWC Integration**: Fast JavaScript/TypeScript compilation via SWC crates
@@ -244,7 +244,7 @@ BuildGroups --> OutputBundle
 
 ---
 
-## Deep Dive & Component Breakdown 🔬
+## Deep Dive & Component Breakdown 🔬
 
 To understand how `Rest`'s internal components interact to provide the
 JavaScript/TypeScript bundling functionality, see the following source files:
@@ -274,7 +274,7 @@ see the [`LICENSE`](https://github.com/CodeEditorLand/Rest/tree/Current/) file.
 
 ---
 
-## Changelog 📜
+## Changelog 📜
 
 Stay updated with our progress! See
 [`CHANGELOG.md`](https://github.com/CodeEditorLand/Rest/tree/Current/) for a
@@ -282,7 +282,7 @@ history of changes specific to **Rest**.
 
 ---
 
-## Funding & Acknowledgements 🙏🏻
+## Funding & Acknowledgements 🙏🏻
 
 **Rest** is a core element of the **Land** ecosystem. This project is funded
 through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
@@ -291,38 +291,38 @@ through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
 [NLnet project page](https://NLnet.NL/project/Land).
 
 <table>
-<thead>
-<tr>
-<th align="left"><strong>Land</strong></th>
-<th align="left"><strong>PlayForm</strong></th>
-<th align="left"><strong>NLnet</strong></th>
-<th align="left"><strong>NGI0 Commons Fund</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left" valign="middle">
-<a href="https://Editor.Land">
-<img width="60" src="https://raw.githubusercontent.com/CodeEditorLand/Asset/refs/heads/Current/Logo/Land.svg" alt="Land">
-</a>
-</td>
-<td align="left" valign="middle">
-<a href="https://PlayForm.Cloud">
-<img width="76" src="https://raw.githubusercontent.com/PlayForm/Asset/refs/heads/Current/Logo/PlayForm.svg" alt="PlayForm">
-</a>
-</td>
-<td align="left" valign="middle">
-<a href="https://NLnet.NL">
-<img width="240" src="https://NLnet.NL/logo/banner.svg" alt="NLnet">
-</a>
-</td>
-<td align="left" valign="middle">
-<a href="https://NLnet.NL/commonsfund">
-<img width="240" src="https://NLnet.NL/image/logos/NGI0CommonsFund_tag_black_mono.svg" alt="NGI0 Commons Fund">
-</a>
-</td>
-</tr>
-</tbody>
+	<thead>
+		<tr>
+			<th align="left"><strong>Land</strong></th>
+			<th align="left"><strong>PlayForm</strong></th>
+			<th align="left"><strong>NLnet</strong></th>
+			<th align="left"><strong>NGI0 Commons Fund</strong></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td align="left" valign="middle">
+				<a href="https://Editor.Land">
+					<img width="60" src="https://raw.githubusercontent.com/CodeEditorLand/Asset/refs/heads/Current/Logo/Land.svg" alt="Land">
+				</a>
+			</td>
+			<td align="left" valign="middle">
+				<a href="https://PlayForm.Cloud">
+					<img width="76" src="https://raw.githubusercontent.com/PlayForm/Asset/refs/heads/Current/Logo/PlayForm.svg" alt="PlayForm">
+				</a>
+			</td>
+			<td align="left" valign="middle">
+				<a href="https://NLnet.NL">
+					<img width="240" src="https://NLnet.NL/logo/banner.svg" alt="NLnet">
+				</a>
+			</td>
+			<td align="left" valign="middle">
+				<a href="https://NLnet.NL/commonsfund">
+					<img width="240" src="https://NLnet.NL/image/logos/NGI0CommonsFund_tag_black_mono.svg" alt="NGI0 Commons Fund">
+				</a>
+			</td>
+		</tr>
+	</tbody>
 </table>
 
 ---
