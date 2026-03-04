@@ -48,7 +48,7 @@ pub fn Fn(Option { Exclude, Root, Pattern, Separator, .. }:&Option) -> Return {
 		.filter_map(|Entry| {
 			let Path = Entry.expect("Cannot Entry.").path().display().to_string();
 
-			// TODO: Separate this into Entry/Exclude.rs
+			// DEPENDENCY: Separate this into Entry/Exclude.rs
 			if !Exclude
 				.clone()
 				.into_iter()

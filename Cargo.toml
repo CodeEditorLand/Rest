@@ -3,38 +3,38 @@ name = "Rest"
 path = "Source/Library.rs"
 
 [build-dependencies]
-serde = { version = "1.0.228", features = ["derive"] }
-toml = { version = "1.0.3" }
+serde = { workspace = true, features = ["derive"] }
+toml = { workspace = true }
 
 [dependencies]
-anyhow = { version = "1.0.102" }
-chrono = { version = "0.4.44" }
-clap = { features = ["derive"], version = "4.5.60" }
-dashmap = { version = "6.1.0" }
-futures = { version = "0.3.32" }
-git2 = { version = "0.20.4" }
-globset = { version = "0.4.18" }
-itertools = { version = "0.14.0" }
-notify = { version = "8.2.0" }
-num_cpus = { version = "1.17.0" }
-par-core = { version = "2.0.0", features = ["rayon"] }
+anyhow = { workspace = true }
+chrono = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+dashmap = { workspace = true }
+futures = { workspace = true }
+git2 = { workspace = true }
+globset = { workspace = true }
+itertools = { workspace = true }
+notify = { workspace = true }
+num_cpus = { workspace = true }
+par-core = { workspace = true, features = ["rayon"] }
 rayon = { version = "1.11.0" }
-regex = { version = "1.12.3" }
-serde = { version = "1.0.228" }
-serde_json = { version = "1.0.149" }
-swc_common = { version = "19.0.0" }
-swc_ecma_ast = { version = "21.0.0" }
-swc_ecma_codegen = { version = "24.0.0" }
-swc_ecma_parser = { version = "35.0.0" }
-swc_ecma_transforms_base = { version = "38.0.0", features = ["concurrent"] }
-swc_ecma_transforms_proposal = { version = "38.0.0" }
-swc_ecma_transforms_typescript = { version = "42.0.0" }
-swc_ecma_visit = { version = "21.0.0" }
-tokio = { version = "1.49.0", features = ["full"] }
-tracing = { version = "0.1.44" }
-tracing-subscriber = "0.3.22"
-unbug = { version = "0.4.0" }
-walkdir = { version = "2.5.0" }
+regex = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+swc_common = { workspace = true }
+swc_ecma_ast = { workspace = true }
+swc_ecma_codegen = { workspace = true }
+swc_ecma_parser = { workspace = true }
+swc_ecma_transforms_base = { workspace = true }
+swc_ecma_transforms_proposal = { workspace = true }
+swc_ecma_transforms_typescript = { workspace = true }
+swc_ecma_visit = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+unbug = { workspace = true }
+walkdir = { workspace = true }
 
 [features]
 default = []
