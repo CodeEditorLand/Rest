@@ -38,8 +38,73 @@
 pub fn Fn() -> ArgMatches {
 	Command::new("Rest")
 		.version(env!("CARGO_PKG_VERSION"))
-		.author("Source 🖋️ Open 👐🏻 <Source/Open@PlayForm.Cloud>")
-		.about("Rest ⛱️")
+		.author("Source 🖋️ Open 👐🏻 <Source/Open@PlayForm.Cloud>")
+		.about("Rest ⛱️")
+		.subcommand(
+			Command::new("compile")
+				.about("Compile TypeScript files using SWC")
+				.arg(
+					Arg::new("Input")
+						.short('i')
+						.long("input")
+						.display_order(1)
+						.value_name("INPUT")
+						.required(true)
+						.help("Input directory containing TypeScript files"),
+				)
+				.arg(
+					Arg::new("Output")
+						.short('o')
+						.long("output")
+						.display_order(2)
+						.value_name("OUTPUT")
+						.required(true)
+						.help("Output directory for compiled JavaScript files"),
+				)
+				.arg(
+					Arg::new("Target")
+						.long("target")
+						.display_order(3)
+						.value_name("TARGET")
+						.required(false)
+						.help("ES target version (e.g., es2024)")
+						.default_value("es2024"),
+				)
+				.arg(
+					Arg::new("Module")
+						.long("module")
+						.display_order(4)
+						.value_name("MODULE")
+						.required(false)
+						.help("Module system (commonjs, esmodule)")
+						.default_value("esmodule"),
+				)
+				.arg(
+					Arg::new("SourceMaps")
+						.long("source-maps")
+						.display_order(5)
+						.action(SetTrue)
+						.required(false)
+						.help("Enable source maps"),
+				)
+				.arg(
+					Arg::new("UseDefineForClassFields")
+						.long("use-define-for-class-fields")
+						.display_order(6)
+						.action(SetTrue)
+						.required(false)
+						.help("Use defineForClassFields (VSCode: false)"),
+				)
+				.arg(
+					Arg::new("Parallel")
+						.short('P')
+						.long("Parallel")
+						.action(SetTrue)
+						.display_order(7)
+						.required(false)
+						.help("Parallel compilation ⏩"),
+				),
+		)
 		.arg(
 			Arg::new("Exclude")
 				.short('E')
@@ -47,7 +112,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(4)
 				.value_name("EXCLUDE")
 				.required(false)
-				.help("Exclude 🚫")
+				.help("Exclude 🚫")
 				.default_value("node_modules"),
 		)
 		.arg(
@@ -58,7 +123,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(2)
 				.value_name("PARALLEL")
 				.required(false)
-				.help("Parallel ⏩"),
+				.help("Parallel ⏩"),
 		)
 		.arg(
 			Arg::new("Pattern")
@@ -66,7 +131,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(5)
 				.value_name("PATTERN")
 				.required(false)
-				.help("Pattern 🔍")
+				.help("Pattern 🔍")
 				.default_value(".git"),
 		)
 		.arg(
@@ -76,7 +141,7 @@ pub fn Fn() -> ArgMatches {
 				.display_order(3)
 				.value_name("ROOT")
 				.required(false)
-				.help("Root 📂")
+				.help("Root 📂")
 				.default_value("."),
 		)
 		.get_matches()

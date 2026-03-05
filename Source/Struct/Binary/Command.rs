@@ -26,20 +26,56 @@ impl Struct {
 	pub fn Fn() -> Self {
 		Self {
 			Separator:std::path::MAIN_SEPARATOR,
-
+	
 			Fn:Box::new(|| {
 				Box::pin(async move {
-					let Option = Entry::Struct::Fn(&Option::Struct::Fn(Struct::Fn()));
-
-					match Option.Parallel {
-						true => {
-							Parallel::Fn(Option).await;
-						},
-
-						false => {
-							Sequential::Fn(Option).await;
-						},
-					};
+					let Command = crate::Fn::Binary::Command::Fn();
+	
+					// Check if compile subcommand was invoked
+					if let Some(compile_matches) = Command.subcommand_matches("compile") {
+						let Input = compile_matches.get_one::<String>("Input").expect("Cannot get Input.").to_owned();
+						let Output = compile_matches.get_one::<String>("Output").expect("Cannot get Output.").to_owned();
+						let Target = compile_matches.get_one::<String>("Target").cloned().unwrap_or_else(|| "es2024".to_string());
+						let Module = compile_matches.get_one::<String>("Module").cloned().unwrap_or_else(|| "esmodule".to_string());
+						let _SourceMaps = compile_matches.get_flag("SourceMaps");
+						let UseDefineForClassFields = compile_matches.get_flag("UseDefineForClassFields");
+						let Parallel = compile_matches.get_flag("Parallel");
+	
+						// Create VSCode-compatible config
+						let Config = crate::Struct::SWC::CompilerConfig {
+							Target,
+							Module: Module.clone(),
+							Strict: true,
+							EmitDecoratorsMetadata: true,
+							TreeShaking: true,
+							Minify: false,
+							ModuleFormat: crate::Struct::SWC::ModuleFormat::from_str(&Module),
+						};
+	
+						// Call the compile function with output directory
+						crate::Fn::SWC::Compile::Fn(crate::Struct::SWC::Option {
+							entry: vec![vec![Input.clone()]],
+							separator: std::path::MAIN_SEPARATOR,
+							pattern: ".ts".to_string(),
+							config: Config,
+							output: Output,
+							use_define_for_class_fields: UseDefineForClassFields,
+						}, Parallel).await;
+	
+					} else {
+						// Default behavior - run Entry/Sequential or Parallel
+						let Option = Entry::Struct::Fn(&Option::Struct::Fn(Struct::Fn()));
+	
+						match Option.Parallel {
+							true => {
+								Parallel::Fn(Option).await;
+							},
+	
+							false => {
+								Sequential::Fn(Option).await;
+							},
+						};
+					}
 				})
 			}),
 		}

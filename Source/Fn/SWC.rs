@@ -22,6 +22,8 @@ async fn Fn() -> anyhow::Result<()> {
 		separator:std::path::MAIN_SEPARATOR,
 		pattern:".ts".to_string(),
 		config:Config.clone(),
+		output: String::new(),  // Not used in watch mode
+		use_define_for_class_fields: false,
 	};
 
 	// Initial compilation
@@ -38,6 +40,8 @@ async fn Fn() -> anyhow::Result<()> {
 }
 
 pub mod Watch;
+
+pub mod Compile;
 
 use tokio::fs;
 use tracing::{error, info};
