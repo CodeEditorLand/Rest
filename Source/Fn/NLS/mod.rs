@@ -1,0 +1,94 @@
+//! NLS (National Language Support) processing for VSCode localization
+//! 
+//! This module handles:
+//! - Extraction of localization keys from TypeScript source
+//! - Generation of localization bundle files
+//! - Replacement of localization keys with actual strings at build time
+
+pub mod extract;
+pub mod replace;
+pub mod bundle;
+
+pub use extract::NLSExtractor;
+pub use replace::NLSReplacer;
+pub use bundle::NLSBundle;
+
+/// Configuration for NLS processing
+#[derive(Debug, Clone, Default)]
+pub struct NLSConfig {
+    /// Source language for localization (default: "en")
+    pub source_lang: String,
+    /// Output directory for generated localization files
+    pub output_dir: String,
+    /// Whether to inline translations into the output
+    pub inline: bool,
+    /// File pattern for localization keys (default: "*.nls.*")
+    pub key_pattern: String,
+    /// Additional languages to generate
+    pub languages: Vec<String>,
+}
+
+impl NLSConfig {
+    pub fn new() -> Self {
+        Self {
+            source_lang: "en".to_string(),
+            output_dir: "out/nls".to_string(),
+            inline: false,
+            key_pattern: "*.nls.*".to_string(),
+            languages: vec!["en".to_string()],
+        }
+    }
+}
+
+/// Represents a localization entry
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct LocalizationEntry {
+    /// The key used to identify this string
+    pub key: String,
+    /// The localized string value
+    pub value: String,
+    /// Optional comment for translators
+    pub comment: Option<String>,
+}
+
+/// A collection of localization entries for a specific language
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct LocalizationBundle {
+    /// Language code (e.g., "en", "de", "fr")
+    pub language: String,
+    /// Hash of the source strings for cache invalidation
+    pub hash: String,
+    /// The localization entries
+    pub entries: Vec<LocalizationEntry>,
+}
+
+impl LocalizationBundle {
+    pub fn new(language: &str) -> Self {
+        Self {
+            language: language.to_string(),
+            hash: String::new(),
+            entries: Vec::new(),
+        }
+    }
+
+    pub fn add_entry(&mut self, key: impl Into<String>, value: impl Into<String>) {
+        self.entries.push(LocalizationEntry {
+            key: key.into(),
+            value: value.into(),
+            comment: None,
+        });
+    }
+
+    /// Generate a simple hash for cache invalidation
+    pub fn compute_hash(&mut self) {
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        
+        let mut hasher = DefaultHasher::new();
+        for entry in &self.entries {
+            entry.key.hash(&mut hasher);
+            entry.value.hash(&mut hasher);
+        }
+        self.hash = format!("{:x}", hasher.finish());
+    }
+}

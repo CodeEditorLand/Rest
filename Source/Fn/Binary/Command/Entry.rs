@@ -23,23 +23,14 @@
 ///
 /// ```
 /// let options = Option {
-
 /// 	Exclude:vec!["node_modules".to_string(), "target".to_string()],
-
 /// 	Root:".".to_string(),
-
 /// 	Separator:'/',
-
 /// };
-
 /// let paths = Fn(&options);
-
 /// for path in paths {
-
 /// 	println!("{:?}", path);
-
 /// }
-
 /// ```
 pub fn Fn(Option { Exclude, Root, Pattern, Separator, .. }:&Option) -> Return {
 	WalkDir::new(Root)

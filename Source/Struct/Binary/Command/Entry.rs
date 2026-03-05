@@ -22,7 +22,6 @@ impl Struct {
 	/// Creates a new instance of the Struct.
 	///
 	/// This function initializes the Struct with the provided options,
-
 	/// generating the entry paths and cloning the omit patterns, parallel
 	/// flag, pattern, and separator from the options.
 	///
