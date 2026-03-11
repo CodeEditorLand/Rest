@@ -1,98 +1,82 @@
-#[tracing::instrument(skip(Option))]
-pub async fn Fn(Option:super::Option) -> anyhow::Result<()> {
-	let (Allow, mut Mark) = mpsc::unbounded_channel();
-	let Queue = FuturesUnordered::new();
-	let Compiler = Arc::new(crate::Struct::SWC::Compiler::new(Option.config.clone()));
+//! OXC-based watch compile module
+//!
+//! This module provides watch-mode compilation using the OXC compiler.
 
-	for file in Option
-		.entry
-		.into_par_iter()
-		.filter_map(|entry| {
-			entry
-				.last()
-				.filter(|last| last.ends_with(&Option.pattern))
-				.map(|_| entry[0..entry.len() - 1].join(&Option.separator.to_string()))
-		})
-		.collect::<Vec<String>>()
-	{
-		let Allow = Allow.clone();
-		let Compiler = Arc::clone(&Compiler);
+use std::io::Write;
+#[tracing::instrument(skip(options))]
+pub async fn Fn(options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
+	let compiler = std::sync::Arc::new(crate::Fn::OXC::Compiler::Compiler::new(options.config.clone()));
 
-		Queue.push(tokio::spawn(async move {
-			match tokio::fs::read_to_string(&file).await {
-				Ok(input) => {
-					// Use spawn_blocking for CPU-intensive compilation
-					let file_clone = file.clone();
-					let result = tokio::task::spawn_blocking(move || Compiler.compile_file(&file_clone, input)).await;
+	// Get the input base path
+	let input_base = options.entry[0][0].clone();
+	let output_base = options.output.clone();
+	let pattern = options.pattern.clone();
 
-					match result {
-						Ok(inner_result) => {
-							match inner_result {
-								Ok(output) => {
-									if let Err(e) = Allow.send((file.clone(), Ok(output))) {
-										error!("Cannot send compilation result: {}", e);
-									}
-								},
-								Err(e) => {
-									error!("Compilation error for {}: {}", file, e);
-									if let Err(e) = Allow.send((file.clone(), Err(e))) {
-										error!("Cannot send compilation error: {}", e);
-									}
-								},
-							}
-						},
-						Err(join_err) => {
-							error!("Task join error for {}: {}", file, join_err);
-							if let Err(e) = Allow.send((file.clone(), Err(anyhow::anyhow!(join_err)))) {
-								error!("Cannot send join error: {}", e);
-							}
-						},
-					}
-				},
-				Err(e) => {
-					error!("Failed to read file {}: {}", file, e);
-					if let Err(e) = Allow.send((file.clone(), Err(anyhow::anyhow!(e)))) {
-						error!("Cannot send file read error: {}", e);
-					}
-				},
+	println!("Starting watch compilation from {} to {}", input_base, output_base);
+
+	// Use walkdir to find all TypeScript files in the input directory
+	let ts_files:Vec<String> = walkdir::WalkDir::new(&input_base)
+		.follow_links(true)
+		.into_iter()
+		.filter_map(|e| {
+			let entry = e.ok()?;
+			let path = entry.path();
+			if path.is_file() && path.to_string_lossy().ends_with(&pattern) {
+				Some(path.to_string_lossy().to_string())
+			} else {
+				None
 			}
-		}));
-	}
+		})
+		.collect();
 
-	tokio::spawn(async move {
-		Queue.collect::<Vec<_>>().await;
-		drop(Allow);
-	});
+	println!("Found {} TypeScript files in {}", ts_files.len(), input_base);
 
-	let mut Count = 0;
-	let mut Error = 0;
+	// Process files sequentially
+	let mut count = 0;
+	let mut error = 0;
 
-	while let Some((file, result)) = Mark.recv().await {
-		match result {
-			Ok(output) => {
-				info!("Compiled: {} -> {}", file, output);
-				Count += 1;
+	for file_path in ts_files {
+		print!(".");
+		std::io::stdout().flush().unwrap();
+
+		match tokio::fs::read_to_string(&file_path).await {
+			Ok(input) => {
+				// Calculate relative path from input base
+				let input_path = std::path::Path::new(&file_path);
+				let base_path = std::path::Path::new(&input_base);
+				let relative_path = input_path.strip_prefix(base_path).unwrap_or(input_path);
+
+				// Create output path preserving directory structure
+				let output_path = std::path::Path::new(&output_base).join(relative_path).with_extension("js");
+
+				match compiler.compile_file_to(&file_path, input, &output_path, options.use_define_for_class_fields) {
+					Ok(output) => {
+						debug!("Compiled: {} -> {}", file_path, output);
+						count += 1;
+					},
+					Err(e) => {
+						error!("Compilation error for {}: {}", file_path, e);
+						error += 1;
+					},
+				}
 			},
 			Err(e) => {
-				warn!("Failed to compile {}: {}", file, e);
-				Error += 1;
+				error!("Failed to read file {}: {}", file_path, e);
+				error += 1;
 			},
 		}
 	}
 
-	let Outlook = Compiler.Outlook.lock().unwrap();
+	println!();
+
+	let outlook = compiler.outlook.lock().unwrap();
 
 	info!(
-		"Compilation complete. Processed {} files in {:?}. {} successful, {} failed.",
-		Outlook.Count, Outlook.Elapsed, Count, Error
+		"Watch compilation complete. Processed {} files in {:?}. {} successful, {} failed.",
+		outlook.count, outlook.elapsed, count, error
 	);
 
 	Ok(())
 }
 
-use std::sync::Arc;
-
-use futures::stream::{FuturesUnordered, StreamExt};
-use rayon::prelude::{IntoParallelIterator, ParallelIterator};
-use tokio::sync::mpsc;
-use tracing::{error, info, warn};
+use tracing::{debug, error, info};

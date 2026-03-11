@@ -1,8 +1,8 @@
-//! SWC-compatible file watching module (using OXC backend)
+//! OXC-based file watching module
 //!
-//! This module provides file watching functionality for the compiler.
+//! This module provides file watching functionality for the OXC compiler.
 
-pub mod Compile;
+use crate::Fn::OXC::Compile;
 
 #[tracing::instrument]
 pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
@@ -35,10 +35,13 @@ pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> 
 							tokio::task::spawn_blocking(move || {
 								let rt = tokio::runtime::Handle::current();
 								rt.block_on(async {
-									if let Err(e) = Compile::Fn(crate::Struct::SWC::Option {
-										entry:vec![vec![path.to_string_lossy().to_string()]],
-										..options
-									})
+									if let Err(e) = Compile::Fn(
+										crate::Struct::SWC::Option {
+											entry:vec![vec![path.to_string_lossy().to_string()]],
+											..options
+										},
+										false, // parallel = false for sequential processing
+									)
 									.await
 									{
 										error!("Compilation error: {}", e);

@@ -20,14 +20,13 @@
 ///
 /// ```rust
 /// let options = Option {
-/// 	Entry:vec![vec!["path".to_string(), "to".to_string(),
-/// "file.git".to_string()]],
+/// 	Entry:vec![vec!["path".to_string(), "to".to_string(), "file.git".to_string()]],
 /// 	Separator:'/',
 /// 	Pattern:".git".to_string(),
 /// };
 /// Fn(options).await;
 /// ```
-/// 
+///
 /// # Errors
 ///
 /// This function will log errors if it fails to generate summaries or send

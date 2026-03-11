@@ -1,30 +1,38 @@
-#[tracing::instrument(skip(Option))]
+//! SWC-compatible compilation module (using OXC backend)
+//!
+//! This module provides the same compilation functionality as the original
+//! SWC compiler but uses OXC for parsing and transformation.
+
+#[tracing::instrument(skip(options))]
 /// Compiles TypeScript files from input directory to output directory
-/// 
+///
 /// # Arguments
-/// 
-/// * `Option` - Compilation options including entry, pattern, config, output directory
-/// * `_Parallel` - Whether to use parallel compilation (currently unused - runs sequentially)
-pub async fn Fn(Option:crate::Struct::SWC::Option, _Parallel:bool) -> anyhow::Result<()> {
+///
+/// * `options` - Compilation options including entry, pattern, config, output
+///   directory
+/// * `_parallel` - Whether to use parallel compilation (currently unused - runs
+///   sequentially)
+pub async fn Fn(options:crate::Struct::SWC::Option, _parallel:bool) -> anyhow::Result<()> {
 	tracing_subscriber::fmt::init();
-	
-	let Compiler = std::sync::Arc::new(crate::Struct::SWC::Compiler::new(Option.config.clone()));
+
+	// Use OXC compiler instead of SWC
+	let compiler = std::sync::Arc::new(crate::Fn::OXC::Compiler::Compiler::new(options.config.clone()));
 
 	// Get the input base path
-	let InputBase = Option.entry[0][0].clone();
-	let OutputBase = Option.output.clone();
-	let Pattern = Option.pattern.clone();
+	let input_base = options.entry[0][0].clone();
+	let output_base = options.output.clone();
+	let pattern = options.pattern.clone();
 
-	println!("Starting compilation from {} to {}", InputBase, OutputBase);
+	println!("Starting compilation from {} to {}", input_base, output_base);
 
 	// Use walkdir to find all TypeScript files in the input directory
-	let ts_files: Vec<String> = WalkDir::new(&InputBase)
+	let ts_files:Vec<String> = walkdir::WalkDir::new(&input_base)
 		.follow_links(true)
 		.into_iter()
 		.filter_map(|e| {
 			let entry = e.ok()?;
 			let path = entry.path();
-			if path.is_file() && path.to_string_lossy().ends_with(&Pattern) {
+			if path.is_file() && path.to_string_lossy().ends_with(&pattern) {
 				Some(path.to_string_lossy().to_string())
 			} else {
 				None
@@ -32,64 +40,63 @@ pub async fn Fn(Option:crate::Struct::SWC::Option, _Parallel:bool) -> anyhow::Re
 		})
 		.collect();
 
-	println!("Found {} TypeScript files in {}", ts_files.len(), InputBase);
+	println!("Found {} TypeScript files in {}", ts_files.len(), input_base);
 
-	// Process files sequentially to avoid SWC globals issues
-	let mut Count = 0;
-	let mut Error = 0;
-	
+	// Process files sequentially to avoid OXC globals issues
+	let mut count = 0;
+	let mut error = 0;
+
 	for file_path in ts_files {
 		print!(".");
 		std::io::stdout().flush().unwrap();
-		
+
 		match tokio::fs::read_to_string(&file_path).await {
 			Ok(input) => {
 				// Calculate relative path from input base
 				let input_path = std::path::Path::new(&file_path);
-				let base_path = std::path::Path::new(&InputBase);
+				let base_path = std::path::Path::new(&input_base);
 				let relative_path = input_path.strip_prefix(base_path).unwrap_or(input_path);
 
 				// Create output path preserving directory structure
-				let output_path = Path::new(&OutputBase).join(relative_path).with_extension("js");
+				let output_path = std::path::Path::new(&output_base).join(relative_path).with_extension("js");
 
-				match Compiler.compile_file_to(&file_path, input, &output_path, Option.use_define_for_class_fields) {
+				match compiler.compile_file_to(&file_path, input, &output_path, options.use_define_for_class_fields) {
 					Ok(output) => {
 						debug!("Compiled: {} -> {}", file_path, output);
-						Count += 1;
+						count += 1;
 					},
 					Err(e) => {
 						error!("Compilation error for {}: {}", file_path, e);
-						Error += 1;
+						error += 1;
 					},
 				}
 			},
 			Err(e) => {
 				error!("Failed to read file {}: {}", file_path, e);
-				Error += 1;
+				error += 1;
 			},
 		}
 	}
 
 	println!();
 
-	let Outlook = Compiler.Outlook.lock().unwrap();
+	let outlook = compiler.outlook.lock().unwrap();
 
 	info!(
 		"Compilation complete. Processed {} files in {:?}. {} successful, {} failed.",
-		Outlook.Count, Outlook.Elapsed, Count, Error
+		outlook.count, outlook.elapsed, count, error
 	);
 
 	// Print summary
 	println!("\n=== Compilation Summary ===");
-	println!("Total files processed: {}", Outlook.Count);
-	println!("Successful: {}", Count);
-	println!("Failed: {}", Error);
-	println!("Time elapsed: {:?}\n", Outlook.Elapsed);
+	println!("Total files processed: {}", outlook.count);
+	println!("Successful: {}", count);
+	println!("Failed: {}", error);
+	println!("Time elapsed: {:?}\n", outlook.elapsed);
 
 	Ok(())
 }
 
-use std::{path::Path, io::Write};
+use std::io::Write;
 
-use walkdir::WalkDir;
-use tracing::{error, debug, info};
+use tracing::{debug, error, info};

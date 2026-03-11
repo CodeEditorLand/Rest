@@ -1,0 +1,49 @@
+{
+	"name": "@codeeditorland/rest",
+	"version": "0.0.1",
+	"description": "Rest compiler for CodeEditorLand - Rust-based TypeScript compilation",
+	"homepage": "https://GitHub.Com/CodeEditorLand/Rest?tab=readme-ov-file",
+	"bugs": {
+		"url": "https://GitHub.Com/CodeEditorLand/Rest/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Rest.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Source 🖋️ Open 👐🏻",
+		"email": "Source/Open@Editor.Land",
+		"url": "https://Editor.Land"
+	},
+	"type": "module",
+	"main": "index.js",
+	"bin": {
+		"Rest": "./bin/Rest.js"
+	},
+	"files": [
+		"bin",
+		"postinstall.js",
+		"prepublishOnly.sh",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"build": "sh prepublishOnly.sh",
+		"postinstall": "node postinstall.js",
+		"prepublishOnly": "sh prepublishOnly.sh"
+	},
+	"optionalDependencies": {
+		"@codeeditorland/rest-darwin-arm64": "0.0.1",
+		"@codeeditorland/rest-darwin-x64": "0.0.1",
+		"@codeeditorland/rest-linux-x64": "0.0.1",
+		"@codeeditorland/rest-win32-x64": "0.0.1"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}

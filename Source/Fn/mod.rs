@@ -1,8 +1,8 @@
 pub mod Binary;
+pub mod OXC;
+pub mod SWC;
 
 pub mod Build;
-
-pub mod SWC;
 
 // Phase 3 advanced features
 pub mod Transform;

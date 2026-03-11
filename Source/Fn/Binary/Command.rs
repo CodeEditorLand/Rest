@@ -30,7 +30,7 @@
 /// let pattern = matches.value_of("Pattern").unwrap_or(".git");
 /// let root = matches.value_of("Root").unwrap_or(".");
 /// ```
-/// 
+///
 /// # Errors
 ///
 /// This function will panic if there are issues with the argument definitions
