@@ -103,6 +103,16 @@ pub fn Fn() -> ArgMatches {
 						.display_order(7)
 						.required(false)
 						.help("Parallel compilation ⏩"),
+				)
+				.arg(
+					Arg::new("Exclude")
+						.short('E')
+						.long("Exclude")
+						.display_order(8)
+						.value_name("EXCLUDE")
+						.required(false)
+						.help("Exclude patterns (comma-separated)")
+						.default_value("node_modules,.d.ts"),
 				),
 		)
 		.arg(
@@ -132,7 +142,7 @@ pub fn Fn() -> ArgMatches {
 				.value_name("PATTERN")
 				.required(false)
 				.help("Pattern 🔍")
-				.default_value(".git"),
+				.default_value(".ts"),
 		)
 		.arg(
 			Arg::new("Root")

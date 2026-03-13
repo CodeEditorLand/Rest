@@ -26,14 +26,19 @@ pub async fn Fn(options:crate::Struct::SWC::Option, _parallel:bool) -> anyhow::R
 	println!("Starting compilation from {} to {}", input_base, output_base);
 
 	// Use walkdir to find all TypeScript files in the input directory
+	// Exclude .d.ts declaration files to match VSCode's build process
 	let ts_files:Vec<String> = walkdir::WalkDir::new(&input_base)
 		.follow_links(true)
 		.into_iter()
 		.filter_map(|e| {
 			let entry = e.ok()?;
 			let path = entry.path();
-			if path.is_file() && path.to_string_lossy().ends_with(&pattern) {
-				Some(path.to_string_lossy().to_string())
+			let path_str = path.to_string_lossy();
+			// Skip .d.ts declaration files (like VSCode's noDeclarationsFilter)
+			if path_str.ends_with(".d.ts") {
+				None
+			} else if path.is_file() && path_str.ends_with(&pattern) {
+				Some(path_str.to_string())
 			} else {
 				None
 			}
