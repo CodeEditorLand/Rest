@@ -12,7 +12,7 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 };
 
-use tracing::{debug, error, info, trace, warn};
+use tracing::{debug, error, info, trace};
 
 static FILE_PROCESS_COUNT:AtomicUsize = AtomicUsize::new(0);
 

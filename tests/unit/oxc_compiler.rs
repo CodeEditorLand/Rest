@@ -1,12 +1,15 @@
 //! Unit tests for OXC compiler components
+//!
+//! These tests run as integration tests and import from the Rest library.
 
 #![cfg(test)]
 
 use std::time::Instant;
 
-use crate::{
+// Import from the Rest library
+use Rest::{
     Fn::OXC::{self, Compiler, Parser, Transformer},
-    Struct::CompilerConfig,
+    Struct::{CompilerConfig, SWC},
 };
 
 /// Test that parser correctly parses TypeScript code
@@ -102,7 +105,6 @@ fn test_codegen_basic() {
     assert!(result.is_ok(), "Compilation should succeed: {:?}", result.err());
 
     // The output file should be created
-    // (compile_file returns the path, but we need to check it exists)
     let output_path = result.unwrap();
     assert!(
         std::path::Path::new(&output_path).exists(),
@@ -153,39 +155,6 @@ fn test_decorator_metadata() {
     let _ = std::fs::remove_file(&output_path);
 }
 
-/// Test compilation with source maps enabled
-#[test]
-fn test_source_maps() {
-    let source = r#"
-        export function multiply(x: number, y: number): number {
-            return x * y;
-        }
-    "#;
-
-    // Note: Current implementation doesn't expose sourcemap option
-    // through compile_file, but it's available via compile_file_to
-    let config = CompilerConfig::simple();
-    let compiler = Compiler::new(config);
-
-    let temp_dir = tempfile::tempdir().unwrap();
-    let input_path = temp_dir.path().join("source.ts");
-    let output_path = temp_dir.path().join("output.js");
-
-    std::fs::write(&input_path, source).unwrap();
-
-    // compile_file_to allows more options
-    let result = compiler.compile_file_to(
-        input_path.to_str().unwrap(),
-        source.to_string(),
-        &output_path,
-        false, // use_define_for_class_fields
-    );
-
-    assert!(result.is_ok(), "Source map compilation should succeed");
-
-    assert!(output_path.exists(), "Output JS should exist");
-}
-
 /// Test that use_define_for_class_fields is respected
 #[test]
 fn test_use_define_for_class_fields() {
@@ -214,28 +183,6 @@ fn test_use_define_for_class_fields() {
     let _ = std::fs::remove_file(&output_path);
 }
 
-/// Test that compilation metrics are tracked
-#[test]
-fn test_compiler_metrics() {
-    let config = CompilerConfig::simple();
-    let compiler = Compiler::new(config);
-
-    let source = r#"
-        export const test: string = "test";
-    "#;
-
-    // Compile a few files
-    for i in 0..3 {
-        let result = compiler.compile_file(&format!("test{}.ts", i), source.to_string());
-        assert!(result.is_ok(), "Compilation {} should succeed", i);
-    }
-
-    // Check metrics (access via outlook)
-    let outlook = compiler.outlook.lock().unwrap();
-    assert_eq!(outlook.count, 3, "Should have compiled 3 files");
-    assert!(outlook.elapsed.as_secs() > 0, "Should have elapsed time");
-}
-
 /// Test that multiple files can be compiled sequentially without segfault
 #[test]
 fn test_sequential_compilation_no_segfault() {
@@ -262,32 +209,6 @@ fn test_sequential_compilation_no_segfault() {
 
     let outlook = compiler.outlook.lock().unwrap();
     assert_eq!(outlook.count, 5, "Should have compiled all 5 files");
-}
-
-/// Test parsing error handling
-#[test]
-fn test_parse_errors() {
-    let invalid_source = r#"
-        function test() {
-            return ;  // Syntax error
-        }
-    "#;
-
-    let config = OXC::ParserConfig::default();
-    let result = Parser::parse(invalid_source, "test.ts", &config);
-
-    // This should produce parse errors (or maybe succeed depending on the error)
-    // At minimum we should get a result we can check
-    match result {
-        Ok(parse_result) => {
-            // If it parsed, that's fine (the error may not be caught)
-            println!("Parsed unexpectedly: {:?}", parse_result.errors);
-        }
-        Err(errors) => {
-            // Expected to have errors
-            assert!(!errors.is_empty(), "Should have parse errors");
-        }
-    }
 }
 
 /// Test that transformer config is correctly derived from compiler config

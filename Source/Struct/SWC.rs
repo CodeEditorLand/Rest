@@ -78,8 +78,7 @@ impl Default for Option {
 			pattern:"**/*.ts".to_string(),
 			config:CompilerConfig::default(),
 			output:"out".to_string(),
-			/// VSCode compatibility: false ensures class fields use define
-			/// pattern
+			// VSCode compatibility: false ensures class fields use define pattern
 			use_define_for_class_fields:false,
 		}
 	}

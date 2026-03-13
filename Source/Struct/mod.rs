@@ -6,5 +6,6 @@ pub mod SWC;
 pub mod CompilerConfig;
 
 // Re-export key types for testing convenience
-pub use SWC::{CompilerConfig, ModuleFormat, Option as BuildOption};
+pub use SWC::{ModuleFormat, Option as BuildOption};
 pub use Binary::Command::Option as CommandOption;
+pub use CompilerConfig as AdvancedCompilerConfig;
