@@ -134,9 +134,12 @@ pub fn transform<'a>(
 		scopes.len()
 	);
 
-	// Configure TypeScript transformation - using defaults
-	let typescript_options = TypeScriptOptions::default();
-	trace!("[Transform #{transform_id}] TypeScript options configured");
+	// Configure TypeScript transformation
+	// Set only_remove_type_imports to true to preserve all value exports
+	// This ensures modules with runtime code (like profiling.ts) emit JavaScript
+	let mut typescript_options = TypeScriptOptions::default();
+	typescript_options.only_remove_type_imports = true;
+	trace!("[Transform #{transform_id}] TypeScript options configured (only_remove_type_imports=true)");
 	
 	// Configure JSX transformation if enabled
 	let jsx_options = if config.jsx {
