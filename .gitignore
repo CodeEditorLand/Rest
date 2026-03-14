@@ -13,3 +13,11 @@ Documentation/Rust/release
 Documentation/Rust/.rustc_info.json
 Documentation/Rust/.rustdoc_fingerprint.json
 Documentation/Rust/CACHEDIR.TAG
+Target/
+/build/
+/out/
+*.js
+*.d.ts
+.vscode/
+.idea/
+*.iml
