@@ -1,7 +1,7 @@
 <table>
 <tr>
 <td align="left" valign="middle">
-<h3 align="left"> Rest</h3>
+<h3 align="left">Rest</h3>
 </td>
 <td align="left" valign="middle">
 <h3 align="left">
@@ -9,7 +9,7 @@
 </h3>
 </td>
 <td align="left" valign="middle">
-<h3 align="left"> + </h3>
+<h3 align="left">+</h3>
 </td>
 <td align="left" valign="middle">
 <h3 align="left">
@@ -30,16 +30,14 @@ Land
 </h3>
 </td>
 <td align="left" valign="middle">
-<h3 align="left">
-🏞️
-</h3>
+<h3 align="left">🏞️</h3>
 </td>
 </tr>
 </table>
 
 ---
 
-# **Rest** ⛱️ The High-Performance TypeScript Compiler for Land 🏞️
+# **Rest** ⛱️ The High-Performance TypeScript Compiler for Land 🏞️
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Rest/tree/Current/LICENSE)
 [![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
@@ -64,7 +62,7 @@ a Rust-powered compiler that produces VSCode-compatible output.
 
 ---
 
-## Key Features 🔐
+## Key Features 🔐
 
 - **Full TypeScript 5.x Support**: Complete compatibility with TypeScript 5.x
   syntax and features.
@@ -84,7 +82,7 @@ a Rust-powered compiler that produces VSCode-compatible output.
 
 ---
 
-## Core Architecture Principles 🏗️
+## Core Architecture Principles 🏗️
 
 | Principle          | Description                                                              | Key Components Involved          |
 | :----------------- | :----------------------------------------------------------------------- | :------------------------------- |
@@ -95,84 +93,7 @@ a Rust-powered compiler that produces VSCode-compatible output.
 
 ---
 
-## Integration 🛠️
-
-Rest integrates into the build system through environment variables:
-
-```bash
-# Set the compiler to Rest
-export Compiler=Rest
-
-# Optional: Configure Rest binary path
-export REST_BINARY_PATH="path/to/Rest"
-
-# Optional: Enable verbose logging
-export REST_VERBOSE=true
-
-# Optional: Enable source maps (when implemented)
-export RestSourcemap=true
-```
-
-When `Compiler=Rest` is set, the build system intercepts TypeScript files and
-delegates compilation to the Rest binary instead of using esbuild's built-in
-TypeScript loader.
-
----
-
-## CLI Usage 📖
-
-```bash
-Rest compile [OPTIONS]
-
-Required:
-  --input, -i <PATH>    Input directory containing TypeScript files
-  --output, -o <PATH>   Output directory for compiled JavaScript
-
-Optional:
-  --target <ES2024>     ECMAScript target (default: es2024)
-  --module <commonjs>   Module system: commonjs, esmodule (default: commonjs)
-  --source-maps         Generate source maps (not yet implemented)
-  --Parallel            Enable parallel compilation (default: false)
-  --use-define-for-class-fields
-                        Use defineForClassFields semantic (default: false)
-  --help, -h            Show help
-  --version, -V         Show version
-```
-
----
-
-## Configuration ⚙️
-
-Rest supports two main configuration presets:
-
-### Simple (Single-File)
-
-```rust
-use Rest::Struct::CompilerConfig;
-
-let config = CompilerConfig::simple();
-// - Target: es2024
-// - Module: commonjs
-// - Private fields: not converted
-// - NLS: disabled
-// - Workers: disabled
-```
-
-### VSCode (Full Pipeline)
-
-```rust
-let config = CompilerConfig::vscode();
-// - Target: es2024
-// - Module: esmodule
-// - Private fields: converted to __<name>
-// - NLS: enabled (localization processing)
-// - Workers: enabled
-// - Bundling: enabled
-```
-
----
-
-## Deep Dive & Component Breakdown 🔬
+## Deep Dive & Component Breakdown 🔬
 
 To understand how `Rest`'s internal components interact to provide
 high-performance TypeScript compilation, see the following source files:
@@ -195,206 +116,24 @@ and VSCode compatibility transformations.
 
 ---
 
-## Architecture 🏛️
+## `Rest` in the Land Ecosystem ⛱️ + 🏞️
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│ Rest Compiler                                                  │
-├──────────────────────────────────────────────────────────────┤
-│                                                                │
-│ Input: TypeScript files (directory)                            │
-│ Output: JavaScript files (directory)                           │
-│                                                                │
-│ Pipeline:                                                      │
-│ 1. Parse (OXC Parser)                                         │
-│    └─> AST with 'static lifetime                              │
-│ 2. Transform (OXC Transformer)                                │
-│    ├─> Strip TypeScript types                                │
-│    ├─> Handle decorators                                     │
-│    └─> Apply useDefineForClassFields                         │
-│ 3. Codegen (OXC Codegen)                                     │
-│    └─> Generate JavaScript                                   │
-│ 4. Write (Filesystem)                                         │
-│    └─> Output with preserved directory structure              │
-│                                                                │
-│ Configuration:                                                 │
-│ - CompilerConfig::simple()                                    │
-│ - CompilerConfig::vscode()                                    │
-│                                                                │
-│ Metrics:                                                       │
-│ - Compilation count                                           │
-│ - Total elapsed time                                          │
-│ - Error count                                                 │
-│                                                                │
-└──────────────────────────────────────────────────────────────┘
-```
+| Component         | Role & Key Responsibilities                                  |
+| :---------------- | :----------------------------------------------------------- |
+| **Rest Compiler** | High-performance TypeScript to JavaScript compilation.       |
+| **RestPlugin**    | esbuild plugin that integrates Rest into the build pipeline. |
+| **Build System**  | Environment-driven compiler selection (esbuild or Rest).     |
 
 ---
 
-## Performance 🚀
-
-From benchmark results (first 100 files of VSCode):
-
-- **Single file compile**: ~0.4ms
-- **Batch of 100 files**: ~200-300ms
-- **Throughput**: 300-500 files/second
-- **Memory**: ~50-100MB for large compilations
-
-Rest is significantly faster than esbuild for TypeScript compilation because:
-
-1. OXC is purpose-built for TypeScript (no JS fallback)
-2. Zero-copy operations with careful lifetime management
-3. No type-checking overhead (like `tsc --noEmit`)
-4. Parallel processing optional with `--Parallel` flag
-
----
-
-## VSCode Compatibility ✅
-
-Rest is designed to produce **byte-for-byte identical** output to VSCode's
-gulp/tsb build:
-
-### Verified Compatibilities
-
-- ✅ Decorator transformation (`__decorate` helper)
-- ✅ `useDefineForClassFields = false` (default)
-- ✅ `emitDecoratorMetadata = true` (default)
-- ✅ Target ES2024
-- ✅ CommonJS and ESM module formats
-- ✅ Private field conversion (with advanced config)
-- ✅ Class field initialization patterns
-
-### Not Yet Implemented
-
-- ⏸️ Source map generation (in progress)
-
----
-
-## Testing 🧪
-
-### Automated Test Suite
-
-Run the comprehensive test suite:
-
-```bash
-./Element/Rest/run_tests.sh
-```
-
-Tests cover:
-
-- Binary existence and version
-- Simple TypeScript compilation
-- Class fields and methods
-- Decorators with metadata
-- Interfaces and types
-- Async functions
-- Multiple file batches
-- VSCode compatibility mode
-- ESM output format
-- Parallel compilation
-- RestPlugin integration
-
-### Integration Testing
-
-Compare Rest output with VSCode's build:
-
-```bash
-./Element/Rest/benchmark_vscode_compatibility.sh
-```
-
-This script:
-
-- Compiles a sample of VSCode source files with Rest
-- Compares output byte-for-byte with VSCode's gulp build
-- Reports match percentage and any differences
-- Measures performance metrics
-
----
-
-## Troubleshooting 🔧
-
-### Binary Not Found
-
-```bash
-# Build Rest
-cargo build --release --package=Rest
-
-# Set binary path
-export REST_BINARY_PATH="Element/Rest/Target/release/Rest"
-```
-
-### Compilation Errors
-
-Rest uses OXC which may have different error messages than `tsc`:
-
-- Parse errors: Check syntax, especially decorators
-- Transform errors: May indicate unsupported TypeScript features
-- Enable `REST_VERBOSE=true` for detailed logs
-
-### Segmentation Faults
-
-Rest includes critical fixes for OXC lifetime management. If you encounter
-segfaults:
-
-1. Ensure using OXC 0.48+
-2. Check that `parse_result` stays alive through transformation
-3. Enable `RUST_LOG=debug` for detailed tracing
-
----
-
-## Development 💻
-
-### Building
-
-```bash
-# Debug build
-cargo build --package=Rest
-
-# Release build (optimized)
-cargo build --release --package=Rest
-```
-
-### Running Tests
-
-```bash
-# Quick test suite
-./Element/Rest/run_tests.sh
-
-# Rust unit/integration tests
-cargo test --package=Rest
-
-# With verbose output
-cargo test --package=Rest -- --nocapture
-
-# Specific test
-cargo test --package=Rest test_name
-```
-
-### Modifying Compiler
-
-1. **Parser changes**: Edit
-   [`Source/Fn/OXC/Parser.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/OXC/Parser.rs)
-2. **Transform changes**: Edit
-   [`Source/Fn/OXC/Transformer.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/OXC/Transformer.rs)
-3. **Codegen changes**: Edit
-   [`Source/Fn/OXC/Codegen.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/OXC/Codegen.rs)
-4. **CLI changes**: Edit
-   [`Source/Fn/Binary/Command.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/Binary/Command.rs)
-5. **Configuration**: Update
-   [`Source/Struct/SWC.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Struct/SWC.rs)
-   or
-   [`Source/Struct/CompilerConfig.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Struct/CompilerConfig.rs)
-
----
-
-## Changelog 📜
+## Changelog 📜
 
 See [`CHANGELOG.md`](https://github.com/CodeEditorLand/Rest/tree/Current/) for a
-history of changes to this component.
+history of changes to this component. 
 
 ---
 
-## License ⚖️
+## License ⚖️
 
 This project is released into the public domain under the **Creative Commons CC0
 Universal** license. You are free to use, modify, distribute, and build upon
@@ -403,10 +142,53 @@ see the [`LICENSE`](https://github.com/CodeEditorLand/Rest/tree/Current/) file.
 
 ---
 
-## Related 📚
+## Funding & Acknowledgements 🙏🏻
 
-- [OXC Documentation](https://oxc.rs/)
-- [VSCode Build Process](https://github.com/microsoft/vscode/tree/main/build)
-- [CodeEditorLand Architecture](https://github.com/CodeEditorLand/Land/tree/Current/Documentation/Architecture/components/Rest.md)
-- [Rest Compiler Detailed Docs](https://github.com/CodeEditorLand/Rest/tree/Current/COMPILER.md)
-- [Verification Report](https://github.com/CodeEditorLand/Rest/tree/Current/VERIFICATION.md)
+**Rest** is a core element of the **Land** ecosystem. This project is funded
+through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
+[NLnet](https://NLnet.NL) with financial support from the European Commission's
+[Next Generation Internet](https://ngi.eu) program. Learn more at the
+[NLnet project page](https://NLnet.NL/project/Land).
+
+<table>
+<thead>
+<tr>
+<th align="left"><strong>Land</strong></th>
+<th align="left"><strong>PlayForm</strong></th>
+<th align="left"><strong>NLnet</strong></th>
+<th align="left"><strong>NGI0 Commons Fund</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="middle">
+<a href="https://Editor.Land">
+<img width="60" src="https://raw.githubusercontent.com/CodeEditorLand/Asset/refs/heads/Current/Logo/Land.svg" alt="Land">
+</a>
+</td>
+<td align="left" valign="middle">
+<a href="https://PlayForm.Cloud">
+<img width="76" src="https://raw.githubusercontent.com/PlayForm/Asset/refs/heads/Current/Logo/PlayForm.svg" alt="PlayForm">
+</a>
+</td>
+<td align="left" valign="middle">
+<a href="https://NLnet.NL">
+<img width="240" src="https://NLnet.NL/logo/banner.svg" alt="NLnet">
+</a>
+</td>
+<td align="left" valign="middle">
+<a href="https://NLnet.NL/commonsfund">
+<img width="240" src="https://NLnet.NL/image/logos/NGI0CommonsFund_tag_black_mono.svg" alt="NGI0 Commons Fund">
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+
+---
+
+**Project Maintainers**: Source Open
+([Source/Open@Editor.Land](mailto:Source/Open@Editor.Land)) |
+[GitHub Repository](https://github.com/CodeEditorLand/Rest) |
+[Report an Issue](https://github.com/CodeEditorLand/Rest/issues) |
+[Security Policy](https://github.com/CodeEditorLand/Rest/security/policy)
