@@ -12,7 +12,6 @@ use oxc_allocator::Allocator;
 use oxc_ast::ast::Program;
 use oxc_codegen::{Codegen, CodegenOptions, CodegenReturn};
 use oxc_span::SourceType;
-use regex::Regex;
 use tracing::{debug, error, info, trace, warn};
 
 /// Codegen configuration options
