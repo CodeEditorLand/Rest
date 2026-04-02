@@ -37,9 +37,9 @@ Land
 
 ---
 
-# **Rest** ⛱️
+# **Rest** ⛱️
 
-The High-Performance TypeScript Compiler for Land 🏞️
+The High-Performance TypeScript Compiler for Land 🏞️
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Rest/tree/Current/LICENSE)
 [![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
@@ -63,7 +63,7 @@ VSCode-compatible output.
 
 ---
 
-## Key Features 🔐
+## Key Features 🔐
 
 - **Full TypeScript 5.x Support**: Complete compatibility with TypeScript 5.x
   syntax and features.
@@ -94,7 +94,7 @@ VSCode-compatible output.
 
 ---
 
-## Deep Dive & Component Breakdown 🔬
+## Deep Dive & Component Breakdown 🔬
 
 To understand how `Rest`'s internal components interact to provide
 high-performance TypeScript compilation, see the following source files:
@@ -117,7 +117,7 @@ and VSCode compatibility transformations.
 
 ---
 
-## `Rest` in the Land Ecosystem ⛱️ + 🏞️
+## `Rest` in the Land Ecosystem ⛱️ + 🏞️
 
 | Component         | Role & Key Responsibilities                                  |
 | :---------------- | :----------------------------------------------------------- |
