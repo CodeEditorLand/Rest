@@ -37,32 +37,33 @@ Land
 
 ---
 
-# **Rest** ⛱️ The High-Performance TypeScript Compiler for Land 🏞️
+# **Rest** ⛱️
+
+The High-Performance TypeScript Compiler for Land 🏞️
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Rest/tree/Current/LICENSE)
 [![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
 [![OXC Version](https://img.shields.io/badge/OXC-0.48-blue.svg)](https://oxc.rs/)
 
-Welcome to **Rest**, a high-performance TypeScript compiler built with Rust and
-OXC, designed for 100% compatibility with VSCode's build process. Rest is one of
-the five Elements in the CodeEditorLand architecture, responsible for
-**compilation and build tooling**. It replaces esbuild's TypeScript loader with
-a Rust-powered compiler that produces VSCode-compatible output.
+**Rest** is a high-performance TypeScript compiler built with Rust and OXC,
+designed for 100% compatibility with VSCode's build process. It replaces
+esbuild's TypeScript loader with a Rust-powered compiler that produces
+VSCode-compatible output.
 
 **Rest** is engineered to:
 
-1. **Deliver High Performance**: Compile TypeScript 2-3x faster than esbuild
+1. **Deliver High Performance:** Compile TypeScript 2-3x faster than esbuild
    using OXC.
-2. **Ensure VSCode Compatibility**: Produce byte-for-byte identical output to
+2. **Ensure VSCode Compatibility:** Produce byte-for-byte identical output to
    VSCode's gulp build.
-3. **Provide Memory Safety**: Leverage Rust's ownership model for deterministic
+3. **Provide Memory Safety:** Leverage Rust's ownership model for deterministic
    performance without garbage collection.
-4. **Support Modern Tooling**: Built on OXC 0.48, the latest TypeScript
+4. **Support Modern Tooling:** Built on OXC 0.48, the latest TypeScript
    infrastructure.
 
 ---
 
-## Key Features 🔐
+## Key Features 🔐
 
 - **Full TypeScript 5.x Support**: Complete compatibility with TypeScript 5.x
   syntax and features.
@@ -93,7 +94,7 @@ a Rust-powered compiler that produces VSCode-compatible output.
 
 ---
 
-## Deep Dive & Component Breakdown 🔬
+## Deep Dive & Component Breakdown 🔬
 
 To understand how `Rest`'s internal components interact to provide
 high-performance TypeScript compilation, see the following source files:
@@ -116,7 +117,7 @@ and VSCode compatibility transformations.
 
 ---
 
-## `Rest` in the Land Ecosystem ⛱️ + 🏞️
+## `Rest` in the Land Ecosystem ⛱️ + 🏞️
 
 | Component         | Role & Key Responsibilities                                  |
 | :---------------- | :----------------------------------------------------------- |
@@ -129,26 +130,28 @@ and VSCode compatibility transformations.
 ## Changelog 📜
 
 See [`CHANGELOG.md`](https://github.com/CodeEditorLand/Rest/tree/Current/) for a
-history of changes to this component. 
+history of changes to this component.
 
 ---
 
 ## License ⚖️
 
-This project is released into the public domain under the **Creative Commons CC0
-Universal** license. You are free to use, modify, distribute, and build upon
-this work for any purpose, without any restrictions. For the full legal text,
-see the [`LICENSE`](https://github.com/CodeEditorLand/Rest/tree/Current/) file.
+This project is licensed under Creative Commons CC0.
+
+See the LICENSE file for details.
 
 ---
 
 ## Funding & Acknowledgements 🙏🏻
 
-**Rest** is a core element of the **Land** ecosystem. This project is funded
-through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
-[NLnet](https://NLnet.NL) with financial support from the European Commission's
-[Next Generation Internet](https://ngi.eu) program. Learn more at the
-[NLnet project page](https://NLnet.NL/project/Land).
+Code Editor Land is funded through the NGI0 Commons Fund, established by NLnet
+with financial support from the European Commission's Next Generation Internet
+programme, under grant agreement No. 101135429.
+
+The project is operated by PlayForm, based in Sofia, Bulgaria.
+
+PlayForm acts as the open-source steward for Code Editor Land under the NGI0
+Commons Fund grant.
 
 <table>
 <thead>
