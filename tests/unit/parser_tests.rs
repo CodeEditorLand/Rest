@@ -532,7 +532,7 @@ fn test_parse_unicode_identifiers() {
         const π = 3.14159;
         let 你好 = "hello";
         function привет(): void {}
-        const 🎉 = "celebrate";
+        const 🎉 = "celebrate";
         interface kabanay {}
     "#;
     let result = parse_source(source, "unicode.ts");
