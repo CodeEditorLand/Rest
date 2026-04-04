@@ -44,7 +44,6 @@
 /// async fn main() { (Struct::Binary::Command::Struct::Fn().Fn)().await }
 
 /// ```
-async fn main() { (Struct::Binary::Command::Struct::Fn().Fn)().await }
 
 pub mod Fn;
 
