@@ -50,16 +50,18 @@ designed for 100% compatibility with VSCode's build process. It replaces
 esbuild's TypeScript loader with a Rust-powered compiler that produces
 VSCode-compatible output.
 
-**Rest** is engineered to:
+**What Rest gives you:**
 
-1. **Deliver High Performance:** Compile TypeScript 2-3x faster than esbuild
-   using OXC.
-2. **Ensure VSCode Compatibility:** Produce byte-for-byte identical output to
-   VSCode's gulp build.
-3. **Provide Memory Safety:** Leverage Rust's ownership model for deterministic
-   performance without garbage collection.
-4. **Support Modern Tooling:** Built on OXC 0.48, the latest TypeScript
-   infrastructure.
+1. **2-3x faster than esbuild.** OXC parses and transforms TypeScript at native
+   Rust speed. No Node.js GC pauses, no V8 JIT warmup.
+2. **Byte-for-byte VS Code output.** The bundles Rest produces are identical to
+   VS Code's gulp build. Full compatibility, no surprises.
+3. **Deterministic builds.** Rust's ownership model means no GC, no
+   nondeterministic finalizers. Same input always produces same output.
+4. **Latest TypeScript support.** Built on OXC 0.48 with full TypeScript 5.x
+   syntax coverage.
+
+📖 **[Rust API Documentation](https://Rust.Documentation.Rest.Editor.Land/)**
 
 ---
 
