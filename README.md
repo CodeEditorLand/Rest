@@ -35,45 +35,159 @@ Land
 </tr>
 </table>
 
-
 ---
 
 # **Rest**&#x2001;⛱️
 
-> **VS Code's TypeScript build uses tsc with Node.js overhead on every incremental compile. Build times grow linearly with project size. Even alternatives like esbuild still run in a Node.js process.**
+The High-Performance TypeScript Compiler for Land 🏞️
+
+> **VS Code's TypeScript build uses tsc with Node.js overhead on every
+> incremental compile. Build times grow linearly with project size. Even
+> alternatives like esbuild still run in a Node.js process.**
 
 _"VS Code's TypeScript build step. 2-3x faster."_
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Rest/tree/Current/LICENSE)
-[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
+[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/Rest.svg)](https://crates.io/crates/Rest)
+[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
 [![OXC Version](https://img.shields.io/badge/OXC-0.48-blue.svg)](https://oxc.rs/)
 
-Rest is an OXC-powered TypeScript compiler implemented in Rust. 100% compatible output at 2-3x the speed of esbuild. Zero Node.js overhead in the build path. Rest processes VS Code's platform code into the bundled artifacts that Cocoon loads at runtime.
+📖 **[Rust API Documentation](https://Rust.Documentation.Editor.Land/Rest/)**
 
-📖 **[Rust API Documentation](https://Rust.Documentation.Rest.Editor.Land/)**
+Welcome to **Rest**, a high-performance TypeScript compiler built with Rust and
+OXC, designed for 100% compatibility with VSCode's build process. Rest is one of
+the Elements in the CodeEditorLand architecture, responsible for **compilation
+and build tooling**. It replaces esbuild's TypeScript loader with a Rust-powered
+compiler that produces VSCode-compatible output.
+
+**Rest** is engineered to:
+
+1. **Deliver High Performance**: Compile TypeScript 2-3x faster than esbuild
+   using OXC.
+2. **Ensure VSCode Compatibility**: Produce byte-for-byte identical output to
+   VSCode's gulp build.
+3. **Provide Memory Safety**: Leverage Rust's ownership model for deterministic
+   performance without garbage collection.
+4. **Support Modern Tooling**: Built on OXC 0.48, the latest TypeScript
+   infrastructure.
+
+### Why OXC over esbuild for TypeScript?
+
+The `Rest` compiler was chosen over the existing esbuild pipeline for three
+reasons that directly affect the VSCode build:
+
+1. **OXC is used by VSCode internally.** This means Rest produces output that
+   matches VSCode's own build pipeline — not an approximation.
+2. **`emitDecoratorMetadata` support.** VSCode's codebase relies on decorator
+   metadata emission. OXC handles this correctly; esbuild has limited support.
+3. **`useDefineForClassFields = false`.** VSCode requires the legacy class
+   fields behavior for ES5 compatibility. OXC's configurable codegen handles
+   this exactly; esbuild's is implicit.
 
 ---
 
-## What It Does&#x2001;🔐
+## Key Features&#x2001;🔐
 
-- **Rust-native compilation.** OXC parser implemented in Rust. Zero Node.js in the build path.
-- **2-3x faster than esbuild.** The same compatible output at significantly higher throughput.
-- **100% compatible output.** VS Code platform code compiles without modification.
+- **Full TypeScript 5.x Support**: Complete compatibility with TypeScript 5.x
+  syntax and features.
+- **Decorator Handling**: Proper support for `emitDecoratorMetadata` and
+  decorator transformations.
+- **Class Fields Control**: Configurable `useDefineForClassFields` behavior
+  (VSCode default: false).
+- **Parallel Compilation**: Optional `--Parallel` flag for multi-core
+  compilation.
+- **Directory-Based Compilation**: Process entire directory structures with
+  preserved layout.
+- **Comprehensive Error Reporting**: Detailed error messages with source
+  location information.
+- **Compilation Metrics**: Built-in tracking of compilation count, elapsed time,
+  and error counts.
+- **Source Map Generation**: Planned support for source maps (in progress).
 
 ---
 
-## Development&#x2001;🛠️
+## Core Architecture Principles&#x2001;🏗️
 
-Rest is a component of the Land workspace. Follow the
-[Land Repository](https://github.com/CodeEditorLand/Land) instructions to
-build and run.
+| Principle          | Description                                                              | Key Components Involved          |
+| :----------------- | :----------------------------------------------------------------------- | :------------------------------- |
+| **Performance**    | Rust + OXC delivers 2-3x faster compilation than esbuild.                | OXC Parser, Transformer, Codegen |
+| **Compatibility**  | OXC is used by VSCode internally, ensuring 1:1 output compatibility.     | OXC 0.48, VSCode build process   |
+| **Memory Safety**  | No garbage collection, deterministic performance through Rust ownership. | Rust lifetime management         |
+| **Modern Tooling** | Built on the latest OXC infrastructure for TypeScript compilation.       | OXC 0.48+                        |
 
 ---
 
-## License&#x2001;⚖️
+## Deep Dive & Component Breakdown&#x2001;🔬
 
-CC0 1.0 Universal. Public domain. No restrictions.
-[LICENSE](https://github.com/CodeEditorLand/Rest/tree/Current/LICENSE)
+To understand how `Rest`'s internal components interact to provide
+high-performance TypeScript compilation, see the following source files:
+
+- **[`Source/Library.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Library.rs)** -
+  Binary entry point
+- **[`Source/Fn/OXC/Compiler.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/OXC/Compiler.rs)** -
+  Main compiler orchestration
+- **[`Source/Fn/OXC/Parser.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/OXC/Parser.rs)** -
+  OXC parser wrapper
+- **[`Source/Fn/OXC/Transformer.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/OXC/Transformer.rs)** -
+  AST transformation (decorators, class fields, JSX)
+- **[`Source/Fn/OXC/Codegen.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Fn/OXC/Codegen.rs)** -
+  Code generation from transformed AST
+- **[`Source/Struct/CompilerConfig.rs`](https://github.com/CodeEditorLand/Rest/tree/Current/Source/Struct/CompilerConfig.rs)** -
+  Advanced configuration (decorators, class fields, target)
+
+The source files explain the OXC-based compilation pipeline, decorator handling,
+and VSCode compatibility transformations.
+
+---
+
+## `Rest` in the Land Ecosystem&#x2001;⛱️ + 🏞️
+
+| Component         | Role & Key Responsibilities                                  |
+| :---------------- | :----------------------------------------------------------- |
+| **Rest Compiler** | High-performance TypeScript to JavaScript compilation.       |
+| **RestPlugin**    | esbuild plugin that integrates Rest into the build pipeline. |
+| **Build System**  | Environment-driven compiler selection (esbuild or Rest).     |
+
+---
+
+## Getting Started&#x2001;🚀
+
+### Installation&#x2001;📥
+
+```toml
+[dependencies]
+Rest = { git = "https://github.com/CodeEditorLand/Rest.git", branch = "Current" }
+```
+
+Or use via the `Output` element's `Compiler=Rest` environment variable.
+
+### Usage&#x2001;🚀
+
+The Rest compiler is invoked as a CLI binary:
+
+```bash
+# Compile a directory
+rest --input ./Source --output ./Target
+
+# With parallel compilation
+rest --input ./Source --output ./Target --Parallel
+
+# Check available options
+rest --help
+```
+
+Via the Output element build pipeline:
+
+```bash
+# Use Rest compiler for TypeScript transpilation
+export Compiler=Rest
+npm run prepublishOnly
+
+# Development mode with Rest
+export NODE_ENV=development
+export Compiler=Rest
+npm run Run
+```
 
 ---
 
@@ -85,12 +199,32 @@ CC0 1.0 Universal. Public domain. No restrictions.
 - [Output](https://github.com/CodeEditorLand/Output)
 - [Cocoon](https://github.com/CodeEditorLand/Cocoon)
 
+---
 
-## Funding & Acknowledgements 🙏🏻
+## License&#x2001;⚖️
 
-Code Editor Land is funded through the NGI0 Commons Fund, established by NLnet
-with financial support from the European Commission's Next Generation Internet
-programme, under grant agreement No. 101135429.
+This project is released into the public domain under the **Creative Commons CC0
+Universal** license. You are free to use, modify, distribute, and build upon
+this work for any purpose, without any restrictions. For the full legal text,
+see the [`LICENSE`](https://github.com/CodeEditorLand/Rest/tree/Current/) file.
+
+---
+
+## Changelog&#x2001;📜
+
+Stay updated with our progress! See
+[`CHANGELOG.md`](https://github.com/CodeEditorLand/Rest/tree/Current/) for a
+history of changes specific to **Rest**.
+
+---
+
+## Funding \& Acknowledgements&#x2001;🙏🏻
+
+**Rest** is a core element of the **Land** ecosystem. This project is funded
+through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
+[NLnet](https://NLnet.NL) with financial support from the European Commission's
+[Next Generation Internet](https://ngi.eu) program. Learn more at the
+[NLnet project page](https://NLnet.NL/project/Land).
 
 The project is operated by PlayForm, based in Sofia, Bulgaria.
 
