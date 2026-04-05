@@ -9,6 +9,3 @@ pub mod Transform;
 pub mod NLS;
 pub mod Worker;
 pub mod Bundle;
-
-// Re-export compiler for testing
-pub use OXC::Compiler;

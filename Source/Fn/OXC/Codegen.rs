@@ -46,11 +46,11 @@ pub struct CodegenResult {
 	pub code_len:usize,
 }
 
-/// Post-process generated JavaScript to match VSCode's static class property format.
-/// Converts `static x = expr;` into `static { this.x = expr; }`.
+/// Post-process generated JavaScript to match VSCode's static class property
+/// format. Converts `static x = expr;` into `static { this.x = expr; }`.
 /// This is needed because OXC 0.48's class properties plugin does not emit
 /// legacy static initializer blocks by default.
-fn transform_static_class_properties(code: &str) -> String {
+fn transform_static_class_properties(code:&str) -> String {
 	// This regex matches: static <name> = <expression>;
 	// Captures the property name and the initializer expression.
 	let re = match regex::Regex::new(r"(?m)^\s*static\s+([a-zA-Z_$][\w$]*)\s*=\s*([^;]+);") {
@@ -59,7 +59,7 @@ fn transform_static_class_properties(code: &str) -> String {
 			// If regex compilation fails, return original code and log.
 			error!("transform_static_class_properties: regex compile error: {}", e);
 			return code.to_string();
-		}
+		},
 	};
 	re.replace_all(code, "static { this.$1 = $2; }").into_owned()
 }
@@ -119,7 +119,7 @@ pub fn codegen<'a>(
 	info!("[Codegen #{codegen_id}] SUCCESS: Generated {} bytes", code_len);
 	// Transform OXC output to match VSCode static class property format
 	let transformed_code = transform_static_class_properties(&code);
-	Ok(CodegenResult { code: transformed_code, code_len })
+	Ok(CodegenResult { code:transformed_code, code_len })
 }
 
 /// Write the generated code to a file

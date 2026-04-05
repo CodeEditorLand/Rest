@@ -1,6 +1,6 @@
 [[bin]]
 name = "Rest"
-path = "Source/Binary.rs"
+path = "Source/Library.rs"
 
 [build-dependencies]
 serde = { workspace = true, features = ["derive"] }

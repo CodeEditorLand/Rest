@@ -17,7 +17,15 @@ use oxc_allocator::Allocator;
 use oxc_ast::ast::Program;
 use oxc_semantic::SemanticBuilder;
 use oxc_span::SourceType;
-use oxc_transformer::{CompilerAssumptions, EnvOptions, JsxOptions, JsxRuntime, TransformOptions, Transformer, TypeScriptOptions};
+use oxc_transformer::{
+	CompilerAssumptions,
+	EnvOptions,
+	JsxOptions,
+	JsxRuntime,
+	TransformOptions,
+	Transformer,
+	TypeScriptOptions,
+};
 use tracing::{debug, info, trace, warn};
 
 /// Transformer configuration options
@@ -140,7 +148,7 @@ pub fn transform<'a>(
 	let mut typescript_options = TypeScriptOptions::default();
 	typescript_options.only_remove_type_imports = true;
 	trace!("[Transform #{transform_id}] TypeScript options configured (only_remove_type_imports=true)");
-	
+
 	// Configure JSX transformation if enabled
 	let jsx_options = if config.jsx {
 		JsxOptions { runtime:JsxRuntime::Automatic, ..JsxOptions::default() }
@@ -149,7 +157,7 @@ pub fn transform<'a>(
 		JsxOptions { runtime:JsxRuntime::Classic, ..JsxOptions::default() }
 	};
 	trace!("[Transform #{transform_id}] JSX options configured");
-	
+
 	// Configure environment options based on target
 	let env_options_start = std::time::Instant::now();
 	let env_options = EnvOptions::from_target(&config.target).unwrap_or_default();
@@ -158,15 +166,18 @@ pub fn transform<'a>(
 		config.target,
 		env_options_start.elapsed()
 	);
-	
+
 	// Configure compiler assumptions for VSCode compatibility.
 	// The `use_define_for_class_fields` flag from TypeScript:
 	// - false => loose mode (direct assignment) => set_public_class_fields = true
 	// - true => strict mode (defineProperty) => set_public_class_fields = false
 	let mut assumptions = CompilerAssumptions::default();
 	assumptions.set_public_class_fields = !config.use_define_for_class_fields;
-	trace!("[Transform #{transform_id}] Compiler assumptions configured (set_public_class_fields={})", assumptions.set_public_class_fields);
-	
+	trace!(
+		"[Transform #{transform_id}] Compiler assumptions configured (set_public_class_fields={})",
+		assumptions.set_public_class_fields
+	);
+
 	// Create transform options with all VSCode compatibility settings
 	let transform_options = TransformOptions {
 		typescript:typescript_options,
