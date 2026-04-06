@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 #===============================================================================
 # prepublishOnly.sh - Build script for @codeeditorland/Rest NPM publishing
 #===============================================================================
@@ -8,63 +8,56 @@
 # lifecycle script.
 #
 # Usage:
-#   bash prepublishOnly.sh
+#   sh prepublishOnly.sh
 #
 # Environment Variables:
-# REST_BUILD_TARGET - Override the build target (default: auto-detect)
-# REST_SKIP_BUILD - Set to "true" to skip the build
-# Compiler - Set to "Rest" to enable the Rest compiler
+#   REST_BUILD_TARGET - Override the build target (default: auto-detect)
+#   REST_SKIP_BUILD   - Set to "true" to skip the build
+#   Compiler          - Set to "Rest" to enable the Rest compiler
 #
 #===============================================================================
 
 set -e
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
-# Log functions
 log_info() {
-	echo -e "${GREEN}[Rest]${NC} $1"
+	printf "[Rest] %s\n" "$1"
 }
 
 log_warn() {
-	echo -e "${YELLOW}[Rest]${NC} $1"
+	printf "[Rest] %s\n" "$1"
 }
 
 log_error() {
-	echo -e "${RED}[Rest]${NC} $1"
+	printf "[Rest] %s\n" "$1" >&2
 }
 
 # Ensure Rust toolchain is configured
-if ! command -v rustup &>/dev/null; then
-log_error "rustup is not installed. Please install Rust from https://rustup.rs/"
-exit 1
+if ! command -v rustup >/dev/null 2>&1; then
+	log_error "rustup is not installed. Please install Rust from https://rustup.rs/"
+	exit 1
 fi
 
 # Set default toolchain to stable if not already configured
-if ! rustup default &>/dev/null; then
-log_info "Setting Rust default toolchain to stable..."
-rustup default stable
+if ! rustup default >/dev/null 2>&1; then
+	log_info "Setting Rust default toolchain to stable..."
+	rustup default stable
 fi
 
 # Check if build should be skipped
-if [[ "${REST_SKIP_BUILD}" == "true" ]]; then
+if [ "${REST_SKIP_BUILD}" = "true" ]; then
 	log_info "Build skipped via REST_SKIP_BUILD environment variable"
 	exit 0
 fi
 
 # Ensure we're in the Rest directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
 log_info "Starting Rest build for NPM publishing..."
 log_info "Working directory: $SCRIPT_DIR"
 
 # Check if Cargo is available
-if ! command -v cargo &>/dev/null; then
+if ! command -v cargo >/dev/null 2>&1; then
 	log_error "Cargo is not installed. Please install Rust from https://rustup.rs/"
 	exit 1
 fi
@@ -73,36 +66,32 @@ log_info "Cargo version: $(cargo --version)"
 
 # Detect target platform
 detect_target() {
-	local platform arch target
-
 	platform=$(uname -s | tr '[:upper:]' '[:lower:]')
 	arch=$(uname -m)
 
 	case "$platform" in
-	darwin)
-		if [[ "$arch" == "arm64" ]]; then
-			target="aarch64-apple-darwin"
-		else
-			target="x86_64-apple-darwin"
-		fi
-		;;
-	linux)
-		if [[ "$arch" == "aarch64" ]]; then
-			target="aarch64-unknown-linux-gnu"
-		else
-			target="x86_64-unknown-linux-gnu"
-		fi
-		;;
-	msys* | mingw* | cygwin*)
-		target="x86_64-pc-windows-msvc"
-		;;
-	*)
-		log_error "Unsupported platform: $platform"
-		exit 1
-		;;
+		darwin)
+			if [ "$arch" = "arm64" ]; then
+				echo "aarch64-apple-darwin"
+			else
+				echo "x86_64-apple-darwin"
+			fi
+			;;
+		linux)
+			if [ "$arch" = "aarch64" ]; then
+				echo "aarch64-unknown-linux-gnu"
+			else
+				echo "x86_64-unknown-linux-gnu"
+			fi
+			;;
+		msys* | mingw* | cygwin*)
+			echo "x86_64-pc-windows-msvc"
+			;;
+		*)
+			log_error "Unsupported platform: $platform"
+			exit 1
+			;;
 	esac
-
-	echo "$target"
 }
 
 # Override target if environment variable is set
@@ -115,14 +104,16 @@ log_info "Building Rest compiler in release mode..."
 cargo build --release --target "$TARGET"
 
 # Verify the binary was created
-# Note: Cargo.toml specifies target-dir = "Target", so we use "Target" instead of "target"
-if [[ "$TARGET" == *"windows"* ]]; then
-  BINARY_PATH="Target/$TARGET/release/Rest.exe"
-else
-  BINARY_PATH="Target/$TARGET/release/Rest"
-fi
+case "$TARGET" in
+	*windows*)
+		BINARY_PATH="Target/$TARGET/release/Rest.exe"
+		;;
+	*)
+		BINARY_PATH="Target/$TARGET/release/Rest"
+		;;
+esac
 
-if [[ ! -f "$BINARY_PATH" ]]; then
+if [ ! -f "$BINARY_PATH" ]; then
 	log_error "Binary not found at: $BINARY_PATH"
 	exit 1
 fi
@@ -132,14 +123,17 @@ log_info "Build successful: $BINARY_PATH"
 # Create bin directory for NPM package
 mkdir -p bin
 
-# Copy or symlink the binary to bin directory
+# Copy the binary to bin directory
 BINARY_NAME=$(basename "$BINARY_PATH")
 cp "$BINARY_PATH" "bin/$BINARY_NAME"
 
 # Make the binary executable (Unix-like systems)
-if [[ "$TARGET" != *"windows"* ]]; then
-	chmod +x "bin/$BINARY_NAME"
-fi
+case "$TARGET" in
+	*windows*) ;;
+	*)
+		chmod +x "bin/$BINARY_NAME"
+		;;
+esac
 
 log_info "Binary copied to: bin/$BINARY_NAME"
 

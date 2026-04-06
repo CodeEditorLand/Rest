@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # Rest Compiler Test Suite
 # This script runs comprehensive tests on the Rest compiler
 
@@ -9,12 +9,6 @@ echo "Rest Compiler Test Suite"
 echo "=========================================="
 echo ""
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
 # Test counters
 TOTAL_TESTS=0
 PASSED_TESTS=0
@@ -22,21 +16,21 @@ FAILED_TESTS=0
 
 # Helper function to run a test
 run_test() {
-    local test_name="$1"
-    local test_command="$2"
-    
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
-    echo -n "Test [$TOTAL_TESTS]: $test_name ... "
-    
-    if eval "$test_command" > /dev/null 2>&1; then
-        echo -e "${GREEN}PASSED${NC}"
-        PASSED_TESTS=$((PASSED_TESTS + 1))
-        return 0
-    else
-        echo -e "${RED}FAILED${NC}"
-        FAILED_TESTS=$((FAILED_TESTS + 1))
-        return 1
-    fi
+	test_name="$1"
+	test_command="$2"
+
+	TOTAL_TESTS=$((TOTAL_TESTS + 1))
+	printf "Test [%s]: %s ... " "$TOTAL_TESTS" "$test_name"
+
+	if eval "$test_command" >/dev/null 2>&1; then
+		echo "PASSED"
+		PASSED_TESTS=$((PASSED_TESTS + 1))
+		return 0
+	else
+		echo "FAILED"
+		FAILED_TESTS=$((FAILED_TESTS + 1))
+		return 1
+	fi
 }
 
 # Test 1: Binary exists
@@ -113,16 +107,14 @@ run_test "Multiple files compilation" "
 "
 
 # Test 11: Source map generation (skipped - not yet implemented)
-echo -e "Test [11]: Source map generation ... ${YELLOW}SKIPPED${NC} (not yet implemented)"
+echo "Test [11]: Source map generation ... SKIPPED (not yet implemented)"
 TOTAL_TESTS=$((TOTAL_TESTS + 1))
 
 # Test 12: Compiler metrics (check that it tracks stats)
 run_test "Compiler tracks metrics" "
-    # Run a compilation and check that we can get metrics
     echo 'export const metric_test = true;' > /tmp/test_metrics.ts
     mkdir -p /tmp/rest_output_metrics
     if Target/release/Rest compile --input /tmp --output /tmp/rest_output_metrics --target es2024 --module commonjs > /dev/null 2>&1; then
-        # Binary ran successfully (metrics are internal but compilation worked)
         true
     else
         false
@@ -134,7 +126,6 @@ run_test "VSCode compatibility mode" "
     echo 'class CompatTest { field = \"test\"; }' > /tmp/test_vscode.ts
     mkdir -p /tmp/rest_output_vscode
     Target/release/Rest compile --input /tmp --output /tmp/rest_output_vscode --target es2024 --module commonjs > /dev/null 2>&1
-    # Check that field appears as direct class property (VSCode style with useDefine=false)
     grep -q 'field = \"test\"' /tmp/rest_output_vscode/test_vscode.js
 "
 
@@ -155,9 +146,7 @@ run_test "Parallel compilation flag" "
 "
 
 # Test 16: Error handling - invalid TypeScript (skipped - OXC is permissive)
-# This test is skipped because OXC parser is quite permissive and may accept
-# syntax that we consider invalid for test purposes.
-echo -e "Test [16]: Error handling for invalid syntax ... ${YELLOW}SKIPPED${NC} (OXC is permissive)"
+echo "Test [16]: Error handling for invalid syntax ... SKIPPED (OXC is permissive)"
 TOTAL_TESTS=$((TOTAL_TESTS + 1))
 
 # Test 17: Integration with esbuild RestPlugin (check if plugin loads)
@@ -170,15 +159,15 @@ echo ""
 echo "=========================================="
 echo "Test Summary"
 echo "=========================================="
-echo -e "Total tests: $TOTAL_TESTS"
-echo -e "Passed: ${GREEN}$PASSED_TESTS${NC}"
-echo -e "Failed: ${RED}$FAILED_TESTS${NC}"
+echo "Total tests: $TOTAL_TESTS"
+echo "Passed: $PASSED_TESTS"
+echo "Failed: $FAILED_TESTS"
 echo ""
 
-if [ $FAILED_TESTS -eq 0 ]; then
-    echo -e "${GREEN}All tests passed!${NC}"
-    exit 0
+if [ "$FAILED_TESTS" -eq 0 ]; then
+	echo "All tests passed!"
+	exit 0
 else
-    echo -e "${RED}Some tests failed.${NC}"
-    exit 1
+	echo "Some tests failed."
+	exit 1
 fi
