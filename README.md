@@ -110,7 +110,7 @@ reasons that directly affect the VSCode build:
 
 | Principle          | Description                                                              | Key Components Involved          |
 | :----------------- | :----------------------------------------------------------------------- | :------------------------------- |
-| **Performance**    | Rust + OXC delivers 2-3x faster compilation than esbuild.                | OXC Parser, Transformer, Codegen |
+| **Performance**    | Rust + OXC delivers 2-3x faster compilation than esbuild.                | OXC Parser, Transformer, Codegen |
 | **Compatibility**  | OXC is used by VSCode internally, ensuring 1:1 output compatibility.     | OXC 0.48, VSCode build process   |
 | **Memory Safety**  | No garbage collection, deterministic performance through Rust ownership. | Rust lifetime management         |
 | **Modern Tooling** | Built on the latest OXC infrastructure for TypeScript compilation.       | OXC 0.48+                        |
@@ -140,7 +140,7 @@ and VSCode compatibility transformations.
 
 ---
 
-## `Rest` in the Land Ecosystem&#x2001;⛱️ + 🏞️
+## `Rest` in the Land Ecosystem&#x2001;⛱️ + 🏞️
 
 | Component         | Role & Key Responsibilities                                  |
 | :---------------- | :----------------------------------------------------------- |
