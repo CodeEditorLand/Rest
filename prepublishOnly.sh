@@ -32,13 +32,13 @@ log_error() {
 }
 
 # Ensure Rust toolchain is configured
-if ! command -v rustup > /dev/null 2>&1; then
+if ! command -v rustup >/dev/null 2>&1; then
 	log_error "rustup is not installed. Please install Rust from https://rustup.rs/"
 	exit 1
 fi
 
 # Set default toolchain to stable if not already configured
-if ! rustup default > /dev/null 2>&1; then
+if ! rustup default >/dev/null 2>&1; then
 	log_info "Setting Rust default toolchain to stable..."
 	rustup default stable
 fi
@@ -57,7 +57,7 @@ log_info "Starting Rest build for NPM publishing..."
 log_info "Working directory: $SCRIPT_DIR"
 
 # Check if Cargo is available
-if ! command -v cargo > /dev/null 2>&1; then
+if ! command -v cargo >/dev/null 2>&1; then
 	log_error "Cargo is not installed. Please install Rust from https://rustup.rs/"
 	exit 1
 fi
@@ -70,27 +70,27 @@ detect_target() {
 	arch=$(uname -m)
 
 	case "$platform" in
-		darwin)
-			if [ "$arch" = "arm64" ]; then
-				echo "aarch64-apple-darwin"
-			else
-				echo "x86_64-apple-darwin"
-			fi
-			;;
-		linux)
-			if [ "$arch" = "aarch64" ]; then
-				echo "aarch64-unknown-linux-gnu"
-			else
-				echo "x86_64-unknown-linux-gnu"
-			fi
-			;;
-		msys* | mingw* | cygwin*)
-			echo "x86_64-pc-windows-msvc"
-			;;
-		*)
-			log_error "Unsupported platform: $platform"
-			exit 1
-			;;
+	darwin)
+		if [ "$arch" = "arm64" ]; then
+			echo "aarch64-apple-darwin"
+		else
+			echo "x86_64-apple-darwin"
+		fi
+		;;
+	linux)
+		if [ "$arch" = "aarch64" ]; then
+			echo "aarch64-unknown-linux-gnu"
+		else
+			echo "x86_64-unknown-linux-gnu"
+		fi
+		;;
+	msys* | mingw* | cygwin*)
+		echo "x86_64-pc-windows-msvc"
+		;;
+	*)
+		log_error "Unsupported platform: $platform"
+		exit 1
+		;;
 	esac
 }
 
@@ -105,12 +105,12 @@ cargo build --release --target "$TARGET"
 
 # Verify the binary was created
 case "$TARGET" in
-	*windows*)
-		BINARY_PATH="Target/$TARGET/release/Rest.exe"
-		;;
-	*)
-		BINARY_PATH="Target/$TARGET/release/Rest"
-		;;
+*windows*)
+	BINARY_PATH="Target/$TARGET/release/Rest.exe"
+	;;
+*)
+	BINARY_PATH="Target/$TARGET/release/Rest"
+	;;
 esac
 
 if [ ! -f "$BINARY_PATH" ]; then
@@ -129,16 +129,16 @@ cp "$BINARY_PATH" "bin/$BINARY_NAME"
 
 # Make the binary executable (Unix-like systems)
 case "$TARGET" in
-	*windows*) ;;
-	*)
-		chmod +x "bin/$BINARY_NAME"
-		;;
+*windows*) ;;
+*)
+	chmod +x "bin/$BINARY_NAME"
+	;;
 esac
 
 log_info "Binary copied to: bin/$BINARY_NAME"
 
 # Create the bin wrapper script (Rest.js)
-cat > bin/Rest.js << 'EOF'
+cat >bin/Rest.js <<'EOF'
 #!/usr/bin/env node
 /**
  * Rest.js - CLI wrapper for Rest compiler binary
