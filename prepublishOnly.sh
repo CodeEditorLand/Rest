@@ -32,13 +32,13 @@ log_error() {
 }
 
 # Ensure Rust toolchain is configured
-if ! command -v rustup >/dev/null 2>&1; then
+if ! command -v rustup > /dev/null 2>&1; then
 	log_error "rustup is not installed. Please install Rust from https://rustup.rs/"
 	exit 1
 fi
 
 # Set default toolchain to stable if not already configured
-if ! rustup default >/dev/null 2>&1; then
+if ! rustup default > /dev/null 2>&1; then
 	log_info "Setting Rust default toolchain to stable..."
 	rustup default stable
 fi
@@ -57,7 +57,7 @@ log_info "Starting Rest build for NPM publishing..."
 log_info "Working directory: $SCRIPT_DIR"
 
 # Check if Cargo is available
-if ! command -v cargo >/dev/null 2>&1; then
+if ! command -v cargo > /dev/null 2>&1; then
 	log_error "Cargo is not installed. Please install Rust from https://rustup.rs/"
 	exit 1
 fi
@@ -138,7 +138,7 @@ esac
 log_info "Binary copied to: bin/$BINARY_NAME"
 
 # Create the bin wrapper script (Rest.js)
-cat >bin/Rest.js <<'EOF'
+cat > bin/Rest.js << 'EOF'
 #!/usr/bin/env node
 /**
  * Rest.js - CLI wrapper for Rest compiler binary

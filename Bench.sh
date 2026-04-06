@@ -47,12 +47,12 @@ echo ""
 
 # Function to count TypeScript files
 count_typescript_files() {
-	find "$1" -name "*.ts" -type f 2>/dev/null | \
-		grep -v "node_modules" | \
-		grep -v "Target" | \
-		grep -v "/test" | \
-		grep -v "\.d\.ts$" | \
-		wc -l
+	find "$1" -name "*.ts" -type f 2> /dev/null \
+		| grep -v "node_modules" \
+		| grep -v "Target" \
+		| grep -v "/test" \
+		| grep -v "\.d\.ts$" \
+		| wc -l
 }
 
 # Function to compile with Rest
@@ -97,7 +97,7 @@ benchmark_rest() {
 	printf "  Total time: %d seconds\n" "$elapsed"
 
 	if [ -d "$output_dir" ]; then
-		compiled_count=$(find "$output_dir" -name "*.js" -type f 2>/dev/null | grep -v "map" | wc -l)
+		compiled_count=$(find "$output_dir" -name "*.js" -type f 2> /dev/null | grep -v "map" | wc -l)
 		echo "  Output files: $compiled_count"
 		echo "  Output size: $(du -sh "$output_dir" | cut -f1)"
 
@@ -126,8 +126,8 @@ compare_outputs() {
 	echo "Finding VSCode JavaScript files..."
 	echo "Finding Rest JavaScript files..."
 
-	total_vscode=$(find "$vscode_dir" -name "*.js" -type f 2>/dev/null | grep -v "map" | grep -v "\.d\.js$" | wc -l)
-	total_rest=$(find "$rest_dir" -name "*.js" -type f 2>/dev/null | grep -v "map" | grep -v "\.d\.js$" | wc -l)
+	total_vscode=$(find "$vscode_dir" -name "*.js" -type f 2> /dev/null | grep -v "map" | grep -v "\.d\.js$" | wc -l)
+	total_rest=$(find "$rest_dir" -name "*.js" -type f 2> /dev/null | grep -v "map" | grep -v "\.d\.js$" | wc -l)
 
 	echo "VSCode: $total_vscode files, Rest: $total_rest files"
 
@@ -146,7 +146,7 @@ compare_outputs() {
 	mismatch_count=0
 	missing_count=0
 
-	find "$vscode_dir" -name "*.js" -type f 2>/dev/null | grep -v "map" | grep -v "\.d\.js$" | while IFS= read -r vscode_file; do
+	find "$vscode_dir" -name "*.js" -type f 2> /dev/null | grep -v "map" | grep -v "\.d\.js$" | while IFS= read -r vscode_file; do
 		rel="${vscode_file#$vscode_dir/}"
 		rest_file="$rest_dir/$rel"
 
@@ -182,7 +182,7 @@ else
 	echo "SKIPPING: VSCode source not found or empty"
 fi
 
-if [ -d "$VSCode_OUT_BUILD_DIR" ] && [ "$(find "$VSCode_OUT_BUILD_DIR" -name "*.js" 2>/dev/null | wc -l)" -gt 0 ]; then
+if [ -d "$VSCode_OUT_BUILD_DIR" ] && [ "$(find "$VSCode_OUT_BUILD_DIR" -name "*.js" 2> /dev/null | wc -l)" -gt 0 ]; then
 	echo ""
 	echo "NOTE: Production build requires different compile options"
 	echo "For now comparing same output with different expected directory"
