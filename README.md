@@ -77,7 +77,7 @@ The `Rest` compiler was chosen over the existing esbuild pipeline for three
 reasons that directly affect the VSCode build:
 
 1. **OXC is used by VSCode internally.** This means Rest produces output that
-   matches VSCode's own build pipeline — not an approximation.
+   matches VSCode's own build pipeline - not an approximation.
 2. **`emitDecoratorMetadata` support.** VSCode's codebase relies on decorator
    metadata emission. OXC handles this correctly; esbuild has limited support.
 3. **`useDefineForClassFields = false`.** VSCode requires the legacy class
