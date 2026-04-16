@@ -1,83 +1,122 @@
 # Changelog
 
-All notable changes to the Rest element are documented in this file.
+All notable changes to Rest (OXC JS Bundler) are documented here.
+Format: [Keep a Changelog](https://keepachangelog.com/).
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+## [v2.1] — Q2 2026: Full Workbench Lift
 
-## [0.6.0] — 2026 Q2
+### Changed
+
+- Test file formatting standardized (1,806 insertions/deletions)
+- README overhauled (+174 lines)
+- Binary.rs separated from Library.rs entry point
+- Shell scripts made POSIX-compliant
+
+## [v2.0] — Q1 2026: Editor Launch Sprint
+
+### March 11: SWC → OXC Migration (Pivotal Commit)
+
+43 files changed, 3,821 insertions, 2,659 deletions.
+
+#### Added
+
+- 7 new OXC modules in `Source/Fn/OXC/`:
+  - `Compiler.rs` (332 lines) — main orchestration with memory-safe allocator
+    scoping, metric tracking, compile ID logging
+  - `Transformer.rs` (224 lines) — AST transformation (TypeScript strip, JSX)
+  - `Compile.rs` (166 lines) — compilation entry point with file I/O
+  - `Parser.rs` (154 lines) — ultra-fast TypeScript parsing, ESTree compat
+  - `Codegen.rs` (142 lines) — code generation with source maps
+  - `Watch.rs` (62 lines) — file system monitoring via `notify` crate
+  - `mod.rs` (11 lines)
+
+#### Removed
+
+- SWC dependencies: swc_common, swc_ecma_ast, swc_ecma_parser,
+  swc_ecma_transforms_base, swc_ecma_transforms_typescript,
+  swc_ecma_codegen, swc_ecma_visit
+
+#### Added (Dependencies)
+
+- OXC crates: oxc_allocator, oxc_parser, oxc_transformer, oxc_minifier,
+  oxc_codegen, oxc_semantic, oxc_span, oxc_ast
+
+### March 13-14: Test Suite
+
+#### Added
+
+- 6 test files (~3,800 lines):
+  - `tests/unit/codegen_tests.rs` (1,224 lines)
+  - `tests/unit/parser_tests.rs` (1,057 lines)
+  - `tests/unit/transformer_tests.rs` (891 lines)
+  - `tests/integration/vscode_compatibility.rs` (427 lines)
+  - `tests/unit/oxc_compiler.rs` (293 lines)
+  - `tests/lib.rs` (15 lines)
+
+### Critical Fix: OXC Allocator Lifetime
+
+Problem: allocator dropped prematurely during code generation (use-after-free).
+Solution: entire Parse → Transform → Codegen pipeline scoped in single block,
+allocator lifetime extends through all stages.
+
+## [v1.3] — Q4 2025: Dependency Maintenance
+
+### Changed
+
+- Dependency updates maintained via Dependabot
+- No source changes
+
+## [v1.2] — Q3 2025: Full Stack Integration
+
+### Changed
+
+- Dependency bumps continued
+- Architecture stable
+
+## [v1.1] — Q2 2025: Architecture Buildout
+
+### Changed
+
+- Incremental improvements and testing
+- 105 commits, mostly sync operations
+
+## [v1.0] — Q1 2025: Integration Phase
+
+### Changed
+
+- Bug fixes, sync operations
+- 104 commits
+
+## [v0.2] — Q4 2024: Architecture Solidification
+
+### Changed
+
+- Stabilization: 42 commits
+- Dependency management
+- License work
+
+## [v0.1] — Q3 2024: Rapid Development
+
+**Created September 14, 2024** (commit 31c95a1).
 
 ### Added
 
-- Comprehensive README overhaul with architecture details
-- Benefit-focused crate-level rustdoc in Library.rs
-- See Also section linking to architecture overview and related Elements
+- Initial build: 33 files, 1,596 insertions
+- `Source/Fn/Binary/Command.rs` — CLI argument orchestration
+- `Source/Fn/Binary/Entry.rs` — command entry execution
+- `Source/Fn/Binary/Parallel.rs` — Rayon-based parallel compilation
+- `Source/Fn/Binary/Sequential.rs` — sequential fallback
+- `Source/Fn/Build.rs` (87 lines) — high-level build coordination
+- `Source/Fn/Bundle/` — ESBuild wrapper + config parsing (286+172+246 lines)
+- `Source/Fn/NLS/` — i18n bundle/extract/replace (167+110+98 lines)
+- `Source/Fn/SWC/` — SWC compiler integration (pre-OXC era)
+- `Source/Fn/Transform/private_field.rs` — TypeScript AST transforms
+- `Source/Fn/Worker/` — worker pool management (bootstrap, compile, detect)
+- `Source/Struct/Binary/Command*.rs` — CLI structure definitions
+- `Source/Struct/CompilerConfig.rs` (166 lines) — compiler configuration DTO
+- Cargo.toml: Edition 2024 (nightly), outputs: staticlib + cdylib + rlib
 
-### Changed
+### Dependencies (First Release)
 
-- Separated binary entry point from library code
-- Standardized test file formatting
-- Made shell scripts POSIX-compliant
-- Standardized quote style and import ordering
-- Rebuilt bin/Rest binary artifact
-
-## [0.5.0] — 2026 Q1
-
-### Added
-
-- Compile subcommand for standalone TypeScript compilation
-- Phase 3 advanced build features (incremental builds, watch mode)
-- Comprehensive test suite for OXC compiler
-- Static class property transformation for VS Code compatibility
-
-### Changed
-
-- Migrated compiler backend from SWC to OXC ecosystem
-- Updated to workspace dependencies
-- Restructured binary entry point with dedicated main.rs
-- Updated .gitignore to exclude build artifacts
-- Removed ephemeral Target/ build artifacts from tracking
-
-### Fixed
-
-- Watch.rs: Used spawn_blocking for compilation inside watcher loop
-- Compile.rs: Used spawn_blocking for CPU-bound compilation
-- Made compile_file synchronous with std::fs to fix Send trait issues
-- Fixed SWC.rs Program::mutate/process logic
-- Fixed Sequential.rs and Parallel.rs GlobSet and Group usage
-- Resolved various import and module declaration warnings
-
-## [0.4.0] — 2025 Q4
-
-### Changed
-
-- Updated dependencies
-
-## [0.3.0] — 2025 Q3
-
-### Changed
-
-- Updated dependencies
-
-## [0.2.0] — 2025 Q2
-
-### Changed
-
-- Updated contact email to Community@Editor.Land
-- Updated dependencies
-
-## [0.1.0] — 2025 Q1
-
-### Changed
-
-- Updated dependencies
-
-## [0.0.1] — 2024 Q3
-
-### Added
-
-- Initial OXC-powered JavaScript bundler for VS Code platform code
-- SWC compiler integration for TypeScript transformation
-- Parallel and sequential build commands with GlobSet support
-- File watcher with automatic recompilation
-- CI/CD workflows with GitHub Actions
-- Dependabot configuration for automated dependency updates
+- SWC ecosystem (swc_common, swc_ecma_*, swc_ecma_codegen, swc_ecma_visit)
+- tokio, rayon, serde_json, tracing, git2, walkdir, notify, globset, dashmap
