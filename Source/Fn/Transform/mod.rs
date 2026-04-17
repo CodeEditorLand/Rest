@@ -4,6 +4,7 @@
 //! - Private field conversion (#field -> __field)
 //! - Additional VSCode-specific transformations
 
-pub mod private_field;
+#[path = "PrivateField.rs"]
+pub mod PrivateField;
 
-pub use private_field::PrivateFieldTransform;
+pub use PrivateField::PrivateFieldTransform;
