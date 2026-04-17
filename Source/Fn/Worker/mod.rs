@@ -5,13 +5,16 @@
 //! - Worker bootstrap code generation
 //! - Module handling for worker contexts
 
-pub mod detect;
-pub mod bootstrap;
-pub mod compile;
+#[path = "Detect.rs"]
+pub mod Detect;
+#[path = "Bootstrap.rs"]
+pub mod Bootstrap;
+#[path = "Compile.rs"]
+pub mod Compile;
 
-pub use detect::WorkerDetector;
-pub use bootstrap::WorkerBootstrap;
-pub use compile::WorkerCompiler;
+pub use Detect::WorkerDetector;
+pub use Bootstrap::WorkerBootstrap;
+pub use Compile::WorkerCompiler;
 
 /// Configuration for worker compilation
 #[derive(Debug, Clone, Default)]

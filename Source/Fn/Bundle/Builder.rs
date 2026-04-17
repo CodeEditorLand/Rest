@@ -140,7 +140,7 @@ impl BundleBuilder {
 	/// Build using esbuild wrapper
 	fn build_with_esbuild(&mut self) -> anyhow::Result<BundleResult> {
 		// Import and use the esbuild wrapper
-		let wrapper = super::esbuild::EsbuildWrapper::new();
+		let wrapper = super::ESBuild::EsbuildWrapper::new();
 		wrapper.build(&self.config)
 	}
 

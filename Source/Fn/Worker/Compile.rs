@@ -108,7 +108,7 @@ impl WorkerCompiler {
 		declarations.push_str("// This file is auto-generated - do not edit\n\n");
 
 		for worker in workers {
-			declarations.push_str(&super::bootstrap::generate_worker_declaration(&worker.name));
+			declarations.push_str(&super::Bootstrap::generate_worker_declaration(&worker.name));
 		}
 
 		declarations

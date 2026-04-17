@@ -5,13 +5,16 @@
 //! - Optional esbuild integration for complex builds
 //! - Multi-file compilation support
 
-pub mod config;
-pub mod builder;
-pub mod esbuild;
+#[path = "Config.rs"]
+pub mod Config;
+#[path = "Builder.rs"]
+pub mod Builder;
+#[path = "ESBuild.rs"]
+pub mod ESBuild;
 
-pub use config::BundleConfig;
-pub use builder::BundleBuilder;
-pub use esbuild::EsbuildWrapper;
+pub use Config::BundleConfig;
+pub use Builder::BundleBuilder;
+pub use ESBuild::EsbuildWrapper;
 
 /// Result of a bundling operation
 #[derive(Debug, Clone)]

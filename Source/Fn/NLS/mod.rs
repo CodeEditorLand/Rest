@@ -5,13 +5,16 @@
 //! - Generation of localization bundle files
 //! - Replacement of localization keys with actual strings at build time
 
-pub mod extract;
-pub mod replace;
-pub mod bundle;
+#[path = "Extract.rs"]
+pub mod Extract;
+#[path = "Replace.rs"]
+pub mod Replace;
+#[path = "Bundle.rs"]
+pub mod Bundle;
 
-pub use extract::NLSExtractor;
-pub use replace::NLSReplacer;
-pub use bundle::NLSBundle;
+pub use Extract::NLSExtractor;
+pub use Replace::NLSReplacer;
+pub use Bundle::NLSBundle;
 
 /// Configuration for NLS processing
 #[derive(Debug, Clone, Default)]
