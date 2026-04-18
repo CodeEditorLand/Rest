@@ -3,10 +3,11 @@
 //! This module re-exports all necessary components for integration tests.
 
 pub mod vscode_compatibility;
-pub mod unit;
-pub mod unit::parser_tests;
-pub mod unit::transformer_tests;
-pub mod unit::codegen_tests;
+pub mod unit {
+    pub mod parser_tests;
+    pub mod transformer_tests;
+    pub mod codegen_tests;
+}
 
 // Re-export compiler components for tests
 pub use crate::{

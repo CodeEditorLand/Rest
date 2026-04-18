@@ -161,10 +161,6 @@ impl WorkerDetector {
 
 #[cfg(test)]
 mod tests {
-	use std::fs;
-
-	use tempfile::TempDir;
-
 	use super::*;
 
 	#[test]
