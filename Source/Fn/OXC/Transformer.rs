@@ -134,12 +134,17 @@ pub fn transform<'a>(
 		return Err(errors);
 	}
 
-	// Extract symbols and scopes from semantic using OXC 0.48 API
-	let (symbols, scopes) = semantic_ret.semantic.into_symbol_table_and_scope_tree();
+	// Extract the unified scoping (symbol table + scope tree) from semantic.
+	// OXC 0.127 collapsed the separate `SymbolTable` + `ScopeTree` accessors
+	// into a single `Scoping` value returned by `into_scoping()`. The older
+	// `into_symbol_table_and_scope_tree()` (0.48-era API) no longer exists,
+	// and `Transformer::build_with_symbols_and_scopes` has likewise been
+	// replaced by `build_with_scoping` below.
+	let scoping = semantic_ret.semantic.into_scoping();
 	trace!(
-		"[Transform #{transform_id}] Extracted {} symbols and {} scopes",
-		symbols.len(),
-		scopes.len()
+		"[Transform #{transform_id}] Extracted scoping: {} symbols, {} scopes",
+		scoping.symbols_len(),
+		scoping.scopes_len()
 	);
 
 	// Configure TypeScript transformation
@@ -189,7 +194,7 @@ pub fn transform<'a>(
 	trace!("[Transform #{transform_id}] TransformOptions configured with plugins");
 	trace!("[Transform #{transform_id}] TransformOptions created");
 
-	// Create transformer and apply transformation using OXC 0.48 API
+	// Create transformer and apply transformation using OXC 0.127 API.
 	let transformer_start = std::time::Instant::now();
 	let transformer = Transformer::new(allocator, Path::new(source_path), &transform_options);
 	info!(
@@ -199,9 +204,9 @@ pub fn transform<'a>(
 	trace!("[Transform #{transform_id}] Transformer allocator address: {:p}", allocator);
 
 	let build_start = std::time::Instant::now();
-	let transform_ret = transformer.build_with_symbols_and_scopes(symbols, scopes, program);
+	let transform_ret = transformer.build_with_scoping(scoping, program);
 	info!(
-		"[Transform #{transform_id}] build_with_symbols_and_scopes completed in {:?}",
+		"[Transform #{transform_id}] build_with_scoping completed in {:?}",
 		build_start.elapsed()
 	);
 	trace!(

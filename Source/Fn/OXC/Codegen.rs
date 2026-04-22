@@ -10,7 +10,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 use oxc_allocator::Allocator;
 use oxc_ast::ast::Program;
-use oxc_codegen::{Codegen, CodegenOptions, CodegenReturn};
+use oxc_codegen::{Codegen, CodegenOptions, CodegenReturn, CommentOptions};
 use oxc_span::SourceType;
 use tracing::{debug, error, info, trace, warn};
 
@@ -97,8 +97,15 @@ pub fn codegen<'a>(
 		config.minify, config.comments
 	);
 
-	// Configure codegen options
-	let options = CodegenOptions { minify:config.minify, comments:config.comments, ..Default::default() };
+	// Configure codegen options. OXC 0.127 replaced the flat `comments: bool`
+	// field with a structured `CommentOptions` covering normal / jsdoc /
+	// annotation / legal comment categories. Map our legacy boolean onto the
+	// two extremes: `true` ⇒ defaults (keep everything), `false` ⇒ disabled
+	// (strip everything). Finer-grained gates can layer on later by exposing
+	// dedicated `CodegenConfig` fields.
+	let comment_options =
+		if config.comments { CommentOptions::default() } else { CommentOptions::disabled() };
+	let options = CodegenOptions { minify:config.minify, comments:comment_options, ..Default::default() };
 	trace!("[Codegen #{codegen_id}] CodegenOptions configured");
 
 	// Create codegen instance and generate code
