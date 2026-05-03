@@ -2,15 +2,17 @@
 //!
 //! This module re-exports all necessary components for integration tests.
 
-pub mod vscode_compatibility;
+pub mod integration {
+	pub mod vscode_compatibility;
+}
 pub mod unit {
-    pub mod parser_tests;
-    pub mod transformer_tests;
-    pub mod codegen_tests;
+	pub mod parser_tests;
+	pub mod transformer_tests;
+	pub mod codegen_tests;
 }
 
 // Re-export compiler components for tests
 pub use crate::{
-    Fn::OXC::{self, Compiler},
-    Struct::{CompilerConfig, SWC},
+	Fn::OXC::{self, Compiler},
+	Struct::{CompilerConfig, SWC},
 };

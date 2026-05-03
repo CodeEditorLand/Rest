@@ -103,8 +103,11 @@ pub fn codegen<'a>(
 	// two extremes: `true` ⇒ defaults (keep everything), `false` ⇒ disabled
 	// (strip everything). Finer-grained gates can layer on later by exposing
 	// dedicated `CodegenConfig` fields.
-	let comment_options =
-		if config.comments { CommentOptions::default() } else { CommentOptions::disabled() };
+	let comment_options = if config.comments {
+		CommentOptions::default()
+	} else {
+		CommentOptions::disabled()
+	};
 	let options = CodegenOptions { minify:config.minify, comments:comment_options, ..Default::default() };
 	trace!("[Codegen #{codegen_id}] CodegenOptions configured");
 
