@@ -5,7 +5,6 @@
 
 /// root directory, and separator for file paths.
 pub struct Struct {
-
 	/// A vector of strings representing patterns to exclude.
 	pub Exclude:Vec<String>,
 
@@ -23,7 +22,6 @@ pub struct Struct {
 }
 
 impl Struct {
-
 	/// Creates a new instance of the Struct.
 	///
 	/// This function initializes the Struct with the provided options,
@@ -39,9 +37,7 @@ impl Struct {
 	///
 	/// Returns a new instance of Struct.
 	pub fn Fn(Option { Separator, .. }:Option) -> Self {
-
 		Self {
-
 			Exclude:Command()
 				.get_one::<String>("Exclude")
 				.expect("Cannot Exclude.")

@@ -32,7 +32,6 @@
 /// This function will log errors if it fails to generate summaries or send
 /// results.
 pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
-
 	let (Allow, mut Mark) = tokio::sync::mpsc::unbounded_channel();
 
 	let Queue = futures::stream::FuturesUnordered::new();
@@ -50,7 +49,6 @@ pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 		})
 		.collect::<Vec<String>>()
 	{
-
 		let Allow = Allow.clone();
 
 		Queue.push(tokio::spawn(async move {
@@ -77,7 +75,6 @@ pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 	let mut Output = Vec::new();
 
 	while let Some((Entry, Build)) = Mark.recv().await {
-
 		Output.push((Entry, Build));
 	}
 
@@ -85,7 +82,6 @@ pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 }
 
 use futures::stream::StreamExt;
-
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
 use crate::Struct::Binary::Command::Entry::Struct as Option;

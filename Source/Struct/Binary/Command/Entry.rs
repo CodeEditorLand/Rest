@@ -4,7 +4,6 @@
 /// the entry paths, parallel execution flag, pattern to match, separator for
 /// file paths, and omit patterns.
 pub struct Struct {
-
 	/// A vector of vectors, where each inner vector contains the components of
 	/// a file path.
 	pub Entry:Type,
@@ -20,7 +19,6 @@ pub struct Struct {
 }
 
 impl Struct {
-
 	/// Creates a new instance of the Struct.
 	///
 	/// This function initializes the Struct with the provided options,
@@ -36,9 +34,7 @@ impl Struct {
 	///
 	/// Returns a new instance of Struct.
 	pub fn Fn(Option:&Option) -> Self {
-
 		Self {
-
 			Entry:crate::Fn::Binary::Command::Entry::Fn(Option),
 
 			Parallel:Option.Parallel,
