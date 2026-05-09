@@ -32,6 +32,7 @@
 /// This function will log errors if it fails to generate summaries or send
 /// results.
 pub async fn Fn(Option { Entry, Pattern, Separator, .. }:Option) {
+
 	let Queue = futures::future::join_all(
 		Entry
 			.into_iter()

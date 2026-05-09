@@ -173,6 +173,7 @@ pub fn generate_inline_worker(code:&str, worker_type:WorkerType) -> String {
 				code.replace("`", "\\`").replace("${", "\\${")
 			)
 		},
+
 		WorkerType::Classic => {
 			format!(
 				"new Worker(URL.createObjectURL(new Blob([`{}`], {{ type: 'application/javascript' }})))",
@@ -193,35 +194,45 @@ export {{ {worker_name} }};
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn test_module_worker_bootstrap() {
 		let config = WorkerConfig::new();
+
 		let bootstrap = WorkerBootstrap::new(config);
 
 		let code = bootstrap.generate_module_worker("./entry.js");
+
 		assert!(code.contains("Module worker bootstrap"));
+
 		assert!(code.contains("./entry.js"));
 	}
 
 	#[test]
 	fn test_classic_worker_bootstrap() {
 		let config = WorkerConfig::new();
+
 		let bootstrap = WorkerBootstrap::new(config);
 
 		let code = bootstrap.generate_classic_worker("./entry.js");
+
 		assert!(code.contains("Classic worker bootstrap"));
+
 		assert!(code.contains("./entry.js"));
 	}
 
 	#[test]
 	fn test_shared_worker_bootstrap() {
 		let config = WorkerConfig::new();
+
 		let bootstrap = WorkerBootstrap::new(config);
 
 		let code = bootstrap.generate_shared_worker("./entry.js");
+
 		assert!(code.contains("Shared worker bootstrap"));
+
 		assert!(code.contains("onconnect"));
 	}
 }

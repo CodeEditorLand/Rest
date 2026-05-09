@@ -4,8 +4,13 @@
 //! parser and transformer, replacing the previous SWC-based implementation.
 
 pub mod Compiler;
+
 pub mod Codegen;
+
 pub mod Compile;
+
 pub mod Parser;
+
 pub mod Transformer;
+
 pub mod Watch;

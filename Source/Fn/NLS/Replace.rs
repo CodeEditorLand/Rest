@@ -11,10 +11,13 @@ use regex::Regex;
 pub struct NLSReplacer {
 	/// The localization bundle to use for replacements
 	bundle:HashMap<String, String>,
+
 	/// Whether to preserve the localize call structure
 	preserve_calls:bool,
+
 	/// Regex patterns for localize calls
 	localize_pattern:Regex,
+
 	_localize2_pattern:Regex,
 }
 
@@ -22,8 +25,11 @@ impl NLSReplacer {
 	pub fn new(bundle:HashMap<String, String>) -> Self {
 		Self {
 			bundle,
+
 			preserve_calls:false,
+
 			localize_pattern:Regex::new(r#"(?:nls\.)?localize\s*\(\s*['"]([^'"]+)['"]"#).unwrap(),
+
 			_localize2_pattern:Regex::new(r#"(?:nls\.)?localize2\s*\(\s*['"]([^'"]+)['"]"#).unwrap(),
 		}
 	}

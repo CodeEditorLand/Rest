@@ -31,11 +31,14 @@ use tracing::{debug, info, trace, warn};
 pub struct ParseResult {
 	/// The parsed AST program with 'static lifetime (safe transmute)
 	pub program:oxc_ast::ast::Program<'static>,
+
 	/// The allocator used for the AST - owns the memory for the Program
 	/// CRITICAL: Must not be dropped separately from program
 	pub allocator:Allocator,
+
 	/// Any parsing errors encountered
 	pub errors:Vec<String>,
+
 	/// File path for debugging
 	#[allow(dead_code)]
 	pub file_path:String,
@@ -46,10 +49,13 @@ pub struct ParseResult {
 pub struct ParserConfig {
 	/// Target ECMAScript version (e.g., "es2024")
 	pub target:String,
+
 	/// Whether to support JSX syntax
 	pub jsx:bool,
+
 	/// Whether to support decorators
 	pub decorators:bool,
+
 	/// Whether to support TypeScript
 	pub typescript:bool,
 }
@@ -81,24 +87,30 @@ pub fn parse(source_text:&str, file_path:&str, config:&ParserConfig) -> Result<P
 	let parse_id = PARSE_COUNT.fetch_add(1, Ordering::SeqCst);
 
 	info!("[Parser #{parse_id}] Starting parse of: {}", file_path);
+
 	trace!("[Parser #{parse_id}] Source text length: {} bytes", source_text.len());
 
 	let allocator = Allocator::default();
+
 	trace!("[Parser #{parse_id}] Allocator created at: {:p}", &allocator);
 
 	// Determine source type based on file extension and config
 	let source_type = determine_source_type(file_path, config);
+
 	info!("[Parser #{parse_id}] Parsing {} as {:?}", file_path, source_type);
 
 	let parse_start = std::time::Instant::now();
+
 	// Parse the source code
 	let parser_return:ParserReturn = Parser::new(&allocator, source_text, source_type).parse();
+
 	info!("[Parser #{parse_id}] Parse completed in {:?}", parse_start.elapsed());
 
 	let errors:Vec<String> = parser_return.errors.iter().map(|e| e.to_string()).collect();
 
 	if !errors.is_empty() {
 		warn!("[Parser #{parse_id}] Parsing errors for {}: {:?}", file_path, errors);
+
 		return Err(errors);
 	}
 
@@ -123,6 +135,7 @@ pub fn parse(source_text:&str, file_path:&str, config:&ParserConfig) -> Result<P
 	};
 
 	debug!("[Parser #{parse_id}] Program transmute complete at: {:p}", &program);
+
 	trace!(
 		"[Parser #{parse_id}] AST body pointer: {:p}, len: {}",
 		program.body.as_ptr(),
@@ -140,15 +153,22 @@ pub fn parse(source_text:&str, file_path:&str, config:&ParserConfig) -> Result<P
 /// Determine the source type based on file path and configuration
 fn determine_source_type(file_path:&str, _config:&ParserConfig) -> SourceType {
 	let path = std::path::Path::new(file_path);
+
 	let extension = path.extension().and_then(|e| e.to_str()).unwrap_or("");
 
 	match extension {
 		"ts" | "mts" => SourceType::ts(),
+
 		"tsx" => SourceType::tsx(),
+
 		"mjs" => SourceType::mjs(),
+
 		"cjs" => SourceType::cjs(),
+
 		"js" => SourceType::unambiguous(),
+
 		"jsx" => SourceType::jsx(),
+
 		_ => SourceType::unambiguous(),
 	}
 }

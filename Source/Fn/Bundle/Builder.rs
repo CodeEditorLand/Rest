@@ -13,8 +13,10 @@ use super::{BundleConfig, BundleEntry, BundleMode, BundleResult};
 /// Builds bundles from input files
 pub struct BundleBuilder {
 	config:BundleConfig,
+
 	/// Cached module graph
 	module_graph:HashMap<String, Vec<String>>,
+
 	/// Processed files
 	processed:Vec<String>,
 }
@@ -36,8 +38,11 @@ impl BundleBuilder {
 
 		match self.config.mode {
 			BundleMode::SingleFile => self.build_single_file(),
+
 			BundleMode::Bundle => self.build_bundle(),
+
 			BundleMode::Watch => self.build_watch(),
+
 			BundleMode::Esbuild => self.build_with_esbuild(),
 		}
 	}
@@ -65,6 +70,7 @@ impl BundleBuilder {
 				.replace(".ts", ".js");
 
 			let output_path = Path::new(&self.config.output_dir).join(&output_filename);
+
 			std::fs::write(&output_path, &output)?;
 
 			bundled_files.push(output_path.to_string_lossy().to_string());
@@ -81,6 +87,7 @@ impl BundleBuilder {
 	/// Build a bundle from multiple files
 	fn build_bundle(&mut self) -> anyhow::Result<BundleResult> {
 		let mut bundled_files = Vec::new();
+
 		let mut all_content = String::new();
 
 		// Collect paths first to avoid borrow issues
@@ -95,7 +102,9 @@ impl BundleBuilder {
 
 			// Compile and collect content
 			let content = self.compile_file(source_path)?;
+
 			all_content.push_str(&content);
+
 			all_content.push_str("\n");
 
 			bundled_files.push(entry);
@@ -108,6 +117,7 @@ impl BundleBuilder {
 
 		// Generate output filename
 		let output_filename = self.generate_output_filename();
+
 		let output_path = Path::new(&self.config.output_dir).join(&output_filename);
 
 		// Write bundle
@@ -117,6 +127,7 @@ impl BundleBuilder {
 		let source_map_path = if self.config.source_map {
 			let map_path =
 				Path::new(&self.config.output_dir).join(format!("{}.map", output_filename.replace(".js", "")));
+
 			Some(map_path.to_string_lossy().to_string())
 		} else {
 			None
@@ -141,6 +152,7 @@ impl BundleBuilder {
 	fn build_with_esbuild(&mut self) -> anyhow::Result<BundleResult> {
 		// Import and use the esbuild wrapper
 		let wrapper = super::ESBuild::EsbuildWrapper::new();
+
 		wrapper.build(&self.config)
 	}
 
@@ -162,15 +174,20 @@ impl BundleBuilder {
 
 		// Extract imports (simplified)
 		let mut deps = Vec::new();
+
 		for line in content.lines() {
 			let trimmed = line.trim();
+
 			if trimmed.starts_with("import ") {
 				if let Some(from_idx) = trimmed.find("from") {
 					let path_part = &trimmed[from_idx + 4..];
+
 					if let Some(quote_start) = path_part.find('"') {
 						let path_end = path_part[quote_start + 1..].find('"');
+
 						if let Some(end) = path_end {
 							let import_path = &path_part[quote_start + 1..quote_start + 1 + end];
+
 							deps.push(import_path.to_string());
 						}
 					}
@@ -198,6 +215,7 @@ impl BundleBuilder {
 			}
 
 			result.push_str(line);
+
 			result.push('\n');
 		}
 
@@ -239,16 +257,19 @@ impl BundleBuilder {
 /// Convenience function to create and build a bundle
 pub fn build_bundle(config:BundleConfig) -> anyhow::Result<BundleResult> {
 	let mut builder = BundleBuilder::new(config);
+
 	builder.build()
 }
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn test_builder_creation() {
 		let config = BundleConfig::single_file();
+
 		let builder = BundleBuilder::new(config);
 
 		assert!(builder.processed.is_empty());
@@ -257,6 +278,7 @@ mod tests {
 	#[test]
 	fn test_add_entry() {
 		let config = BundleConfig::bundle();
+
 		let mut builder = BundleBuilder::new(config);
 
 		builder.add_entry(BundleEntry::entry("src/index.ts"));
@@ -269,6 +291,7 @@ mod tests {
 		let config = BundleConfig::bundle().with_output_file("{name}.bundle.js");
 
 		let builder = BundleBuilder::new(config);
+
 		let filename = builder.generate_output_filename();
 
 		assert_eq!(filename, "index.bundle.js");
@@ -279,6 +302,7 @@ mod tests {
 		let config = BundleConfig::bundle().add_entry("src/index.ts").add_entry("src/util.ts");
 
 		let builder = BundleBuilder::new(config);
+
 		let hash = builder.compute_hash();
 
 		assert!(!hash.is_empty());

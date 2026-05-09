@@ -17,13 +17,17 @@ use Rest::{
 fn test_parser_basic() {
 	let source = r#"
         interface User {
+
             name: string;
+
             age: number;
         }
 
         function greet(user: User): string {
+
             return `Hello, ${user.name}!`;
         }
+
     "#;
 
 	let config = OXC::ParserConfig::new(
@@ -34,10 +38,13 @@ fn test_parser_basic() {
 	);
 
 	let result = Parser::parse(source, "test.ts", &config);
+
 	assert!(result.is_ok(), "Parser should succeed");
 
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty(), "Parse should have no errors");
+
 	assert!(!parse_result.program.body.is_empty(), "AST should have statements");
 }
 
@@ -46,25 +53,32 @@ fn test_parser_basic() {
 fn test_transformer_basic() {
 	let source = r#"
         class MyClass {
+
             private field: string = "value";
+
             public method(): void {}
         }
+
     "#;
 
 	let config = CompilerConfig::simple();
+
 	let compiler = Compiler::new(config.clone());
 
 	// Parse first
 	let parser_config = compiler.get_parser_config();
+
 	let mut parse_result = Parser::parse(source, "test.ts", &parser_config).unwrap();
 
 	// Transform
 	let transformer_config = compiler.get_transformer_config();
+
 	let program = unsafe {
 		std::mem::transmute::<&mut oxc_ast::ast::Program<'static>, &mut oxc_ast::ast::Program<'_>>(
 			&mut parse_result.program,
 		)
 	};
+
 	let source_type = oxc_span::SourceType::ts();
 
 	let transform_result =
@@ -82,19 +96,25 @@ fn test_transformer_basic() {
 fn test_codegen_basic() {
 	let source = r#"
         export const answer: number = 42;
+
         export function add(a: number, b: number): number {
+
             return a + b;
         }
+
     "#;
 
 	let config = CompilerConfig::simple();
+
 	let compiler = Compiler::new(config);
 
 	let result = compiler.compile_file("test.ts", source.to_string());
+
 	assert!(result.is_ok(), "Compilation should succeed: {:?}", result.err());
 
 	// The output file should be created
 	let output_path = result.unwrap();
+
 	assert!(
 		std::path::Path::new(&output_path).exists(),
 		"Output file should exist: {}",
@@ -110,24 +130,30 @@ fn test_codegen_basic() {
 fn test_decorator_metadata() {
 	let source = r#"
         function sealed(constructor: Function) {
+
             Object.seal(constructor);
         }
 
         @sealed
         class DecoratedClass {
+
             constructor() {}
         }
+
     "#;
 
 	let mut config = CompilerConfig::vscode();
+
 	config.emit_decorators_metadata = true;
 
 	let compiler = Compiler::new(config);
+
 	let result = compiler.compile_file("test.ts", source.to_string());
 
 	assert!(result.is_ok(), "Decorator compilation should succeed: {:?}", result.err());
 
 	let output_path = result.unwrap();
+
 	let output = std::fs::read_to_string(&output_path).unwrap();
 
 	// With emitDecoratorsMetadata, we should have __decorate helper
@@ -145,17 +171,22 @@ fn test_decorator_metadata() {
 fn test_use_define_for_class_fields() {
 	let source = r#"
         class MyClass {
+
             field = "initialized";
         }
+
     "#;
 
 	let config = CompilerConfig::simple();
+
 	let compiler = Compiler::new(config);
 
 	let result = compiler.compile_file("test.ts", source.to_string());
+
 	assert!(result.is_ok());
 
 	let output_path = result.unwrap();
+
 	let output = std::fs::read_to_string(&output_path).unwrap();
 
 	// With default (use_define_for_class_fields=false), class fields
@@ -172,6 +203,7 @@ fn test_use_define_for_class_fields() {
 #[test]
 fn test_sequential_compilation_no_segfault() {
 	let config = CompilerConfig::simple();
+
 	let compiler = Compiler::new(config);
 
 	let sources = vec![
@@ -184,6 +216,7 @@ fn test_sequential_compilation_no_segfault() {
 
 	for (i, source) in sources.iter().enumerate() {
 		let result = compiler.compile_file(&format!("seq_test_{}.ts", i), source.to_string());
+
 		assert!(
 			result.is_ok(),
 			"Sequential compilation {} should succeed: {:?}",
@@ -193,6 +226,7 @@ fn test_sequential_compilation_no_segfault() {
 	}
 
 	let outlook = compiler.outlook.lock().unwrap();
+
 	assert_eq!(outlook.count, 5, "Should have compiled all 5 files");
 }
 
@@ -200,13 +234,17 @@ fn test_sequential_compilation_no_segfault() {
 #[test]
 fn test_transformer_config_derivation() {
 	let config = CompilerConfig::vscode();
+
 	let compiler = Compiler::new(config);
 
 	let transformer_config = compiler.get_transformer_config();
 
 	assert_eq!(transformer_config.target, "es2024", "Target should be es2024");
+
 	assert_eq!(transformer_config.module_format, "esmodule", "VSCode uses esmodule");
+
 	assert!(transformer_config.emit_decorator_metadata, "Should emit decorator metadata");
+
 	assert!(
 		!transformer_config.use_define_for_class_fields,
 		"VSCode does NOT use defineForClassFields"
@@ -217,13 +255,17 @@ fn test_transformer_config_derivation() {
 #[test]
 fn test_parser_config_derivation() {
 	let config = CompilerConfig::vscode();
+
 	let compiler = Compiler::new(config);
 
 	let parser_config = compiler.get_parser_config();
 
 	assert_eq!(parser_config.target, "es2024");
+
 	assert!(!parser_config.jsx, "Should not have JSX by default");
+
 	assert!(parser_config.decorators, "Decorators should be enabled");
+
 	assert!(parser_config.typescript, "TypeScript should be enabled");
 }
 
@@ -233,59 +275,78 @@ fn test_parser_config_derivation() {
 fn test_compile_performance() {
 	let source = r#"
         export interface DataStore {
+
             get(key: string): Promise<string>;
+
             set(key: string, value: string): Promise<void>;
+
             delete(key: string): Promise<boolean>;
+
             clear(): Promise<void>;
         }
 
         export class LocalStorageStore implements DataStore {
+
             async get(key: string): Promise<string> {
+
                 return localStorage.getItem(key) || "";
             }
 
             async set(key: string, value: string): Promise<void> {
+
                 localStorage.setItem(key, value);
             }
 
             async delete(key: string): Promise<boolean> {
+
                 return localStorage.removeItem(key);
             }
 
             async clear(): Promise<void> {
+
                 localStorage.clear();
             }
         }
 
         export class MemoryStore implements DataStore {
+
             private store: Map<string, string> = new Map();
 
             async get(key: string): Promise<string> {
+
                 return this.store.get(key) || "";
             }
 
             async set(key: string, value: string): Promise<void> {
+
                 this.store.set(key, value);
             }
 
             async delete(key: string): Promise<boolean> {
+
                 return this.store.delete(key);
             }
 
             async clear(): Promise<void> {
+
                 this.store.clear();
             }
         }
+
     "#;
 
 	let config = CompilerConfig::vscode();
+
 	let compiler = Compiler::new(config);
 
 	let start = Instant::now();
+
 	let result = compiler.compile_file("perf_test.ts", source.to_string());
+
 	let elapsed = start.elapsed();
 
 	assert!(result.is_ok(), "Performance test compilation should succeed");
+
 	println!("Performance test: {:?} for ~100 lines", elapsed);
 
 	// Clean up

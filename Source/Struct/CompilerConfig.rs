@@ -16,13 +16,17 @@ use crate::Fn::{Bundle::BundleConfig, NLS::NLSConfig, Worker::WorkerConfig};
 pub struct CompilerConfig {
 	/// Basic compiler settings
 	pub target:String,
+
 	pub module:String,
+
 	pub strict:bool,
+
 	pub emit_decorators_metadata:bool,
 
 	// Phase 3: Advanced features
 	/// Enable private field conversion (#field -> __field)
 	pub convert_private_fields:bool,
+
 	/// Prefix to use for converted private fields
 	pub private_field_prefix:String,
 
@@ -45,10 +49,13 @@ pub enum CompilationMode {
 	/// Simple single-file compilation (original behavior)
 	#[default]
 	SingleFile,
+
 	/// Multi-file bundling
 	Bundle,
+
 	/// Worker compilation
 	Worker,
+
 	/// Full VSCode build pipeline
 	VSCode,
 }
@@ -58,14 +65,23 @@ impl CompilerConfig {
 	pub fn simple() -> Self {
 		Self {
 			target:"es2024".to_string(),
+
 			module:"commonjs".to_string(),
+
 			strict:true,
+
 			emit_decorators_metadata:true,
+
 			convert_private_fields:false,
+
 			private_field_prefix:"__".to_string(),
+
 			nls:None,
+
 			worker:None,
+
 			bundle:None,
+
 			mode:CompilationMode::SingleFile,
 		}
 	}
@@ -74,14 +90,23 @@ impl CompilerConfig {
 	pub fn vscode() -> Self {
 		Self {
 			target:"es2024".to_string(),
+
 			module:"esmodule".to_string(),
+
 			strict:true,
+
 			emit_decorators_metadata:true,
+
 			convert_private_fields:true,
+
 			private_field_prefix:"__".to_string(),
+
 			nls:Some(NLSConfig::new()),
+
 			worker:Some(WorkerConfig::new()),
+
 			bundle:Some(BundleConfig::bundle()),
+
 			mode:CompilationMode::VSCode,
 		}
 	}
@@ -89,28 +114,34 @@ impl CompilerConfig {
 	/// Enable private field conversion
 	pub fn with_private_fields(mut self, enabled:bool) -> Self {
 		self.convert_private_fields = enabled;
+
 		self
 	}
 
 	/// Enable NLS processing
 	pub fn with_nls(mut self, config:NLSConfig) -> Self {
 		self.nls = Some(config);
+
 		self
 	}
 
 	/// Enable worker compilation
 	pub fn with_workers(mut self, config:WorkerConfig) -> Self {
 		self.worker = Some(config);
+
 		self
 	}
 
 	/// Enable bundling
 	pub fn with_bundling(mut self, config:BundleConfig) -> Self {
 		let requires_bundle = config.requires_bundle();
+
 		self.bundle = Some(config);
+
 		if requires_bundle {
 			self.mode = CompilationMode::Bundle;
 		}
+
 		self
 	}
 
@@ -133,22 +164,30 @@ impl Default for CompilerConfig {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn test_simple_config() {
 		let config = CompilerConfig::simple();
+
 		assert_eq!(config.mode, CompilationMode::SingleFile);
+
 		assert!(!config.convert_private_fields);
 	}
 
 	#[test]
 	fn test_vscode_config() {
 		let config = CompilerConfig::vscode();
+
 		assert_eq!(config.mode, CompilationMode::VSCode);
+
 		assert!(config.convert_private_fields);
+
 		assert!(config.is_nls_enabled());
+
 		assert!(config.are_workers_enabled());
+
 		assert!(config.is_bundling_enabled());
 	}
 
@@ -160,7 +199,9 @@ mod tests {
 			.with_workers(WorkerConfig::new());
 
 		assert!(config.convert_private_fields);
+
 		assert!(config.is_nls_enabled());
+
 		assert!(config.are_workers_enabled());
 	}
 }

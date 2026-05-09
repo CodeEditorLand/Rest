@@ -25,6 +25,7 @@ pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> 
 			Ok(event) => {
 				if let notify::Event {
 					kind: notify::EventKind::Modify(notify::event::ModifyKind::Data(_)),
+
 					paths,
 					..
 				} = event
@@ -32,6 +33,7 @@ pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> 
 					for path in paths {
 						if path.extension().map_or(false, |ext| ext == "ts") {
 							let options = options.clone();
+
 							tokio::task::spawn_blocking(move || {
 								let rt = tokio::runtime::Handle::current();
 								rt.block_on(async {
@@ -52,6 +54,7 @@ pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> 
 					}
 				}
 			},
+
 			Err(e) => error!("Watch error: {:?}", e),
 		}
 	}

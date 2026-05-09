@@ -8,6 +8,7 @@
 pub struct Config {
 	/// Prefix to use for converted private fields
 	pub prefix:String,
+
 	/// Whether to preserve the original private identifier in comments
 	pub preserve_comments:bool,
 }
@@ -67,32 +68,40 @@ pub fn convert_private_fields(source:&str, prefix:&str) -> String {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn test_private_field_transform_creation() {
 		let transform = PrivateFieldTransform::new();
+
 		let config = transform.config;
+
 		assert_eq!(config.prefix, "__");
 	}
 
 	#[test]
 	fn test_private_field_transform_with_config() {
 		let config = Config { prefix:"_private_".to_string(), preserve_comments:false };
+
 		let transform = PrivateFieldTransform::with_config(config.clone());
+
 		assert_eq!(transform.config.prefix, "_private_");
 	}
 
 	#[test]
 	fn test_convert_private_name() {
 		let transform = PrivateFieldTransform::new();
+
 		assert_eq!(transform.convert_private_name("field"), "__field");
 	}
 
 	#[test]
 	fn test_is_private_field() {
 		let transform = PrivateFieldTransform::new();
+
 		assert!(transform.is_private_field("#field"));
+
 		assert!(!transform.is_private_field("field"));
 	}
 }

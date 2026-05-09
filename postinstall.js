@@ -23,6 +23,7 @@ if (process.env.REST_SKIP_INSTALL === "true") {
 	console.log(
 		"[Rest] Installation skipped via REST_SKIP_INSTALL environment variable",
 	);
+
 	process.exit(0);
 }
 
@@ -32,7 +33,9 @@ if (process.env.REST_SKIP_INSTALL === "true") {
 function getPlatform() {
 	const platforms = {
 		"darwin": "darwin",
+
 		"linux": "linux",
+
 		"win32": "win32",
 	};
 
@@ -53,6 +56,7 @@ function getArchitecture() {
 
 	const archs = {
 		"x64": "x64",
+
 		"arm64": "arm64",
 	};
 
@@ -73,12 +77,15 @@ function getArchitecture() {
  */
 async function installBinary() {
 	const platform = getPlatform();
+
 	const architecture = getArchitecture();
+
 	const packageName = `@codeeditorland/rest-${platform}-${architecture}`;
 
 	console.log(
 		`[Rest] Detected platform: ${platform}, architecture: ${architecture}`,
 	);
+
 	console.log(`[Rest] Installing binary from: ${packageName}`);
 
 	try {
@@ -97,6 +104,7 @@ async function installBinary() {
 
 		// Create the bin directory if it doesn't exist
 		const binDir = join(__dirname, "bin");
+
 		if (!existsSync(binDir)) {
 			mkdirSync(binDir, { recursive: true });
 		}
@@ -109,16 +117,25 @@ async function installBinary() {
 		// This is useful for local development where binaries are built in Target/release
 		const localBinaryPath = join(
 			__dirname,
+
 			"..",
+
 			"Target",
+
 			"release",
+
 			"rest",
 		);
+
 		const localBinaryPathWin = join(
 			__dirname,
+
 			"..",
+
 			"Target",
+
 			"release",
+
 			"rest.exe",
 		);
 
@@ -135,6 +152,7 @@ async function installBinary() {
 
 			// Create symlink or copy to bin directory
 			const binaryName = platform === "win32" ? "rest.exe" : "rest";
+
 			const binPath = join(binDir, binaryName);
 
 			// For now, just log the path - the actual binary handling depends on the build system

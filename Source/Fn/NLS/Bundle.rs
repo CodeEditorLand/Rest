@@ -9,6 +9,7 @@ use super::{LocalizationBundle, NLSConfig};
 /// Generates an NLS bundle from extracted keys
 pub struct NLSBundle {
 	_config:NLSConfig,
+
 	/// Bundle for each language
 	bundles:HashMap<String, LocalizationBundle>,
 }
@@ -38,6 +39,7 @@ impl NLSBundle {
 			for (key, value) in entries {
 				bundle.add_entry(key.clone(), value.clone());
 			}
+
 			bundle.compute_hash();
 		}
 	}
@@ -51,6 +53,7 @@ impl NLSBundle {
 
 		for (lang, bundle) in &self.bundles {
 			let filename = format!("{}.json", lang);
+
 			let path = output_dir.join(&filename);
 
 			let json =
@@ -71,6 +74,7 @@ impl NLSBundle {
 	/// Load a bundle from a file
 	pub fn load_bundle(language:&str, path:&Path) -> std::io::Result<LocalizationBundle> {
 		let content = std::fs::read_to_string(path)?;
+
 		let bundle:LocalizationBundle =
 			serde_json::from_str(&content).map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
 
@@ -108,6 +112,7 @@ pub fn generate_vscode_bundle(entries:&HashMap<String, String>, language:&str) -
 	}
 
 	bundle.compute_hash();
+
 	bundle
 }
 
@@ -117,6 +122,7 @@ pub fn format_metadata(bundle:&LocalizationBundle) -> serde_json::Value {
 
 	for entry in &bundle.entries {
 		let mut item = serde_json::Map::new();
+
 		item.insert("value".to_string(), serde_json::Value::String(entry.value.clone()));
 
 		if let Some(comment) = &entry.comment {
@@ -131,6 +137,7 @@ pub fn format_metadata(bundle:&LocalizationBundle) -> serde_json::Value {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
@@ -138,7 +145,9 @@ mod tests {
 		let config = NLSConfig { languages:vec!["en".to_string(), "de".to_string()], ..Default::default() };
 
 		let bundle = NLSBundle::new(config);
+
 		assert!(bundle.get_bundle("en").is_some());
+
 		assert!(bundle.get_bundle("de").is_some());
 	}
 
@@ -147,10 +156,13 @@ mod tests {
 		let config = NLSConfig { languages:vec!["en".to_string()], ..Default::default() };
 
 		let mut bundle = NLSBundle::new(config);
+
 		bundle.add_entry("en", "hello", "Hello World");
 
 		let en_bundle = bundle.get_bundle("en").unwrap();
+
 		assert_eq!(en_bundle.entries.len(), 1);
+
 		assert_eq!(en_bundle.entries[0].key, "hello");
 	}
 
@@ -159,9 +171,11 @@ mod tests {
 		let config = NLSConfig { languages:vec!["en".to_string()], ..Default::default() };
 
 		let mut bundle = NLSBundle::new(config);
+
 		bundle.add_entry("en", "hello", "Hello World");
 
 		let map = bundle.to_hashmap("en");
+
 		assert_eq!(map.get("hello"), Some(&"Hello World".to_string()));
 	}
 }

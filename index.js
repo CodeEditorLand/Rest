@@ -19,7 +19,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  */
 export function run(...args) {
 	const platform = process.platform;
+
 	const binaryName = platform === "win32" ? "Rest.exe" : "Rest";
+
 	const binaryPath = join(__dirname, "bin", binaryName);
 
 	if (!existsSync(binaryPath)) {
@@ -30,6 +32,7 @@ export function run(...args) {
 	}
 
 	const command = `"${binaryPath}" ${args.map((a) => `"${a}"`).join(" ")}`;
+
 	return execSync(command, { encoding: "utf8" });
 }
 
@@ -40,6 +43,7 @@ export function run(...args) {
 export function getVersion() {
 	try {
 		const output = run("--version");
+
 		return output.match(/v?\d+\.\d+\.\d+/)?.[0] || "unknown";
 	} catch (_error) {
 		return "unknown";
@@ -49,5 +53,6 @@ export function getVersion() {
 // Export CLI functionality for programmatic use
 export default {
 	run,
+
 	getVersion,
 };

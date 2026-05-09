@@ -7,8 +7,10 @@
 
 #[path = "Extract.rs"]
 pub mod Extract;
+
 #[path = "Replace.rs"]
 pub mod Replace;
+
 #[path = "Bundle.rs"]
 pub mod Bundle;
 
@@ -21,12 +23,16 @@ pub use Bundle::NLSBundle;
 pub struct NLSConfig {
 	/// Source language for localization (default: "en")
 	pub source_lang:String,
+
 	/// Output directory for generated localization files
 	pub output_dir:String,
+
 	/// Whether to inline translations into the output
 	pub inline:bool,
+
 	/// File pattern for localization keys (default: "*.nls.*")
 	pub key_pattern:String,
+
 	/// Additional languages to generate
 	pub languages:Vec<String>,
 }
@@ -35,9 +41,13 @@ impl NLSConfig {
 	pub fn new() -> Self {
 		Self {
 			source_lang:"en".to_string(),
+
 			output_dir:"out/nls".to_string(),
+
 			inline:false,
+
 			key_pattern:"*.nls.*".to_string(),
+
 			languages:vec!["en".to_string()],
 		}
 	}
@@ -48,8 +58,10 @@ impl NLSConfig {
 pub struct LocalizationEntry {
 	/// The key used to identify this string
 	pub key:String,
+
 	/// The localized string value
 	pub value:String,
+
 	/// Optional comment for translators
 	pub comment:Option<String>,
 }
@@ -59,8 +71,10 @@ pub struct LocalizationEntry {
 pub struct LocalizationBundle {
 	/// Language code (e.g., "en", "de", "fr")
 	pub language:String,
+
 	/// Hash of the source strings for cache invalidation
 	pub hash:String,
+
 	/// The localization entries
 	pub entries:Vec<LocalizationEntry>,
 }
@@ -81,10 +95,13 @@ impl LocalizationBundle {
 		};
 
 		let mut hasher = DefaultHasher::new();
+
 		for entry in &self.entries {
 			entry.key.hash(&mut hasher);
+
 			entry.value.hash(&mut hasher);
 		}
+
 		self.hash = format!("{:x}", hasher.finish());
 	}
 }

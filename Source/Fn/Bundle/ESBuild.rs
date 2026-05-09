@@ -25,6 +25,7 @@ impl EsbuildWrapper {
 
 	pub fn with_path(mut self, path:impl Into<String>) -> Self {
 		self.esbuild_path = Some(path.into());
+
 		self
 	}
 
@@ -74,19 +75,23 @@ impl EsbuildWrapper {
 		// Entry points
 		for entry in &config.entries {
 			args.push("--bundle".to_string());
+
 			args.push(entry.clone());
 		}
 
 		// Output
 		args.push("--outdir".to_string());
+
 		args.push(config.output_dir.clone());
 
 		// Format
 		args.push("--format".to_string());
+
 		args.push(config.format.clone());
 
 		// Target
 		args.push("--target".to_string());
+
 		args.push(config.target.clone());
 
 		// Source maps
@@ -116,6 +121,7 @@ impl EsbuildWrapper {
 		// External modules
 		for external in &config.externals {
 			args.push("--external".to_string());
+
 			args.push(external.clone());
 		}
 
@@ -130,15 +136,18 @@ impl EsbuildWrapper {
 
 		if !output.status.success() {
 			let stderr = String::from_utf8_lossy(&output.stderr);
+
 			return Err(anyhow::anyhow!("esbuild failed: {}", stderr));
 		}
 
 		// Collect bundled files
 		let mut bundled_files = Vec::new();
+
 		for entry in &config.entries {
 			let filename = Path::new(entry).file_stem().and_then(|s| s.to_str()).unwrap_or("output");
 
 			let ext = if config.format == "cjs" { "cjs" } else { "js" };
+
 			bundled_files.push(format!("{}/{}.{}", config.output_dir, filename, ext));
 		}
 
@@ -170,10 +179,12 @@ impl EsbuildWrapper {
 		}
 
 		args.push("--outdir".to_string());
+
 		args.push(config.output_dir.clone());
 
 		// Type checking
 		args.push("--tsconfig".to_string());
+
 		args.push("tsconfig.json".to_string());
 
 		self.build(config)
@@ -203,6 +214,7 @@ impl Default for EsbuildWrapper {
 /// Check if esbuild is available
 pub fn check_esbuild() -> bool {
 	let wrapper = EsbuildWrapper::new();
+
 	wrapper.is_available()
 }
 
@@ -222,17 +234,20 @@ pub fn install_esbuild() -> anyhow::Result<()> {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn test_esbuild_wrapper_creation() {
 		let wrapper = EsbuildWrapper::new();
+
 		assert!(wrapper.esbuild_path.is_none());
 	}
 
 	#[test]
 	fn test_esbuild_wrapper_with_path() {
 		let wrapper = EsbuildWrapper::new().with_path("/custom/path/esbuild");
+
 		assert!(wrapper.esbuild_path.is_some());
 	}
 
@@ -240,6 +255,7 @@ mod tests {
 	fn test_check_esbuild() {
 		// This test will fail if esbuild is not installed
 		let available = check_esbuild();
+
 		// Just check it doesn't panic
 		let _ = available;
 	}

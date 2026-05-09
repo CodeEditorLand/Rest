@@ -3,11 +3,16 @@
 //! This module re-exports all necessary components for integration tests.
 
 pub mod integration {
+
 	pub mod vscode_compatibility;
 }
+
 pub mod unit {
+
 	pub mod parser_tests;
+
 	pub mod transformer_tests;
+
 	pub mod codegen_tests;
 }
 

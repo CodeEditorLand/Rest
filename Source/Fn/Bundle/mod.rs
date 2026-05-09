@@ -7,8 +7,10 @@
 
 #[path = "Config.rs"]
 pub mod Config;
+
 #[path = "Builder.rs"]
 pub mod Builder;
+
 #[path = "ESBuild.rs"]
 pub mod ESBuild;
 
@@ -21,10 +23,13 @@ pub use ESBuild::EsbuildWrapper;
 pub struct BundleResult {
 	/// Path to the bundled output file
 	pub output_path:String,
+
 	/// Source map path (if generated)
 	pub source_map_path:Option<String>,
+
 	/// List of bundled files
 	pub bundled_files:Vec<String>,
+
 	/// Bundle hash for cache invalidation
 	pub hash:String,
 }
@@ -34,8 +39,10 @@ pub struct BundleResult {
 pub struct BundleEntry {
 	/// Path to the source file
 	pub source:String,
+
 	/// Module name (for ESM exports)
 	pub module_name:Option<String>,
+
 	/// Whether this is an entry point
 	pub is_entry:bool,
 }
@@ -47,6 +54,7 @@ impl BundleEntry {
 
 	pub fn with_module_name(mut self, name:impl Into<String>) -> Self {
 		self.module_name = Some(name.into());
+
 		self
 	}
 }
@@ -57,10 +65,13 @@ pub enum BundleMode {
 	/// Single file compilation (current behavior)
 	#[default]
 	SingleFile,
+
 	/// Bundle multiple files into one
 	Bundle,
+
 	/// Watch mode - rebuild on changes
 	Watch,
+
 	/// Build with esbuild (for complex cases)
 	Esbuild,
 }

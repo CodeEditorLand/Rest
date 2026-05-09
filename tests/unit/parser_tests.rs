@@ -12,17 +12,24 @@ use Rest::{Fn::OXC::Parser, Struct::CompilerConfig};
 /// Helper function to parse TypeScript source and return result
 fn parse_source(source:&str, file_name:&str) -> anyhow::Result<Rest::Struct::OXC::ParserResult> {
 	let config = CompilerConfig::simple();
+
 	let parser_config = CompilerConfig::to_parser_config(&config);
+
 	Parser::parse(source, file_name, &parser_config)
 }
 
 #[test]
 fn test_parse_empty_file() {
 	let source = "";
+
 	let result = parse_source(source, "empty.ts");
+
 	assert!(result.is_ok(), "Empty file should parse successfully");
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty(), "Empty file should have no errors");
+
 	assert!(parse_result.program.body.is_empty(), "Empty file should have no statements");
 }
 
@@ -30,13 +37,21 @@ fn test_parse_empty_file() {
 fn test_parse_simple_variable_declaration() {
 	let source = r#"
         let x: number = 42;
+
         let y: string = "hello";
+
         const z: boolean = true;
+
     "#;
+
 	let result = parse_source(source, "simple_vars.ts");
+
 	assert!(result.is_ok(), "Simple variable declarations should parse");
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
+
 	assert_eq!(parse_result.program.body.len(), 3);
 }
 
@@ -44,20 +59,29 @@ fn test_parse_simple_variable_declaration() {
 fn test_parse_function_declarations() {
 	let source = r#"
         function add(a: number, b: number): number {
+
             return a + b;
         }
 
         const multiply = (x: number, y: number): number => x * y;
 
         interface MathOps {
+
             add(a: number, b: number): number;
+
             multiply(x: number, y: number): number;
         }
+
     "#;
+
 	let result = parse_source(source, "functions.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
+
 	assert!(parse_result.program.body.len() >= 2);
 }
 
@@ -65,24 +89,34 @@ fn test_parse_function_declarations() {
 fn test_parse_class_with_types() {
 	let source = r#"
         class Person {
+
             private name: string;
+
             private age: number;
 
             constructor(name: string, age: number) {
+
                 this.name = name;
+
                 this.age = age;
             }
 
             greet(): string {
+
                 return `Hello, I'm ${this.name}`;
             }
         }
 
         const p = new Person("Alice", 30);
+
     "#;
+
 	let result = parse_source(source, "class.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -90,19 +124,29 @@ fn test_parse_class_with_types() {
 fn test_parse_interface() {
 	let source = r#"
         interface Animal {
+
             name: string;
+
             age: number;
+
             speak(): void;
         }
 
         interface Dog extends Animal {
+
             breed: string;
+
             bark(): void;
         }
+
     "#;
+
 	let result = parse_source(source, "interface.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -110,14 +154,22 @@ fn test_parse_interface() {
 fn test_parse_type_aliases() {
 	let source = r#"
         type ID = string | number;
+
         type Callback = (data: any) => void;
+
         type Partial<T> = {
+
             [P in keyof T]?: T[P];
         };
+
     "#;
+
 	let result = parse_source(source, "types.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -125,24 +177,38 @@ fn test_parse_type_aliases() {
 fn test_parse_enums() {
 	let source = r#"
         enum Color {
+
             Red = 1,
+
             Green = 2,
+
             Blue = 3
         }
 
         enum Direction {
+
             Up,
+
             Down,
+
             Left,
+
             Right
         }
+
     "#;
+
 	let result = parse_source(source, "enums.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
+
 	// Verify enum bodies are present
 	let body = &parse_result.program.body;
+
 	assert_eq!(body.len(), 2);
 }
 
@@ -150,17 +216,25 @@ fn test_parse_enums() {
 fn test_parse_namespace() {
 	let source = r#"
         namespace MyNamespace {
+
             export const value = 42;
+
             export function foo(): number { return value; }
         }
 
         module AnotherModule {
+
             export interface IModule {}
         }
+
     "#;
+
 	let result = parse_source(source, "namespace.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -168,19 +242,28 @@ fn test_parse_namespace() {
 fn test_parse_imports_exports() {
 	let source = r#"
         import { Component, OnInit } from '@angular/core';
+
         import * as React from 'react';
+
         import defaultExport from 'some-module';
+
         import { type User } from './types';
 
         export class MyComponent implements OnInit {
+
             ngOnInit(): void {}
         }
 
         export default MyComponent;
+
     "#;
+
 	let result = parse_source(source, "imports_exports.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -193,16 +276,22 @@ fn test_parse_decorators() {
 
         @Component
         class MyService {
+
             @Inject('token')
             private dependency: any;
         }
 
         @Injectable()
         export class AnotherService {}
+
     "#;
+
 	let result = parse_source(source, "decorators.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -219,13 +308,20 @@ fn test_parse_jsx() {
                 <p>Content</p>
             </div>
         );
+
     "#;
+
 	let config = CompilerConfig::simple();
+
 	let parser_config = CompilerConfig::to_parser_config(&config);
+
 	// JSX parsing requires jsx flag in parser config
 	let result = Parser::parse(source, "component.tsx", &parser_config);
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -233,19 +329,29 @@ fn test_parse_jsx() {
 fn test_parse_static_class_properties() {
 	let source = r#"
         class MyClass {
+
             static PI = 3.14159;
+
             static readonly VERSION = '1.0.0';
+
             static initialized = false;
 
             static getDoublePI() {
+
                 return MyClass.PI * 2;
             }
         }
+
     "#;
+
 	let result = parse_source(source, "static_props.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
+
 	assert!(parse_result.program.body.len() > 0);
 }
 
@@ -253,21 +359,30 @@ fn test_parse_static_class_properties() {
 fn test_parse_generic_types() {
 	let source = r#"
         function identity<T>(arg: T): T {
+
             return arg;
         }
 
         interface Box<T> {
+
             value: T;
         }
 
         class Container<T, U> {
+
             first: T;
+
             second: U;
         }
+
     "#;
+
 	let result = parse_source(source, "generics.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -275,23 +390,32 @@ fn test_parse_generic_types() {
 fn test_parse_advanced_types() {
 	let source = r#"
         type Nullable<T> = T | null;
+
         type NonNullable<T> = T extends null | undefined ? never : T;
 
         type Partial<T> = {
+
             [P in keyof T]?: T[P];
         };
 
         type Readonly<T> = {
+
             readonly [P in keyof T]: T[P];
         };
 
         type Pick<T, K extends keyof T> = {
+
             [P in K]: T[P];
         };
+
     "#;
+
 	let result = parse_source(source, "advanced_types.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -299,12 +423,19 @@ fn test_parse_advanced_types() {
 fn test_parse_conditional_types() {
 	let source = r#"
         type IsString<T> = T extends string ? true : false;
+
         type First<T extends any[]> = T extends [infer U, ...infer Rest] ? U : never;
+
         type Last<T extends any[]> = T extends [...infer Rest, infer U] ? U : never;
+
     "#;
+
 	let result = parse_source(source, "conditional_types.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -312,24 +443,37 @@ fn test_parse_conditional_types() {
 fn test_parse_async_await() {
 	let source = r#"
         async function fetchData(url: string): Promise<any> {
+
             const response = await fetch(url);
+
             const data = await response.json();
+
             return data;
         }
 
         const getData = async () => {
+
             try {
+
                 const result = await fetchData('/api/data');
+
                 return result;
             } catch (error) {
+
                 console.error(error);
+
                 throw error;
             }
         };
+
     "#;
+
 	let result = parse_source(source, "async.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -337,23 +481,35 @@ fn test_parse_async_await() {
 fn test_parse_generator_functions() {
 	let source = r#"
         function* idGenerator() {
+
             let id = 0;
+
             while (true) {
+
                 yield id++;
             }
         }
 
         function* fibonacci(): Generator<number> {
+
             let [prev, curr] = [0, 1];
+
             while (true) {
+
                 yield curr;
+
                 [prev, curr] = [curr, prev + curr];
             }
         }
+
     "#;
+
 	let result = parse_source(source, "generators.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -361,22 +517,34 @@ fn test_parse_generator_functions() {
 fn test_parse_complex_expressions() {
 	let source = r#"
         const obj = {
+
             a: 1,
+
             b: 'string',
+
             c: { nested: true },
+
             d: [1, 2, 3],
+
             e() { return this.a; },
+
             *generator() { yield 1; }
         };
 
         const arr = [
             { x: 1, y: 2 },
+
             { x: 3, y: 4 }
         ];
+
     "#;
+
 	let result = parse_source(source, "expressions.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -384,17 +552,25 @@ fn test_parse_complex_expressions() {
 fn test_parse_template_literals() {
 	let source = r#"
         const name = "World";
+
         const greeting = `Hello, ${name}!`;
+
         const multiline = `
             This is a
             multiline
             template
         `;
+
         const expression = `Sum: ${1 + 2}`;
+
     "#;
+
 	let result = parse_source(source, "templates.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -402,13 +578,21 @@ fn test_parse_template_literals() {
 fn test_parse_optional_chaining() {
 	let source = r#"
         const obj = { a: { b: { c: 42 } } };
+
         const value = obj?.a?.b?.c;
+
         const method = obj?.a?.method?.();
+
         const arr = maybeArray?.[0];
+
     "#;
+
 	let result = parse_source(source, "optional_chaining.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -416,12 +600,19 @@ fn test_parse_optional_chaining() {
 fn test_parse_nullish_coalescing() {
 	let source = r#"
         const value = null ?? 'default';
+
         const num = undefined ?? 0;
+
         const obj = {} as Any ?? {};
+
     "#;
+
 	let result = parse_source(source, "nullish_coalescing.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -429,11 +620,17 @@ fn test_parse_nullish_coalescing() {
 fn test_parse_big_int() {
 	let source = r#"
         const big: bigint = 9007199254740991n;
+
         const huge = 1234567890123456789012345678901234567890n;
+
     "#;
+
 	let result = parse_source(source, "bigint.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -441,21 +638,30 @@ fn test_parse_big_int() {
 fn test_parse_private_class_fields() {
 	let source = r#"
         class MyClass {
+
             #privateField: string;
+
             #count = 0;
 
             constructor(value: string) {
+
                 this.#privateField = value;
             }
 
             getPrivate(): string {
+
                 return this.#privateField;
             }
         }
+
     "#;
+
 	let result = parse_source(source, "private_fields.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -463,20 +669,29 @@ fn test_parse_private_class_fields() {
 fn test_parse_assertion_functions() {
 	let source = r#"
         function assert(condition: any, msg?: string): asserts condition {
+
             if (!condition) {
+
                 throw new Error(msg ?? 'Assertion failed');
             }
         }
 
         function assertEqual<T>(actual: T, expected: T): asserts actual is T {
+
             if (actual !== expected) {
+
                 throw new Error('Not equal');
             }
         }
+
     "#;
+
 	let result = parse_source(source, "assertions.ts");
+
 	assert!(result.is_ok());
+
 	let parse_result = result.unwrap();
+
 	assert!(parse_result.errors.is_empty());
 }
 
@@ -484,12 +699,18 @@ fn test_parse_assertion_functions() {
 fn test_parse_using_declarations() {
 	let source = r#"
         using disposable = new Disposable();
+
         using resource1 = acquireResource();
+
         using (disposable) {
+
             // use disposable
         }
+
     "#;
+
 	let result = parse_source(source, "using.ts");
+
 	assert!(
 		result.is_ok() || result.is_err(),
 		"using declarations may or may not be supported yet"
@@ -500,15 +721,21 @@ fn test_parse_using_declarations() {
 fn test_parse_large_file_stress() {
 	// Generate a large TypeScript file to test parser performance and memory
 	let mut source = String::from("function func() { ");
+
 	for i in 0..1000 {
 		source.push_str(&format!("let x{i}: number = {i}; "));
 	}
+
 	source.push_str("}");
 
 	let start = Instant::now();
+
 	let result = parse_source(&source, "large.ts");
+
 	let elapsed = start.elapsed();
+
 	assert!(result.is_ok(), "Large file should parse successfully: {:?}", result.err());
+
 	assert!(elapsed.as_secs() < 5, "Parsing should complete within reasonable time");
 }
 

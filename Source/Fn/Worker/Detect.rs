@@ -83,6 +83,7 @@ impl WorkerDetector {
 		let is_shared = file_name.contains("SharedWorker") || file_name.contains("shared");
 
 		let source_path = path.to_string_lossy().to_string();
+
 		let name = path.file_stem()?.to_str()?.replace(".worker", "").replace("-worker", "");
 
 		let output_path = Path::new(&self.config.output_dir)
