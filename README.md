@@ -41,9 +41,9 @@ Land
 
 The High-Performance TypeScript Compiler for Land 🏞️
 
-> **VS Code's TypeScript build uses tsc with Node.js overhead on every
+> **`VS Code`'s `TypeScript` build uses `tsc` with `Node.js` overhead on every
 > incremental compile. Build times grow linearly with project size. Even
-> alternatives like esbuild still run in a Node.js process.**
+> alternatives like `esbuild` still run in a `Node.js` process.**
 
 _"VS Code's TypeScript build step. 2-3x faster."_
 
@@ -54,16 +54,16 @@ _"VS Code's TypeScript build step. 2-3x faster."_
 
 📖 **[Rust API Documentation](https://Rust.Documentation.Editor.Land/Rest/)**
 
-Welcome to **Rest**, a high-performance TypeScript compiler built with Rust and
-OXC, designed for 100% compatibility with VSCode's build process. Rest is one of
-the Elements in the CodeEditorLand architecture, responsible for **compilation
-and build tooling**. It replaces esbuild's TypeScript loader with a Rust-powered
-compiler that produces VSCode-compatible output.
+Welcome to **Rest**, a high-performance `TypeScript` compiler built with `Rust` and
+`OXC`, designed for 100% compatibility with `VSCode`'s build process. Rest is one of
+the Elements in the `CodeEditorLand` architecture, responsible for **compilation
+and build tooling**. It replaces `esbuild`'s `TypeScript` loader with a `Rust`-powered
+compiler that produces `VSCode`-compatible output.
 
 **Rest** is engineered to:
 
-1. **Deliver High Performance**: Compile TypeScript 2-3x faster than esbuild
-   using OXC.
+1. **Deliver High Performance**: Compile `TypeScript` 2-3x faster than `esbuild`
+   using `OXC`.
 2. **Ensure VSCode Compatibility**: Produce byte-for-byte identical output to
    VSCode's gulp build.
 3. **Provide Memory Safety**: Leverage Rust's ownership model for deterministic
