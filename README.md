@@ -54,11 +54,11 @@ _"VS Code's TypeScript build step. 2-3x faster."_
 
 📖 **[Rust API Documentation](https://Rust.Documentation.Editor.Land/Rest/)**
 
-Welcome to **Rest**, a high-performance `TypeScript` compiler built with `Rust` and
-`OXC`, designed for 100% compatibility with `VSCode`'s build process. Rest is one of
-the Elements in the `CodeEditorLand` architecture, responsible for **compilation
-and build tooling**. It replaces `esbuild`'s `TypeScript` loader with a `Rust`-powered
-compiler that produces `VSCode`-compatible output.
+Welcome to **Rest**, a high-performance `TypeScript` compiler built with `Rust`
+and `OXC`, designed for 100% compatibility with `VSCode`'s build process. Rest
+is one of the Elements in the `CodeEditorLand` architecture, responsible for
+**compilation and build tooling**. It replaces `esbuild`'s `TypeScript` loader
+with a `Rust`-powered compiler that produces `VSCode`-compatible output.
 
 **Rest** is engineered to:
 
@@ -73,16 +73,17 @@ compiler that produces `VSCode`-compatible output.
 
 ### Why OXC over esbuild for TypeScript?
 
-The `Rest` compiler was chosen over the existing esbuild pipeline for three
-reasons that directly affect the VSCode build:
+The `Rest` compiler was chosen over the existing `esbuild` pipeline for three
+reasons that directly affect the `VSCode` build:
 
-1. **OXC is used by VSCode internally.** This means Rest produces output that
-   matches VSCode's own build pipeline - not an approximation.
-2. **`emitDecoratorMetadata` support.** VSCode's codebase relies on decorator
-   metadata emission. OXC handles this correctly; esbuild has limited support.
-3. **`useDefineForClassFields = false`.** VSCode requires the legacy class
-   fields behavior for ES5 compatibility. OXC's configurable codegen handles
-   this exactly; esbuild's is implicit.
+1. **`OXC` is used by `VSCode` internally.** This means Rest produces output
+   that matches `VSCode`'s own build pipeline - not an approximation.
+2. **`emitDecoratorMetadata` support.** `VSCode`'s codebase relies on decorator
+   metadata emission. `OXC` handles this correctly; `esbuild` has limited
+   support.
+3. **`useDefineForClassFields = false`.** `VSCode` requires the legacy class
+   fields behavior for `ES5` compatibility. `OXC`'s configurable codegen handles
+   this exactly; `esbuild`'s is implicit.
 
 ---
 
@@ -142,11 +143,11 @@ and VSCode compatibility transformations.
 
 ## `Rest` in the Land Ecosystem&#x2001;⛱️ + 🏞️
 
-| Component         | Role & Key Responsibilities                                  |
-| :---------------- | :----------------------------------------------------------- |
-| **Rest Compiler** | High-performance TypeScript to JavaScript compilation.       |
-| **RestPlugin**    | esbuild plugin that integrates Rest into the build pipeline. |
-| **Build System**  | Environment-driven compiler selection (esbuild or Rest).     |
+| Component         | Role & Key Responsibilities                                    |
+| :---------------- | :------------------------------------------------------------- |
+| **Rest Compiler** | High-performance `TypeScript` to `JavaScript` compilation.     |
+| **RestPlugin**    | `esbuild` plugin that integrates Rest into the build pipeline. |
+| **Build System**  | Environment-driven compiler selection (`esbuild` or `Rest`).   |
 
 ---
 
