@@ -1,4 +1,4 @@
-# Rest — Deep Dive
+# Rest - Deep Dive
 
 This document provides the technical foundation for the Rest TypeScript compiler
 within the Land ecosystem. **Rest** is a Rust binary that uses the OXC toolchain
@@ -16,8 +16,8 @@ concurrently across CPU cores.
 
 ```mermaid
 graph TB
-    subgraph "Rest — TypeScript Compiler"
-        Binary["Library.rs — Binary Entry Point"]
+    subgraph "Rest - TypeScript Compiler"
+        Binary["Library.rs - Binary Entry Point"]
         CLI["CLI Argument Parsing\n--Input · --Output · --Parallel"]
         Compiler["Fn/OXC/Compiler.rs\nOrchestration"]
         Parser["Fn/OXC/Parser.rs\nOXC Parser"]
@@ -121,7 +121,7 @@ Tokio worker threads and collects aggregated metrics.
 | Output path        | `--Output`          | required                 | Destination directory for compiled JavaScript               |
 | Parallel mode      | `--Parallel`        | off                      | Enable multi-core parallel compilation                      |
 | Decorator metadata | `CompilerConfig`    | `true`                   | Emit `emitDecoratorMetadata` for VSCode compatibility       |
-| Class fields mode  | `CompilerConfig`    | `false` (VSCode default) | `useDefineForClassFields` — off matches VSCode's gulp build |
+| Class fields mode  | `CompilerConfig`    | `false` (VSCode default) | `useDefineForClassFields` - off matches VSCode's gulp build |
 | Source maps        | `CompilerConfig`    | development only         | Inline source maps for debug builds                         |
 
 The `CompilerConfig` struct is populated from either CLI flags or from the
