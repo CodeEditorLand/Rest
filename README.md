@@ -5,7 +5,7 @@
 </td>
 <td align="left" valign="middle">
 <h3 align="left">
-⛱️
+&#x2001;⛱️
 </h3>
 </td>
 <td align="left" valign="middle">
@@ -39,7 +39,7 @@ Land
 
 # **Rest**&#x2001;⛱️
 
-The High-Performance TypeScript Compiler for Land 🏞️
+The High-Performance TypeScript Compiler for Land &#x2001;🏞️
 
 > **`VS Code`'s `TypeScript` build uses `tsc` with `Node.js` overhead on every
 > incremental compile. Build times grow linearly with project size. Even
@@ -52,7 +52,7 @@ _"VS Code's TypeScript build step. 2-3x faster."_
 [<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
 [![OXC Version](https://img.shields.io/badge/OXC-0.48-blue.svg)](https://oxc.rs/)
 
-📖 **[Rust API Documentation](https://Rust.Documentation.Editor.Land/Rest/)**
+**[Rust API Documentation](https://Rust.Documentation.Editor.Land/Rest/)**&#x2001;📖
 
 Welcome to **Rest**, a high-performance `TypeScript` compiler built with `Rust`
 and `OXC`, designed for 100% compatibility with `VSCode`'s build process. Rest
@@ -141,7 +141,7 @@ and VSCode compatibility transformations.
 
 ---
 
-## `Rest` in the Land Ecosystem&#x2001;⛱️ + 🏞️
+## `Rest` in the Land Ecosystem&#x2001;⛱️ + &#x2001;🏞️
 
 | Component         | Role & Key Responsibilities                                    |
 | :---------------- | :------------------------------------------------------------- |
