@@ -1,9 +1,11 @@
-# Rest: OXC TypeScript Compiler
+# Rest: OXC TypeScript Compiler ☕
 
-This document describes Rest, a high-performance TypeScript compiler built on
-the OXC (Oxidation Compiler) toolchain. Rest replaces esbuild's TypeScript
-loader with a Rust-powered OXC pipeline, producing VS Code-compatible output at
-2-3x speed improvement.
+This document describes `Rest`, a high-performance `TypeScript` compiler built
+on the OXC (Oxidation Compiler) toolchain:
+
+- Replaces `esbuild`'s `TypeScript` loader with a `Rust`-powered OXC pipeline
+- Produces VS Code-compatible output at 2-3x speed improvement
+- Handles decorators, class field transformations, JSX, and type stripping
 
 ---
 
@@ -44,24 +46,27 @@ graph TB
     BUNDLE --> MAP["Source maps<br/>(.js.map)"]
 ```
 
-## Overview
+## Overview 📋
 
-Rest is a Rust binary and library that provides a TypeScript-to-JavaScript
-compiler using the OXC toolchain. It handles decorators, class field
-transformations, JSX, and TypeScript type stripping, producing output compatible
-with VS Code's module system.
+`Rest` is a `Rust` binary and library that provides a
+`TypeScript`-to-`JavaScript` compiler using the OXC toolchain:
 
-| Attribute    | Value                                                                                                         |
-| ------------ | ------------------------------------------------------------------------------------------------------------- |
-| Language     | Rust (edition 2024)                                                                                           |
-| Crate type   | Binary + Library                                                                                              |
-| OXC version  | 0.48+                                                                                                         |
-| Dependencies | oxc_allocator, oxc_parser, oxc_transformer, oxc_codegen, oxc_semantic, oxc_span, oxc_ast, Common, clap, rayon |
-| Consumed by  | Output (optional RestPlugin)                                                                                  |
+- Handles decorators, class field transformations, JSX, and TypeScript type
+  stripping
+- Produces output compatible with VS Code's module system
+- Integrates with `Output`'s build pipeline via `RestPlugin`
+
+| Attribute    | Value                                                                                                                             |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| Language     | `Rust` (edition 2024)                                                                                                             |
+| Crate type   | Binary + Library                                                                                                                  |
+| OXC version  | 0.48+                                                                                                                             |
+| Dependencies | `oxc_allocator`, `oxc_parser`, `oxc_transformer`, `oxc_codegen`, `oxc_semantic`, `oxc_span`, `oxc_ast`, `Common`, `clap`, `rayon` |
+| Consumed by  | `Output` (optional `RestPlugin`)                                                                                                  |
 
 ---
 
-## Architecture
+## Architecture 🏗️
 
 ```
 +---------------------------------------------------------+
@@ -85,26 +90,27 @@ with VS Code's module system.
 +---------------------------------------------------------+
 ```
 
-### Module Map
+### Module Map 🗺️
 
-| Path                              | Purpose                             |
-| --------------------------------- | ----------------------------------- |
-| `Source/Binary.rs`                | Binary entry point                  |
-| `Source/Fn/Build.rs`              | Build pipeline orchestration        |
-| `Source/Fn/Bundle.rs`             | Module bundling                     |
-| `Source/Fn/Transform.rs`          | TypeScript transformation pipeline  |
-| `Source/Fn/OXC.rs`                | OXC compiler integration            |
-| `Source/Fn/Worker.rs`             | Parallel worker pool                |
-| `Source/Fn/NLS.rs`                | Natural language search integration |
-| `Source/Struct/CompilerConfig.rs` | Compiler configuration types        |
-| `Source/Library.rs`               | Library root for integration        |
-| `Source/Main.rs`                  | Alternative entry point             |
+| Path                              | Purpose                              |
+| --------------------------------- | ------------------------------------ |
+| `Source/Binary.rs`                | Binary entry point                   |
+| `Source/Fn/Build.rs`              | Build pipeline orchestration         |
+| `Source/Fn/Bundle.rs`             | Module bundling                      |
+| `Source/Fn/Transform.rs`          | `TypeScript` transformation pipeline |
+| `Source/Fn/OXC.rs`                | OXC compiler integration             |
+| `Source/Fn/Worker.rs`             | Parallel worker pool                 |
+| `Source/Fn/NLS.rs`                | Natural language search integration  |
+| `Source/Struct/CompilerConfig.rs` | Compiler configuration types         |
+| `Source/Library.rs`               | Library root for integration         |
+| `Source/Main.rs`                  | Alternative entry point              |
 
 ---
 
-## Compilation Pipeline
+## Compilation Pipeline 🔧
 
-The OXC compilation pipeline processes TypeScript input through multiple stages:
+The OXC compilation pipeline processes `TypeScript` input through multiple
+stages:
 
 ```
 TypeScript input (.ts, .tsx, .mts, .cts)
@@ -139,9 +145,9 @@ TypeScript input (.ts, .tsx, .mts, .cts)
 JavaScript output (.js, .cjs, .mjs)
 ```
 
-### Parallel Processing
+### Parallel Processing ⚡
 
-Rest uses rayon for parallel file compilation:
+`Rest` uses `rayon` for parallel file compilation:
 
 ```rust
 // Worker pool processes files in parallel
@@ -155,9 +161,9 @@ the `--workers N` flag.
 
 ---
 
-## Configuration
+## Configuration ⚙️
 
-Rest reads configuration from CLI flags and environment variables:
+`Rest` reads configuration from CLI flags and environment variables:
 
 | Flag             | Env Variable        | Default    | Description                   |
 | ---------------- | ------------------- | ---------- | ----------------------------- |
@@ -170,7 +176,7 @@ Rest reads configuration from CLI flags and environment variables:
 | `--decorators`   | `REST_DECORATORS`   | `legacy`   | Decorator metadata mode       |
 | `--class-fields` | `REST_CLASS_FIELDS` | `define`   | Class field emit mode         |
 
-### Output Configuration
+### Output Configuration 📝
 
 ```sh
 rest --entry src/index.ts \
@@ -182,7 +188,7 @@ rest --entry src/index.ts \
 
 ---
 
-## CLI Usage
+## CLI Usage 💻
 
 ```sh
 # Single file compilation
@@ -203,9 +209,9 @@ rest --entry src/index.ts --out-dir dist/ --decorators stage3
 
 ---
 
-## Integration with Output
+## Integration with Output 🔗
 
-Rest integrates with the Output element's build pipeline through the
+`Rest` integrates with the `Output` element's build pipeline through the
 `RestPlugin`:
 
 ```typescript
@@ -235,7 +241,7 @@ Activated via environment variable: `Compiler=Rest`
 
 ---
 
-## Performance Benchmarks
+## Performance Benchmarks 📊
 
 | Operation                    | esbuild | Rest (OXC) | Improvement |
 | ---------------------------- | ------- | ---------- | ----------- |
@@ -248,14 +254,14 @@ Benchmarks performed on Apple M1 Max with 8 worker threads.
 
 ---
 
-## Related Documentation
+## Related Documentation 📚
 
-- [Output](../Output/Documentation/GitHub/Architecture.md) - Build artifact
-  management (RestPlugin consumer)
-- [BuildPipeline](../../../Documentation/GitHub/BuildPipeline.md) - Build
-  pipeline integration
-- [RustInfrastructure](../../../Documentation/GitHub/RustInfrastructure.md) -
-  Rust backend components
+- [Output](https://github.com/CodeEditorLand/Output/tree/Current/Documentation/GitHub/Architecture.md) -
+  Build artifact management (`RestPlugin` consumer)
+- [BuildPipeline](https://github.com/CodeEditorLand/Land/tree/Current/Documentation/GitHub/BuildPipeline.md) -
+  Build pipeline integration
+- [RustInfrastructure](https://github.com/CodeEditorLand/Land/tree/Current/Documentation/GitHub/RustInfrastructure.md) -
+  `Rust` backend components
 
 ---
 
