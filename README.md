@@ -13,7 +13,7 @@
 </td>
 <td align="left" valign="middle">
 <h3 align="left">
-<a href="https://Editor.Land" target="_blank">
+<a href="https://Land.PlayForm.Cloud" target="_blank">
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://PlayForm.Cloud/Dark/Image/GitHub/Land.svg">
 <source media="(prefers-color-scheme: light)" srcset="https://PlayForm.Cloud/Image/GitHub/Land.svg">
@@ -24,7 +24,7 @@
 </td>
 <td align="left" valign="middle">
 <h3 align="left">
-<a href="https://Editor.Land" target="_blank">
+<a href="https://Land.PlayForm.Cloud" target="_blank">
 Land
 </a>
 </h3>
@@ -48,11 +48,11 @@ The High-Performance TypeScript Compiler for Land &#x2001;🏞️
 _"VS Code's TypeScript build step. 2-3x faster."_
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Rest/tree/Current/LICENSE)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/Rest.svg)](https://crates.io/crates/Rest)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
+[<img src="https://land.playform.cloud/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/Rest.svg)](https://crates.io/crates/Rest)
+[<img src="https://land.playform.cloud/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
 [![OXC Version](https://img.shields.io/badge/OXC-0.48-blue.svg)](https://oxc.rs/)
 
-**[Rust API Documentation](https://Rust.Documentation.Editor.Land/Rest/)**&#x2001;📖
+**[Rust API Documentation](https://Rust.Documentation.Land.PlayForm.Cloud/Rest/)**&#x2001;📖
 
 Welcome to **Rest**, a high-performance `TypeScript` compiler built with `Rust`
 and `OXC`, designed for 100% compatibility with `VSCode`'s build process. Rest
@@ -194,9 +194,9 @@ npm run Run
 
 ## See Also
 
-- [Rest Documentation](https://editor.land/Doc/rest)
-- [Architecture Overview](https://editor.land/Doc/architecture)
-- [Why Rust](https://editor.land/Doc/why-rust)
+- [Rest Documentation](https://land.playform.cloud/Doc/rest)
+- [Architecture Overview](https://land.playform.cloud/Doc/architecture)
+- [Why Rust](https://land.playform.cloud/Doc/why-rust)
 - [Output](https://github.com/CodeEditorLand/Output)
 - [Cocoon](https://github.com/CodeEditorLand/Cocoon)
 
@@ -244,7 +244,7 @@ Commons Fund grant.
 <tbody>
 <tr>
 <td align="left" valign="middle">
-<a href="https://Editor.Land">
+<a href="https://Land.PlayForm.Cloud">
 <img width="60" src="https://raw.githubusercontent.com/CodeEditorLand/Asset/refs/heads/Current/Logo/Land.svg" alt="Land">
 </a>
 </td>
@@ -270,7 +270,7 @@ Commons Fund grant.
 ---
 
 **Project Maintainers**: Source Open
-([Source/Open@Editor.Land](mailto:Source/Open@Editor.Land)) |
+([Source/Open@Land.PlayForm.Cloud](mailto:Source/Open@Land.PlayForm.Cloud)) |
 [GitHub Repository](https://github.com/CodeEditorLand/Rest) |
 [Report an Issue](https://github.com/CodeEditorLand/Rest/issues) |
 [Security Policy](https://github.com/CodeEditorLand/Rest/security/policy)
