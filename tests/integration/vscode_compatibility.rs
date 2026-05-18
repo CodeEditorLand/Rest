@@ -428,7 +428,7 @@ mod tests {
 						// Skip .d.ts files and test files
 						if !path.to_string_lossy().contains(".d.ts")
 							&& !path.to_string_lossy().contains("/test/")
-							&& !path.to_string_lossy().contains("\\test\\")
+							&& !path.to_string_lossy().contains("\	est\\")
 						{
 							files.push(path.to_path_buf());
 						}
