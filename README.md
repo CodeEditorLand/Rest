@@ -149,6 +149,61 @@ and VSCode compatibility transformations.
 | **RestPlugin**    | `esbuild` plugin that integrates Rest into the build pipeline. |
 | **Build System**  | Environment-driven compiler selection (`esbuild` or `Rest`).   |
 
+## System Architecture Diagram&#x2001;🏗️
+
+```mermaid
+graph LR
+    classDef rest     fill:#ffe0cc,stroke:#e67e22,stroke-width:2px,color:#4a1500;
+    classDef oxc      fill:#fff3c0,stroke:#f39c12,stroke-width:1px,color:#5a3e00;
+    classDef output   fill:#d0d8ff,stroke:#4a6fa5,stroke-width:1px,color:#001050;
+    classDef consumer fill:#f0d0ff,stroke:#9b59b6,stroke-width:1px,color:#2c0050;
+
+    subgraph REST["Rest ⛱️ — Rust/OXC TypeScript Compiler"]
+        direction TB
+        subgraph PIPELINE["Fn/OXC/ — Compilation Pipeline"]
+            Parser["Parser.rs
+OXC parser TypeScript 5.x"]:::oxc
+            Transformer["Transformer.rs
+emitDecoratorMetadata · class fields · JSX"]:::oxc
+            Codegen["Codegen.rs
+OXC code generation"]:::oxc
+            Compiler["Compiler.rs
+orchestrates pipeline"]:::rest
+            Watch["Watch.rs
+notify-based file watch"]:::rest
+            Parser --> Transformer --> Codegen
+            Compiler --> Parser
+        end
+        subgraph CONFIG["Struct/"]
+            CompilerCfg["CompilerConfig.rs
+useDefineForClassFields · target · decorators"]:::rest
+        end
+        subgraph MODES["Fn/Build · Bundle · NLS · Worker"]
+            BuildMode["Build.rs — directory compilation"]:::rest
+            BundleMode["Bundle/ — bundling mode"]:::rest
+        end
+        Compiler --> CompilerCfg
+        Compiler --> BuildMode
+    end
+
+    subgraph OUTPUT["Output ⚫ — Build Pipeline"]
+        ESBuild["ESBuild/Output.ts"]:::output
+        RestPlugin["ESBuild/Rest/Plugin.ts
+intercepts .ts, delegates to Rest"]:::output
+        ESBuild --> RestPlugin
+    end
+
+    subgraph CONSUMERS["Artifacts consumed by"]
+        Sky["Sky 🌌"]:::consumer
+        Cocoon["Cocoon 🦋"]:::consumer
+    end
+
+    RestPlugin -- spawns CLI --> Compiler
+    Compiler -- emits .js --> ESBuild
+    ESBuild --> Sky
+    ESBuild --> Cocoon
+```
+
 ---
 
 ## Getting Started&#x2001;🚀
