@@ -158,9 +158,9 @@ graph LR
     classDef output   fill:#d0d8ff,stroke:#4a6fa5,stroke-width:1px,color:#001050;
     classDef consumer fill:#f0d0ff,stroke:#9b59b6,stroke-width:1px,color:#2c0050;
 
-    subgraph REST["Rest ⛱️ — Rust/OXC TypeScript Compiler"]
+    subgraph REST["Rest ⛱️ - Rust/OXC TypeScript Compiler"]
         direction TB
-        subgraph PIPELINE["Fn/OXC/ — Compilation Pipeline"]
+        subgraph PIPELINE["Fn/OXC/ - Compilation Pipeline"]
             Parser["Parser.rs
 OXC parser TypeScript 5.x"]:::oxc
             Transformer["Transformer.rs
@@ -179,14 +179,14 @@ notify-based file watch"]:::rest
 useDefineForClassFields · target · decorators"]:::rest
         end
         subgraph MODES["Fn/Build · Bundle · NLS · Worker"]
-            BuildMode["Build.rs — directory compilation"]:::rest
-            BundleMode["Bundle/ — bundling mode"]:::rest
+            BuildMode["Build.rs - directory compilation"]:::rest
+            BundleMode["Bundle/ - bundling mode"]:::rest
         end
         Compiler --> CompilerCfg
         Compiler --> BuildMode
     end
 
-    subgraph OUTPUT["Output ⚫ — Build Pipeline"]
+    subgraph OUTPUT["Output ⚫ - Build Pipeline"]
         ESBuild["ESBuild/Output.ts"]:::output
         RestPlugin["ESBuild/Rest/Plugin.ts
 intercepts .ts, delegates to Rest"]:::output
