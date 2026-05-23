@@ -1,5 +1,3 @@
-#![allow(non_snake_case)]
-
 #[tokio::main]
 async fn main() {
 	// [Boot] [Telemetry] Bring up shared dual-pipe (PostHog + OTLP). No-op
