@@ -2,7 +2,6 @@
 //!
 //! These tests run as integration tests and import from the Rest library.
 
-#![cfg(test)]
 
 use std::time::Instant;
 

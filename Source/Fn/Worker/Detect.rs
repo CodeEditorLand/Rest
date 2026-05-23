@@ -128,10 +128,13 @@ impl WorkerDetector {
 				if trimmed.starts_with("import ") {
 					if let Some(from_start) = trimmed.find("from") {
 						let import_part = &trimmed[from_start + 4..];
+
 						if let Some(path_start) = import_part.find('"') {
 							let path_end = import_part[path_start + 1..].find('"');
+
 							if let Some(end) = path_end {
 								let import_path = &import_part[path_start + 1..path_start + 1 + end];
+
 								deps.push(import_path.to_string());
 							}
 						}
@@ -142,10 +145,13 @@ impl WorkerDetector {
 				if trimmed.starts_with("importScripts(") {
 					if let Some(paren_start) = trimmed.find('(') {
 						let paren_content = &trimmed[paren_start + 1..];
+
 						if let Some(paren_end) = paren_content.find(')') {
 							let scripts = &paren_content[..paren_end];
+
 							for script in scripts.split(',') {
 								let script = script.trim().trim_matches('"').trim_matches('\'');
+
 								if !script.is_empty() {
 									deps.push(script.to_string());
 								}
@@ -162,28 +168,36 @@ impl WorkerDetector {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn test_worker_detection_by_name() {
 		let config = WorkerConfig::new();
+
 		let detector = WorkerDetector::new(config);
 
 		assert!(detector.is_worker_file(Path::new("test.worker.ts")));
+
 		assert!(detector.is_worker_file(Path::new("my-worker.js")));
+
 		assert!(detector.is_worker_file(Path::new("SharedWorker.ts")));
+
 		assert!(!detector.is_worker_file(Path::new("regular.ts")));
 	}
 
 	#[test]
 	fn test_worker_detection_by_content() {
 		let config = WorkerConfig::new();
+
 		let detector = WorkerDetector::new(config);
 
 		let content = r#"
             self.onmessage = function(e) {
+
                 self.postMessage(e.data);
             };
+
         "#;
 
 		assert!(detector.contains_worker_marker(content));
@@ -192,9 +206,11 @@ mod tests {
 	#[test]
 	fn test_dependency_extraction() {
 		let config = WorkerConfig::new();
+
 		let detector = WorkerDetector::new(config);
 
 		let path = Path::new("test.worker.ts");
+
 		// This would need an actual file to work properly
 		let _deps = detector.extract_dependencies(path);
 	}

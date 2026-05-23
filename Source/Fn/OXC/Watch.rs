@@ -18,6 +18,7 @@ pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> 
 	)?;
 
 	use notify::Watcher; // trait import
+
 	watcher.watch(path.as_ref(), notify::RecursiveMode::Recursive)?;
 
 	while let Some(result) = rx.recv().await {

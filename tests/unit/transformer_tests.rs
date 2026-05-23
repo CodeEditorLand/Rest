@@ -4,8 +4,6 @@
 //! AST to JavaScript, including type stripping, decorator handling, and class
 //! properties.
 
-#![cfg(test)]
-
 use Rest::{
 	Fn::OXC::{self, Compiler, Parser, Transformer},
 	Struct::CompilerConfig,

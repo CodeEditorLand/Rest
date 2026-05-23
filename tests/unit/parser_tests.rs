@@ -3,8 +3,6 @@
 //! These tests verify that the OXC parser correctly handles various TypeScript
 //! language constructs, including edge cases and complex scenarios.
 
-#![cfg(test)]
-
 use std::time::Instant;
 
 use Rest::{Fn::OXC::Parser, Struct::CompilerConfig};

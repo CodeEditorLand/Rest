@@ -3,8 +3,6 @@
 //! These tests verify that Rest compiler output matches VSCode's gulp/tsb build
 //! exactly, ensuring 1:1 compatibility for the CodeEditorLand build process.
 
-#![cfg(test)]
-
 use std::{
 	path::{Path, PathBuf},
 	process::Command,

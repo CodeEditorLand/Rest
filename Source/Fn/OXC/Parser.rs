@@ -40,7 +40,6 @@ pub struct ParseResult {
 	pub errors:Vec<String>,
 
 	/// File path for debugging
-	#[allow(dead_code)]
 	pub file_path:String,
 }
 

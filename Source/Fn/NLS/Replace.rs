@@ -36,6 +36,7 @@ impl NLSReplacer {
 
 	pub fn with_preserve_calls(mut self, preserve:bool) -> Self {
 		self.preserve_calls = preserve;
+
 		self
 	}
 
@@ -47,9 +48,12 @@ impl NLSReplacer {
 		if let Some(caps) = self.localize_pattern.captures(&result) {
 			if let Some(key) = caps.get(1) {
 				let key_str = key.as_str();
+
 				if let Some(value) = self.bundle.get(key_str) {
 					let pattern = format!(r#"nls.localize\s*\(\s*['"]{}.*?\)"#, regex::escape(key_str));
+
 					let re = Regex::new(&pattern).unwrap();
+
 					if self.preserve_calls {
 						// Keep the call but with replacement
 						result = re
@@ -70,33 +74,41 @@ impl NLSReplacer {
 /// Replace NLS keys in source code with translations
 pub fn replace_nls_keys(source:&str, bundle:&HashMap<String, String>) -> String {
 	let replacer = NLSReplacer::new(bundle.clone());
+
 	replacer.replace(source)
 }
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn test_replacer_creation() {
 		let bundle = HashMap::new();
+
 		let replacer = NLSReplacer::new(bundle);
+
 		assert!(!replacer.preserve_calls);
 	}
 
 	#[test]
 	fn test_replacer_with_preserve() {
 		let bundle = HashMap::new();
+
 		let replacer = NLSReplacer::new(bundle).with_preserve_calls(true);
+
 		assert!(replacer.preserve_calls);
 	}
 
 	#[test]
 	fn test_replace_keys() {
 		let mut bundle = HashMap::new();
+
 		bundle.insert("hello".to_string(), "Hello World".to_string());
 
 		let source = r#"nls.localize('hello', 'default')"#;
+
 		let result = replace_nls_keys(source, &bundle);
 
 		assert!(result.contains("Hello World"));

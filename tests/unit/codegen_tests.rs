@@ -3,8 +3,6 @@
 //! These tests verify that the OXC codegen produces correct JavaScript output
 //! from transformed ASTs, including formatting, source maps, and edge cases.
 
-#![cfg(test)]
-
 use Rest::{
 	Fn::OXC::{self, Compiler, Parser, Transformer},
 	Struct::CompilerConfig,
