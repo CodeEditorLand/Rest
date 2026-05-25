@@ -2,7 +2,6 @@
 //!
 //! These tests run as integration tests and import from the Rest library.
 
-
 use std::time::Instant;
 
 // Import from the Rest library
