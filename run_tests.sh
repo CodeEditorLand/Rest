@@ -22,7 +22,7 @@ run_test() {
 	TOTAL_TESTS=$((TOTAL_TESTS + 1))
 	printf "Test [%s]: %s ... " "$TOTAL_TESTS" "$test_name"
 
-	if eval "$test_command" >/dev/null 2>&1; then
+	if eval "$test_command" > /dev/null 2>&1; then
 		echo "PASSED"
 		PASSED_TESTS=$((PASSED_TESTS + 1))
 		return 0
