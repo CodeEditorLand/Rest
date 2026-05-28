@@ -37,6 +37,7 @@ pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> 
 
 							tokio::task::spawn_blocking(move || {
 								let rt = tokio::runtime::Handle::current();
+
 								rt.block_on(async {
 									if let Err(e) = Compile::Fn(
 										crate::Struct::SWC::Option {

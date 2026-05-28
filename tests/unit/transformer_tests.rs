@@ -93,9 +93,11 @@ fn test_transform_decorators() {
         class MyService {
 
             @Inject('token')
+
             private dependency: any;
 
             @Injectable()
+
             getValue(): string {
 
                 return 'value';
@@ -169,6 +171,7 @@ fn test_transform_use_define_for_class_fields_false() {
     "#;
 
 	let mut config = CompilerConfig::vscode(); // use_define_for_class_fields = false
+
 	let result = transform_source(source, "vscode_define.ts", &config);
 
 	assert!(result.is_ok(), "VSCode-compatible transformation should succeed");
@@ -450,6 +453,7 @@ fn test_transform_static_class_properties_vscode_format() {
     "#;
 
 	let mut config = CompilerConfig::vscode(); // use_define_for_class_fields = false
+
 	let result = transform_source(source, "static_props.ts", &config);
 
 	assert!(result.is_ok(), "Static class property transformation should succeed");

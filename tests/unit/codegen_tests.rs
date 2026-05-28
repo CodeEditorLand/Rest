@@ -900,6 +900,7 @@ fn test_codegen_promise() {
 	let source = r#"
         const p = new Promise((resolve, reject) => {
             if (success) resolve(value);
+
             else reject(error);
         });
 
@@ -1131,6 +1132,7 @@ fn test_codegen_array_spread() {
 fn test_codegen_optional_elements() {
 	let source = r#"
         const arr = [1, , 3];  // holey array
+
         const obj = {
 
             a: 1,

@@ -172,8 +172,10 @@ async function installBinary() {
 // Run the installation
 installBinary().catch((error) => {
 	console.error(`[Rest] Error during binary installation:`, error.message);
+
 	console.error(
 		`[Rest] Continuing without binary - Rest compiler may not be available`,
 	);
+
 	process.exit(0); // Don't fail the install, just warn
 });

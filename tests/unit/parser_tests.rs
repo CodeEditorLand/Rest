@@ -276,10 +276,12 @@ fn test_parse_decorators() {
         class MyService {
 
             @Inject('token')
+
             private dependency: any;
         }
 
         @Injectable()
+
         export class AnotherService {}
 
     "#;
@@ -986,12 +988,15 @@ fn test_parse_this_types() {
 	let source = r#"
         class MyClass {
             private value: number;
+
             constructor(value: number) {
                 this.value = value;
             }
+
             getThis(): this {
                 return this;
             }
+
             clone(): this {
                 return new (this.constructor as any)(this.value);
             }
@@ -1167,6 +1172,7 @@ fn test_parse_ambient_declarations() {
 	let source = r#"
         declare module 'some-module' {
             export function foo(): void;
+
             export const bar: string;
         }
 
@@ -1191,7 +1197,9 @@ fn test_parse_export_namespace() {
 	let source = r#"
         export namespace MyExports {
             export const VERSION = '1.0';
+
             export interface Types {}
+
             export function helper() {}
         }
     "#;
@@ -1270,8 +1278,11 @@ fn test_parse_function_bindings() {
         };
         class MyClass {
             static staticMethod() {}
+
             instanceMethod() {}
+
             get accessor() { return this._value; }
+
             set accessor(val) { this._value = val; }
         }
     "#;

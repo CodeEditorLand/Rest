@@ -34,8 +34,11 @@ pub async fn Fn(options:crate::Struct::SWC::Option, _parallel:bool) -> anyhow::R
 		.into_iter()
 		.filter_map(|e| {
 			let entry = e.ok()?;
+
 			let path = entry.path();
+
 			let path_str = path.to_string_lossy();
+
 			// Skip .d.ts declaration files (like VSCode's noDeclarationsFilter)
 			if path_str.ends_with(".d.ts") {
 				None

@@ -56,7 +56,9 @@ pub async fn Fn(options:crate::Struct::SWC::Option, _parallel:bool) -> anyhow::R
 		.into_iter()
 		.filter_map(|e| {
 			let entry = e.ok()?;
+
 			let path = entry.path();
+
 			if path.is_file() && path.to_string_lossy().ends_with(&pattern) {
 				Some(path.to_string_lossy().to_string())
 			} else {

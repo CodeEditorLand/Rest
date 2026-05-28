@@ -37,20 +37,26 @@ impl Struct {
 							.get_one::<String>("Input")
 							.expect("Cannot get Input.")
 							.to_owned();
+
 						let Output = compile_matches
 							.get_one::<String>("Output")
 							.expect("Cannot get Output.")
 							.to_owned();
+
 						let Target = compile_matches
 							.get_one::<String>("Target")
 							.cloned()
 							.unwrap_or_else(|| "es2024".to_string());
+
 						let Module = compile_matches
 							.get_one::<String>("Module")
 							.cloned()
 							.unwrap_or_else(|| "esmodule".to_string());
+
 						let _SourceMaps = compile_matches.get_flag("SourceMaps");
+
 						let UseDefineForClassFields = compile_matches.get_flag("UseDefineForClassFields");
+
 						let Parallel = compile_matches.get_flag("Parallel");
 
 						// Create VSCode-compatible config

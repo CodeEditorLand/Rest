@@ -65,10 +65,12 @@ impl WorkerBootstrap {
 			r#"
 self.onconnect = function(event) {
     const port = event.ports[0];
+
     port.onmessage = function(event) {
         // Handle messages from the main thread
         self.dispatchEvent(new MessageEvent('message', event));
     };
+
     port.start();
 };
 
@@ -99,6 +101,7 @@ self.onconnect = function(event) {
         self.MessageChannel = class MessageChannel {
             constructor() {
                 this.port1 = new MessagePort();
+
                 this.port2 = new MessagePort();
             }
         };
@@ -109,10 +112,14 @@ self.onconnect = function(event) {
         self.MessagePort = class MessagePort {
             constructor() {
                 this.onmessage = null;
+
                 this.onmessageerror = null;
             }
+
             postMessage(data) {}
+
             start() {}
+
             close() {}
         };
     }
@@ -144,9 +151,11 @@ self.onconnect = function(event) {
 (function() {{
     const workerCode = `
         {loader_code}
+
     `;
     
     const blob = new Blob([workerCode], {{ type: 'application/javascript' }});
+
     const url = URL.createObjectURL(blob);
     
     self["{worker_name}"] = new Worker(url, {{ type: 'module' }});
