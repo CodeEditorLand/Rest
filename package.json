@@ -40,7 +40,7 @@
 		"@codeeditorland/rest-win32-x64": "0.0.1"
 	},
 	"engines": {
-		"node": ">=18.0.0"
+		"node": ">=24.0.0"
 	},
 	"publishConfig": {
 		"access": "public",
