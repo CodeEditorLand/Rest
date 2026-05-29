@@ -30,7 +30,7 @@ panic = "abort"
 strip = true
 
 [target.aarch64-apple-darwin]
-# rustflags removed: -Zshare-generics=y is nightly-only and not compatible with stable Rust
+rustflags = ["-Zshare-generics=y"]
 
 [target.x86_64-apple-darwin]
-# rustflags removed: -Zshare-generics=y is nightly-only and not compatible with stable Rust
+rustflags = ["-Zshare-generics=y"]
