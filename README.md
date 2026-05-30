@@ -52,7 +52,7 @@ _"VS Code's TypeScript build step. 2-3x faster."_
 [<img src="https://land.playform.cloud/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
 [![OXC Version](https://img.shields.io/badge/OXC-0.48-blue.svg)](https://oxc.rs/)
 
-**[Rust API Documentation](https://Rust.Documentation.Land.PlayForm.Cloud/Rest/)**&#x2001;📖
+**[Rust API Documentation](https://rust.documentation.land.playform.cloud/Rest/)**&#x2001;📖
 
 Welcome to **Rest**, a high-performance `TypeScript` compiler built with `Rust`
 and `OXC`, designed for 100% compatibility with `VSCode`'s build process. Rest
