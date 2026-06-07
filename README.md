@@ -2,12 +2,7 @@
 	<tr>
 		<td align="left" valign="middle">
 			<h3 align="left">
-				Rest
-			</h3>
-		</td>
-		<td align="left" valign="middle">
-			<h3 align="left">
-				⛱️
+				Rest&#x2001;⛱️
 			</h3>
 		</td>
 		<td align="left" valign="middle">
@@ -29,13 +24,8 @@
 		<td align="left" valign="middle">
 			<h3 align="left">
 				<a href="https://Land.PlayForm.Cloud" target="_blank">
-					Land
+					Land&#x2001;🏞️
 				</a>
-			</h3>
-		</td>
-		<td align="left" valign="middle">
-			<h3 align="left">
-				🏞️
 			</h3>
 		</td>
 	</tr>
@@ -147,7 +137,7 @@ and VSCode compatibility transformations.
 
 ---
 
-## `Rest` in the Land Ecosystem&#x2001;⛱️ + &#x2001;🏞️
+## `Rest` in the Land Ecosystem ⛱️ + 🏞️
 
 | Component         | Role & Key Responsibilities                                    |
 | :---------------- | :------------------------------------------------------------- |
