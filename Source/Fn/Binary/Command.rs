@@ -38,7 +38,7 @@
 pub fn Fn() -> ArgMatches {
 	Command::new("Rest")
 		.version(env!("CARGO_PKG_VERSION"))
-		.author("Source 🖋️ Open 👐🏻 <Source/Open@PlayForm.Cloud>")
+		.author("Source 🖋️ Open 👐🏻 <Source/Open@editor.land>")
 		.about("Rest ⛱️")
 		.subcommand(
 			Command::new("compile")
