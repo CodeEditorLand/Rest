@@ -13,7 +13,6 @@ use Rest::{
 /// Test that parser correctly parses TypeScript code
 #[test]
 fn test_parser_basic() {
-
 	let source = r#"
         interface User {
 
@@ -31,11 +30,8 @@ fn test_parser_basic() {
 
 	let config = OXC::ParserConfig::new(
 		"es2024".to_string(),
-
 		false, // jsx
-
 		true,  // decorators
-
 		true,  // typescript
 	);
 
@@ -53,7 +49,6 @@ fn test_parser_basic() {
 /// Test that transformer correctly transforms TypeScript AST
 #[test]
 fn test_transformer_basic() {
-
 	let source = r#"
         class MyClass {
 
@@ -89,9 +84,7 @@ fn test_transformer_basic() {
 
 	assert!(
 		transform_result.is_ok(),
-
 		"Transformation should succeed: {:?}",
-
 		transform_result.err()
 	);
 }
@@ -99,7 +92,6 @@ fn test_transformer_basic() {
 /// Test that codegen produces valid JavaScript
 #[test]
 fn test_codegen_basic() {
-
 	let source = r#"
         export const answer: number = 42;
 
@@ -123,9 +115,7 @@ fn test_codegen_basic() {
 
 	assert!(
 		std::path::Path::new(&output_path).exists(),
-
 		"Output file should exist: {}",
-
 		output_path
 	);
 
@@ -136,7 +126,6 @@ fn test_codegen_basic() {
 /// Test decorator handling with emitDecoratorsMetadata
 #[test]
 fn test_decorator_metadata() {
-
 	let source = r#"
         function sealed(constructor: Function) {
 
@@ -168,7 +157,6 @@ fn test_decorator_metadata() {
 	// With emitDecoratorsMetadata, we should have __decorate helper
 	assert!(
 		output.contains("__decorate") || output.contains("DecoratedClass"),
-
 		"Output should contain decorator helper or class"
 	);
 
@@ -179,7 +167,6 @@ fn test_decorator_metadata() {
 /// Test that use_define_for_class_fields is respected
 #[test]
 fn test_use_define_for_class_fields() {
-
 	let source = r#"
         class MyClass {
 
@@ -204,7 +191,6 @@ fn test_use_define_for_class_fields() {
 	// should be transpiled to assignments in constructor
 	assert!(
 		output.contains("constructor") || output.contains("field"),
-
 		"Output should contain class field handling"
 	);
 
@@ -214,20 +200,15 @@ fn test_use_define_for_class_fields() {
 /// Test that multiple files can be compiled sequentially without segfault
 #[test]
 fn test_sequential_compilation_no_segfault() {
-
 	let config = CompilerConfig::simple();
 
 	let compiler = Compiler::new(config);
 
 	let sources = vec![
 		r#"export const a: number = 1;"#,
-
 		r#"export const b: number = 2;"#,
-
 		r#"export const c: number = 3;"#,
-
 		r#"export const d: number = 4;"#,
-
 		r#"export const e: number = 5;"#,
 	];
 
@@ -236,11 +217,8 @@ fn test_sequential_compilation_no_segfault() {
 
 		assert!(
 			result.is_ok(),
-
 			"Sequential compilation {} should succeed: {:?}",
-
 			i,
-
 			result.err()
 		);
 	}
@@ -253,7 +231,6 @@ fn test_sequential_compilation_no_segfault() {
 /// Test that transformer config is correctly derived from compiler config
 #[test]
 fn test_transformer_config_derivation() {
-
 	let config = CompilerConfig::vscode();
 
 	let compiler = Compiler::new(config);
@@ -268,7 +245,6 @@ fn test_transformer_config_derivation() {
 
 	assert!(
 		!transformer_config.use_define_for_class_fields,
-
 		"VSCode does NOT use defineForClassFields"
 	);
 }
@@ -276,7 +252,6 @@ fn test_transformer_config_derivation() {
 /// Test that parser config is correctly derived from compiler config
 #[test]
 fn test_parser_config_derivation() {
-
 	let config = CompilerConfig::vscode();
 
 	let compiler = Compiler::new(config);
@@ -296,7 +271,6 @@ fn test_parser_config_derivation() {
 #[test]
 #[ignore] // Only run with --ignored
 fn test_compile_performance() {
-
 	let source = r#"
         export interface DataStore {
 
