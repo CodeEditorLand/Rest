@@ -245,9 +245,9 @@ npm run Run
 
 ## See Also
 
-- [Rest Documentation](https://editor.land/Doc/rest)
-- [Architecture Overview](https://editor.land/Doc/architecture)
-- [Why Rust](https://editor.land/Doc/why-rust)
+- [Rest Documentation](https://Editor.Land/Doc/rest)
+- [Architecture Overview](https://Editor.Land/Doc/architecture)
+- [Why Rust](https://Editor.Land/Doc/why-rust)
 - [Output](https://github.com/CodeEditorLand/Output)
 - [Cocoon](https://github.com/CodeEditorLand/Cocoon)
 
