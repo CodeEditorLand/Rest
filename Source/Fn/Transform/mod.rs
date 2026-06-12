@@ -6,7 +6,8 @@
 //!
 //! ## Modules
 //!
-//! * [`PrivateField`] — Converts TypeScript private fields to regular properties.
+//! * [`PrivateField`] — Converts TypeScript private fields to regular
+//!   properties.
 
 #[path = "PrivateField.rs"]
 pub mod PrivateField;

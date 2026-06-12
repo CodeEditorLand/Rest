@@ -6,8 +6,11 @@
  * It re-exports the CLI wrapper functionality.
  */
 import { execSync } from "node:child_process";
+
 import { existsSync } from "node:fs";
+
 import { dirname, join } from "node:path";
+
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -18,6 +21,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  * @returns {Buffer} The output from the Rest compiler
  */
 export function run(...args) {
+
 	const platform = process.platform;
 
 	const binaryName = platform === "win32" ? "Rest.exe" : "Rest";
@@ -41,6 +45,7 @@ export function run(...args) {
  * @returns {string} The version string
  */
 export function getVersion() {
+
 	try {
 		const output = run("--version");
 
@@ -52,6 +57,7 @@ export function getVersion() {
 
 // Export CLI functionality for programmatic use
 export default {
+
 	run,
 
 	getVersion,

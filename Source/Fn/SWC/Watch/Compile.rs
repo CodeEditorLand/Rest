@@ -9,8 +9,8 @@ use std::io::Write;
 ///
 /// ## Parameters
 ///
-/// * `options` — Compilation options including entry paths, pattern,
-///   config, and output directory.
+/// * `options` — Compilation options including entry paths, pattern, config,
+///   and output directory.
 pub async fn Fn(options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
 	let compiler = std::sync::Arc::new(crate::Fn::OXC::Compiler::Compiler::new(options.config.clone()));
 

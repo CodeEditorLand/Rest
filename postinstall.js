@@ -13,13 +13,16 @@
  *   REST_BINARY_PATH  - Override the default binary installation path
  */
 import { existsSync, mkdirSync } from "node:fs";
+
 import { dirname, join } from "node:path";
+
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Check if installation should be skipped
 if (process.env.REST_SKIP_INSTALL === "true") {
+
 	console.log(
 		"[Rest] Installation skipped via REST_SKIP_INSTALL environment variable",
 	);
@@ -31,6 +34,7 @@ if (process.env.REST_SKIP_INSTALL === "true") {
  * Platform and architecture detection
  */
 function getPlatform() {
+
 	const platforms = {
 		"darwin": "darwin",
 
@@ -52,6 +56,7 @@ function getPlatform() {
 }
 
 function getArchitecture() {
+
 	const arch = process.arch;
 
 	const archs = {
@@ -76,6 +81,7 @@ function getArchitecture() {
  * Install the platform-specific binary
  */
 async function installBinary() {
+
 	const platform = getPlatform();
 
 	const architecture = getArchitecture();

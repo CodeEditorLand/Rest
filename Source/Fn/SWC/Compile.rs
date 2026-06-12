@@ -11,8 +11,8 @@
 ///
 /// * `options` — Compilation options including entry paths, pattern, config,
 ///   and output directory.
-/// * `_parallel` — Whether to use parallel compilation (currently unused;
-///   runs sequentially).
+/// * `_parallel` — Whether to use parallel compilation (currently unused; runs
+///   sequentially).
 pub async fn Fn(options:crate::Struct::SWC::Option, _parallel:bool) -> anyhow::Result<()> {
 	tracing_subscriber::fmt::init();
 

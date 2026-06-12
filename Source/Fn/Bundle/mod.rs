@@ -84,7 +84,8 @@ pub enum BundleMode {
 }
 
 impl BundleMode {
-	/// Returns `true` if this mode requires actual bundling (is an entry point).
+	/// Returns `true` if this mode requires actual bundling (is an entry
+	/// point).
 	pub fn requires_bundle(&self) -> bool {
 		matches!(self, BundleMode::Bundle | BundleMode::Esbuild | BundleMode::Watch)
 	}

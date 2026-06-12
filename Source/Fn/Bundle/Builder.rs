@@ -152,9 +152,7 @@ impl BundleBuilder {
 
 	/// Builds in watch mode — builds once; actual watching is handled by the
 	/// caller.
-	fn build_watch(&mut self) -> anyhow::Result<BundleResult> {
-		self.build_bundle()
-	}
+	fn build_watch(&mut self) -> anyhow::Result<BundleResult> { self.build_bundle() }
 
 	/// Builds using the esbuild wrapper.
 	fn build_with_esbuild(&mut self) -> anyhow::Result<BundleResult> {

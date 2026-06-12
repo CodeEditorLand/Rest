@@ -26,8 +26,8 @@ fn get_nesting_depth(path:&str) -> usize {
 ///
 /// * `options` — Compilation options including entry paths, pattern, config,
 ///   and output directory.
-/// * `_parallel` — Whether to use parallel compilation (currently unused;
-///   runs sequentially).
+/// * `_parallel` — Whether to use parallel compilation (currently unused; runs
+///   sequentially).
 ///
 /// ## Returns
 ///
