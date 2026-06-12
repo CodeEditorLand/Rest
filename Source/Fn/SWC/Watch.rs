@@ -1,11 +1,21 @@
-//! SWC-compatible file watching module (using OXC backend)
+//! SWC-compatible file watching module (uses OXC backend).
 //!
-//! This module provides file watching functionality for the compiler.
+//! Provides file watching functionality for the compiler, recompiling
+//! TypeScript files on modification.
 
 pub mod Compile;
 
 #[tracing::instrument]
-/// Watch a single file for changes and recompile on modification.
+/// Watches a single file for changes and recompiles on modification.
+///
+/// ## Parameters
+///
+/// * `path` — Directory path to watch for `.ts` file changes.
+/// * `options` — Compiler options for recompilation.
+///
+/// ## Errors
+///
+/// Returns an error if the file watcher cannot be initialised.
 pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
 	let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
 

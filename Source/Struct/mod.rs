@@ -1,7 +1,10 @@
-//! Configuration structures and CLI types.
+//! # Struct
+//!
+//! Configuration structures, CLI types, and compiler configuration used
+//! throughout the Rest build pipeline.
 //!
 //! Re-exports Binary command options, SWC compiler config, and advanced
-//! CompilerConfig types used throughout the Rest crate.
+//! CompilerConfig types.
 
 pub mod Binary;
 

@@ -1,36 +1,16 @@
-/// Asynchronously processes entries to generate summaries and outputs the
-/// results.
+/// Processes entries in parallel: filters by glob pattern, spawns
+/// concurrent build tasks, collects results via channels, and outputs them.
 ///
-/// This function performs the following steps:
-/// 1. Filters and processes the provided entries based on the given pattern and
-///    separator.
-/// 2. Spawns asynchronous tasks to generate summaries for each entry.
-/// 3. Collects the results and outputs them.
+/// ## Arguments
 ///
-/// # Argument
+/// * `Option` — A struct with:
+///   - `Entry`: Vector of file path component vectors.
+///   - `Separator`: Character joining path components.
+///   - `Pattern`: Glob pattern to match against joined paths.
 ///
-/// * `Option` - A struct containing the following fields:
-///   - `Entry`: A vector of vectors, where each inner vector contains the
-///     components of a file path.
-///   - `Separator`: A character used to join the components of the file path.
-///   - `Pattern`: A string pattern to match against the last element of each
-///     entry.
+/// ## Errors
 ///
-/// # Example
-///
-/// ```rust
-/// let options = Option {
-/// 	Entry:vec![vec!["path".to_string(), "to".to_string(), "file.git".to_string()]],
-/// 	Separator:'/',
-/// 	Pattern:".git".to_string(),
-/// };
-/// Fn(options).await;
-/// ```
-///
-/// # Errors
-///
-/// This function will log errors if it fails to generate summaries or send
-/// results.
+/// Logs errors if build tasks fail or channel sends fail.
 pub async fn Fn(Option { Entry, Separator, Pattern, .. }:Option) {
 	let (Allow, mut Mark) = tokio::sync::mpsc::unbounded_channel();
 

@@ -1,12 +1,11 @@
-//! OXC TypeScript Compiler
+//! OXC TypeScript Compiler.
 //!
-//! This module provides the main compiler orchestration for TypeScript to
-//! JavaScript compilation using the OXC parser, transformer, and codegen.
+//! Provides the main compiler orchestration for TypeScript-to-JavaScript
+//! compilation using the OXC parser, transformer, and codegen subsystems.
 //!
-//! DIAGNOSTIC LOGGING:
-//! - Full lifecycle tracking from parse through codegen
-//! - Memory allocation/deallocation timestamps
-//! - Pointer addresses for debugging use-after-free
+//! Diagnostic logging tracks the full lifecycle from parse through codegen,
+//! including memory allocation timestamps and pointer addresses for
+//! debugging use-after-free issues.
 
 use std::{
 	path::Path,
@@ -28,42 +27,47 @@ use super::{
 
 static COMPILE_ID:AtomicUsize = AtomicUsize::new(0);
 
-/// Compiler metrics
+/// Compiler metrics: count, elapsed time, and error count.
 #[derive(Debug, Default)]
 pub struct CompilerMetrics {
-	/// Number of files compiled
+	/// Number of files compiled.
 	pub count:usize,
 
-	/// Total elapsed time
+	/// Total elapsed time.
 	pub elapsed:Duration,
 
-	/// Number of errors
+	/// Number of errors.
 	pub error:usize,
 }
 
-/// OXC-based TypeScript compiler
+/// OXC-based TypeScript compiler.
+///
+/// Orchestrates the parse → transform → codegen pipeline for each
+/// source file.
 pub struct Compiler {
-	/// Compiler configuration
+	/// Compiler configuration.
 	pub config:crate::Struct::SWC::CompilerConfig,
 
-	/// Compiler metrics
+	/// Compiler metrics.
 	pub outlook:Arc<Mutex<CompilerMetrics>>,
 }
 
 impl Compiler {
-	/// Create a new OXC compiler
+	/// Creates a new OXC compiler with the given configuration.
 	pub fn new(config:crate::Struct::SWC::CompilerConfig) -> Self {
 		Self { config, outlook:Arc::new(Mutex::new(CompilerMetrics::default())) }
 	}
 
-	/// Compile a TypeScript file and return the output
+	/// Compiles a TypeScript file from source text, returning the output path.
 	///
-	/// # Arguments
-	/// * `file_path` - Path to the source file
-	/// * `input` - TypeScript source code
+	/// ## Parameters
 	///
-	/// # Returns
-	/// Result containing the output file path
+	/// * `file_path` — Path to the source file.
+	/// * `input` — TypeScript source code.
+	///
+	/// ## Returns
+	///
+	/// The output file path on success, or an error describing the failure.
 	#[tracing::instrument(skip(self, input))]
 	pub fn compile_file(&self, file_path:&str, input:String) -> anyhow::Result<String> {
 		let compile_id = COMPILE_ID.fetch_add(1, Ordering::SeqCst);
@@ -181,16 +185,18 @@ impl Compiler {
 		Ok(output_path.to_string_lossy().to_string())
 	}
 
-	/// Compile a TypeScript file and write output to a specific path
+	/// Compiles a TypeScript file and writes the output to a specific path.
 	///
-	/// # Arguments
-	/// * `file_path` - Path to the source file
-	/// * `input` - TypeScript source code
-	/// * `output_path` - Path for the output file
-	/// * `use_define_for_class_fields` - VSCode compatibility setting
+	/// ## Parameters
 	///
-	/// # Returns
-	/// Result containing the output file path
+	/// * `file_path` — Path to the source file.
+	/// * `input` — TypeScript source code.
+	/// * `output_path` — Destination path for the compiled JavaScript.
+	/// * `use_define_for_class_fields` — VSCode compatibility setting.
+	///
+	/// ## Returns
+	///
+	/// The output file path on success, or an error describing the failure.
 	#[tracing::instrument(skip(self, input))]
 	pub fn compile_file_to(
 		&self,
@@ -342,7 +348,7 @@ impl Compiler {
 		Ok(output_path.to_string_lossy().to_string())
 	}
 
-	/// Get parser configuration from compiler config
+	/// Returns the parser configuration derived from the compiler config.
 	fn get_parser_config(&self) -> ParserConfig {
 		ParserConfig::new(
 			self.config.Target.clone(),
@@ -352,7 +358,7 @@ impl Compiler {
 		)
 	}
 
-	/// Get transformer configuration from compiler config
+	/// Returns the transformer configuration derived from the compiler config.
 	fn get_transformer_config(&self) -> TransformerConfig {
 		TransformerConfig::new(
 			self.config.Target.clone(),
@@ -365,7 +371,7 @@ impl Compiler {
 		)
 	}
 
-	/// Get codegen configuration from compiler config
+	/// Returns the codegen configuration derived from the compiler config.
 	fn get_codegen_config(&self) -> CodegenConfig {
 		CodegenConfig::new(
 			self.config.Minify,

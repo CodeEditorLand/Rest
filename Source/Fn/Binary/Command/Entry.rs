@@ -1,25 +1,23 @@
-/// Generates a list of file paths from the specified root directory, excluding
-/// paths that match any of the specified exclude patterns.
+/// Generates a list of file paths from the root directory, excluding paths
+/// matching the exclude patterns.
 ///
-/// # Argument
+/// ## Arguments
 ///
-/// * `Option` - A reference to an `Option` struct containing the following
-///   fields:
-///   - `Exclude`: A vector of strings representing patterns to exclude.
-///   - `Root`: The root directory to start the walk from.
-///   - `Separator`: The separator used for splitting file paths.
+/// * `Option` — A reference to an `Option` struct with:
+///   - `Exclude`: Patterns to exclude.
+///   - `Root`: Starting directory.
+///   - `Separator`: Path component separator.
 ///
-/// # Returns
+/// ## Returns
 ///
-/// Returns a vector of vectors, where each inner vector contains the components
-/// of a file path split by the specified separator.
+/// A vector of vectors, each inner vector containing the path components
+/// split by the separator.
 ///
-/// # Panics
+/// ## Panics
 ///
-/// This function will panic if it encounters an error while reading a directory
-/// entry.
+/// Panics on directory read errors.
 ///
-/// # Example
+/// ## Example
 ///
 /// ```
 /// let options = Option {

@@ -1,9 +1,14 @@
-//! NLS (National Language Support) processing for VSCode localization
+//! NLS (National Language Support) processing for VSCode localization.
 //!
-//! This module handles:
-//! - Extraction of localization keys from TypeScript source
-//! - Generation of localization bundle files
-//! - Replacement of localization keys with actual strings at build time
+//! Handles extraction of localization keys from TypeScript source, generation
+//! of localization bundle files, and replacement of localization keys with
+//! actual strings at build time.
+//!
+//! ## Modules
+//!
+//! * [`Extract`] — Key extraction from source code.
+//! * [`Replace`] — Key replacement with localized strings.
+//! * [`Bundle`] — Bundle generation and management.
 
 #[path = "Extract.rs"]
 pub mod Extract;
@@ -18,27 +23,27 @@ pub use Extract::NLSExtractor;
 pub use Replace::NLSReplacer;
 pub use Bundle::NLSBundle;
 
-/// Configuration for NLS processing
+/// Configuration for NLS processing.
 #[derive(Debug, Clone, Default)]
 pub struct NLSConfig {
-	/// Source language for localization (default: "en")
+	/// Source language for localization (default: `"en"`).
 	pub source_lang:String,
 
-	/// Output directory for generated localization files
+	/// Output directory for generated localization files.
 	pub output_dir:String,
 
-	/// Whether to inline translations into the output
+	/// Whether to inline translations into the output.
 	pub inline:bool,
 
-	/// File pattern for localization keys (default: "*.nls.*")
+	/// File pattern for localization keys (default: `"*.nls.*"`).
 	pub key_pattern:String,
 
-	/// Additional languages to generate
+	/// Additional languages to generate.
 	pub languages:Vec<String>,
 }
 
 impl NLSConfig {
-	/// Create a new [`NLSConfig`] with default settings.
+	/// Creates a new [`NLSConfig`] with default settings.
 	pub fn new() -> Self {
 		Self {
 			source_lang:"en".to_string(),
@@ -54,43 +59,43 @@ impl NLSConfig {
 	}
 }
 
-/// Represents a localization entry
+/// A localization entry mapping a key to its translated value.
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct LocalizationEntry {
-	/// The key used to identify this string
+	/// The key used to identify this string.
 	pub key:String,
 
-	/// The localized string value
+	/// The localized string value.
 	pub value:String,
 
-	/// Optional comment for translators
+	/// Optional comment for translators.
 	pub comment:Option<String>,
 }
 
-/// A collection of localization entries for a specific language
+/// A collection of localization entries for a specific language.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct LocalizationBundle {
-	/// Language code (e.g., "en", "de", "fr")
+	/// Language code (e.g., `"en"`, `"de"`, `"fr"`).
 	pub language:String,
 
-	/// Hash of the source strings for cache invalidation
+	/// Hash of the source strings for cache invalidation.
 	pub hash:String,
 
-	/// The localization entries
+	/// The localization entries.
 	pub entries:Vec<LocalizationEntry>,
 }
 
 impl LocalizationBundle {
-	/// Create a new [`LocalizationBundle`` for the given language.
+	/// Creates a new [`LocalizationBundle`] for the given language.
 	pub fn new(language:&str) -> Self { Self { language:language.to_string(), hash:String::new(), entries:Vec::new() } }
 
-	/// Add a localisation entry to this bundle.
+	/// Adds a localization entry to this bundle.
 	pub fn add_entry(&mut self, key:impl Into<String>, value:impl Into<String>) {
 		self.entries
 			.push(LocalizationEntry { key:key.into(), value:value.into(), comment:None });
 	}
 
-	/// Generate a simple hash for cache invalidation
+	/// Computes a hash for cache invalidation from all entries.
 	pub fn compute_hash(&mut self) {
 		use std::{
 			collections::hash_map::DefaultHasher,

@@ -1,27 +1,26 @@
-/// Creates and returns the command-line argument matches for the `Rest`
+/// Creates and returns the command-line argument matches for the Rest
 /// application.
 ///
-/// This function sets up the command-line interface using the `clap` crate,
-
-/// defining various arguments and their properties such as short and long
-/// names, help messages, default values, and whether they are required.
+/// Sets up the command-line interface using `clap`, defining arguments
+/// for compile subcommands, exclude patterns, parallel processing,
+/// search patterns, and the root directory.
 ///
-/// # Returns
+/// ## Arguments
 ///
-/// Returns an `ArgMatches` instance containing the parsed command-line
-/// arguments.
+/// * `Exclude` — Patterns to exclude (default: `"node_modules"`).
+/// * `Parallel` — Flag to enable parallel processing.
+/// * `Pattern` — File pattern to match (default: `".git"`).
+/// * `Root` — Root directory (default: `"."`).
 ///
-/// # Argument
+/// ## Returns
 ///
-/// * `Exclude` - An optional argument to specify patterns to exclude. Default
-///   is "node_modules".
-/// * `Parallel` - An optional flag to enable parallel processing.
-/// * `Pattern` - An optional argument to specify a pattern to match. Default is
-///   ".git".
-/// * `Root` - An optional argument to specify the root directory. Default is
-///   ".".
+/// An `ArgMatches` instance containing the parsed command-line arguments.
 ///
-/// # Example
+/// ## Errors
+///
+/// Panics if argument definitions or parsing has issues.
+///
+/// ## Example
 ///
 /// ```rust
 /// let matches = Fn();
@@ -30,11 +29,6 @@
 /// let pattern = matches.value_of("Pattern").unwrap_or(".git");
 /// let root = matches.value_of("Root").unwrap_or(".");
 /// ```
-///
-/// # Errors
-///
-/// This function will panic if there are issues with the argument definitions
-/// or parsing.
 pub fn Fn() -> ArgMatches {
 	Command::new("Rest")
 		.version(env!("CARGO_PKG_VERSION"))

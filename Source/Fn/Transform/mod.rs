@@ -1,8 +1,12 @@
-//! Custom AST transforms for VSCode compatibility
+//! Custom AST transforms for VSCode compatibility.
 //!
-//! This module provides custom transforms that SWC doesn't include by default:
-//! - Private field conversion (#field -> __field)
+//! Provides custom transforms that SWC does not include by default:
+//! - Private field conversion (`#field` → `__field`)
 //! - Additional VSCode-specific transformations
+//!
+//! ## Modules
+//!
+//! * [`PrivateField`] — Converts TypeScript private fields to regular properties.
 
 #[path = "PrivateField.rs"]
 pub mod PrivateField;

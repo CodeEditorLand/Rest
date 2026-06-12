@@ -1,11 +1,8 @@
-//! OXC-based compilation module
+//! OXC-based compilation module.
 //!
-//! This module provides the compilation functionality using the OXC compiler.
-//!
-//! DIAGNOSTIC LOGGING:
-//! - Full lifecycle tracking of file compilation
-//! - Memory allocation tracking for each file
-//! - File path and nesting level analysis
+//! Provides compilation functionality using the OXC compiler with full
+//! lifecycle diagnostic logging: file discovery, nesting depth analysis,
+//! and per-file timing.
 
 use std::{
 	io::Write,
@@ -16,20 +13,25 @@ use tracing::{debug, error, info, trace};
 
 static FILE_PROCESS_COUNT:AtomicUsize = AtomicUsize::new(0);
 
-/// Calculate directory nesting depth for a path
+/// Calculates directory nesting depth for a path.
 fn get_nesting_depth(path:&str) -> usize {
 	path.chars().filter(|&c| c == std::path::MAIN_SEPARATOR || c == '/').count()
 }
 
 #[tracing::instrument(skip(options))]
-/// Compiles TypeScript files from input directory to output directory
+/// Compiles TypeScript files from the input directory to the output directory
+/// using the OXC compiler pipeline.
 ///
-/// # Arguments
+/// ## Parameters
 ///
-/// * `options` - Compilation options including entry, pattern, config, output
-///   directory
-/// * `_parallel` - Whether to use parallel compilation (currently unused - runs
-///   sequentially)
+/// * `options` — Compilation options including entry paths, pattern, config,
+///   and output directory.
+/// * `_parallel` — Whether to use parallel compilation (currently unused;
+///   runs sequentially).
+///
+/// ## Returns
+///
+/// `Ok(())` on success, or an error describing the failure reason.
 pub async fn Fn(options:crate::Struct::SWC::Option, _parallel:bool) -> anyhow::Result<()> {
 	info!("=== OXC Compilation START ===");
 

@@ -1,10 +1,11 @@
-//! OXC Code Generation module
+//! OXC Code Generation module.
 //!
-//! This module provides code generation from the transformed AST to JavaScript
-//! source code.
+//! Provides code generation from the transformed AST to JavaScript source
+//! code.
 //!
-//! DIAGNOSTIC LOGGING:
-//! - Tracks codegen lifecycle and memory access patterns
+//! ## Diagnostic Logging
+//!
+//! Tracks the codegen lifecycle and memory access patterns for debugging.
 
 use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -14,19 +15,19 @@ use oxc_codegen::{Codegen, CodegenOptions, CodegenReturn, CommentOptions};
 use oxc_span::SourceType;
 use tracing::{debug, error, info, trace, warn};
 
-/// Codegen configuration options
+/// Codegen configuration options.
 #[derive(Debug, Clone)]
 pub struct CodegenConfig {
-	/// Whether to generate minified output
+	/// Whether to generate minified output.
 	pub minify:bool,
 
-	/// Whether to generate source maps
+	/// Whether to generate source maps.
 	pub source_map:bool,
 
-	/// Source map file name (without extension)
+	/// Source map file name (without extension).
 	pub source_map_name:String,
 
-	/// Whether to preserve comments
+	/// Whether to preserve comments.
 	pub comments:bool,
 }
 
@@ -35,24 +36,25 @@ impl Default for CodegenConfig {
 }
 
 impl CodegenConfig {
-	/// Create a new codegen configuration
+	/// Creates a new codegen configuration.
 	pub fn new(minify:bool, _source_map:bool, _source_map_name:String, comments:bool) -> Self {
 		Self { minify, source_map:_source_map, source_map_name:_source_map_name, comments }
 	}
 }
 
-/// Result of code generation
+/// Result of code generation.
 pub struct CodegenResult {
-	/// The generated JavaScript source code
+	/// The generated JavaScript source code.
 	pub code:String,
 
-	/// The length of the generated code
+	/// The length of the generated code.
 	pub code_len:usize,
 }
 
-/// Post-process generated JavaScript to match VSCode's static class property
+/// Post-processes generated JavaScript to match VSCode's static class property
 /// format. Converts `static x = expr;` into `static { this.x = expr; }`.
-/// This is needed because OXC 0.48's class properties plugin does not emit
+///
+/// This is needed because OXC 0.48's class-properties plugin does not emit
 /// legacy static initializer blocks by default.
 fn transform_static_class_properties(code:&str) -> String {
 	// This regex matches: static <name> = <expression>;
@@ -71,23 +73,25 @@ fn transform_static_class_properties(code:&str) -> String {
 	re.replace_all(code, "static { this.$1 = $2; }").into_owned()
 }
 
-/// Generate JavaScript source code from a transformed AST
-///
-/// # Arguments
-/// * `allocator` - The allocator used for the AST
-/// * `program` - The transformed program AST
-/// * `_source_type` - The source type (JavaScript, JSX, etc.)
-/// * `config` - Codegen configuration options
-///
-/// # Returns
-/// A CodegenResult containing the generated source code
 static CODEGEN_COUNT:AtomicUsize = AtomicUsize::new(0);
 
 #[tracing::instrument(skip(_allocator, program, config))]
-/// Generate JavaScript code from an OXC AST.
+/// Generates JavaScript code from an OXC AST.
 ///
 /// Takes a parsed AST and produces the final compiled JavaScript output
 /// using OXC's codegen pipeline.
+///
+/// ## Parameters
+///
+/// * `_allocator` — The allocator used for the AST (tracked for safety).
+/// * `program` — The transformed program AST.
+/// * `_source_type` — The source type (JavaScript, JSX, etc.).
+/// * `config` — Codegen configuration options.
+///
+/// ## Returns
+///
+/// A [`CodegenResult`] containing the generated source code on success,
+/// or an error string on failure.
 pub fn codegen<'a>(
 	_allocator:&Allocator,
 
@@ -157,11 +161,16 @@ pub fn codegen<'a>(
 	Ok(CodegenResult { code:transformed_code, code_len })
 }
 
-/// Write the generated code to a file
+/// Writes the generated code to a file.
 ///
-/// # Arguments
-/// * `output_path` - The path to write the output file
-/// * `result` - The codegen result containing source text
+/// ## Parameters
+///
+/// * `output_path` — Path to write the output file.
+/// * `result` — The codegen result containing generated source text.
+///
+/// ## Errors
+///
+/// Returns `std::io::Error` if directory creation or file writing fails.
 pub fn write_output(output_path:&std::path::Path, result:&CodegenResult) -> Result<(), std::io::Error> {
 	// Create parent directories if they don't exist
 	if let Some(parent) = output_path.parent() {

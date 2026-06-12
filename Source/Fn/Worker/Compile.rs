@@ -1,12 +1,14 @@
-//! Worker compilation orchestration
+//! Worker compilation orchestration.
 //!
-//! Coordinates the compilation of web workers.
+//! Coordinates the compilation of web workers: detection, bootstrap, and
+//! output generation.
 
 use std::{collections::HashMap, path::Path};
 
 use super::{WorkerBootstrap, WorkerConfig, WorkerDetector, WorkerInfo, WorkerType};
 
-/// Compiles web workers
+/// Compiles web workers: detects worker files, generates bootstrap code,
+/// and writes the final output bundles.
 pub struct WorkerCompiler {
 	config:WorkerConfig,
 
@@ -14,12 +16,12 @@ pub struct WorkerCompiler {
 
 	bootstrap:WorkerBootstrap,
 
-	/// Cached compiled workers
+	/// Cached compiled workers (name → compiled source).
 	compiled:HashMap<String, String>,
 }
 
 impl WorkerCompiler {
-	/// Create a new [`WorkerCompiler`] for the given configuration.
+	/// Creates a new [`WorkerCompiler`] for the given configuration.
 	pub fn new(config:WorkerConfig) -> Self {
 		Self {
 			config:config.clone(),
@@ -32,7 +34,15 @@ impl WorkerCompiler {
 		}
 	}
 
-	/// Compile all workers in a directory
+	/// Compiles all workers found in a directory.
+	///
+	/// ## Returns
+	///
+	/// A list of [`WorkerInfo`] describing each compiled worker.
+	///
+	/// ## Errors
+	///
+	/// Returns an error if worker compilation fails.
 	pub fn compile_workers(&mut self, root_dir:&Path) -> anyhow::Result<Vec<WorkerInfo>> {
 		// Ensure output directory exists
 		std::fs::create_dir_all(&self.config.output_dir)?;
@@ -48,7 +58,11 @@ impl WorkerCompiler {
 		Ok(workers)
 	}
 
-	/// Compile a single worker
+	/// Compiles a single worker.
+	///
+	/// ## Errors
+	///
+	/// Returns an error if the source file is missing or compilation fails.
 	pub fn compile_worker(&mut self, worker_info:&mut WorkerInfo) -> anyhow::Result<()> {
 		let source_path = Path::new(&worker_info.source_path);
 
@@ -80,12 +94,10 @@ impl WorkerCompiler {
 		Ok(())
 	}
 
-	/// Compile a module worker
+	/// Compiles a module worker by prepending bootstrap code.
 	fn compile_module_worker(&self, source:&str, worker_info:&WorkerInfo) -> anyhow::Result<String> {
-		// Add bootstrap code for module workers
 		let bootstrap = self.bootstrap.generate_module_worker(&worker_info.source_path);
 
-		// Combine bootstrap and source
 		let mut output = bootstrap;
 
 		output.push_str("\n// Worker source\n");
@@ -95,12 +107,10 @@ impl WorkerCompiler {
 		Ok(output)
 	}
 
-	/// Compile a classic worker
+	/// Compiles a classic worker by prepending bootstrap code.
 	fn compile_classic_worker(&self, source:&str, worker_info:&WorkerInfo) -> anyhow::Result<String> {
-		// Add bootstrap code for classic workers
 		let bootstrap = self.bootstrap.generate_classic_worker(&worker_info.source_path);
 
-		// Combine bootstrap and source
 		let mut output = bootstrap;
 
 		output.push_str("\n// Worker source\n");
@@ -110,10 +120,10 @@ impl WorkerCompiler {
 		Ok(output)
 	}
 
-	/// Get a compiled worker by name
+	/// Returns the compiled source for a named worker, if present.
 	pub fn get_compiled(&self, name:&str) -> Option<&String> { self.compiled.get(name) }
 
-	/// Generate worker type declarations
+	/// Generates TypeScript type declarations for all compiled workers.
 	pub fn generate_declarations(&self, workers:&[WorkerInfo]) -> String {
 		let mut declarations = String::new();
 
@@ -128,7 +138,7 @@ impl WorkerCompiler {
 		declarations
 	}
 
-	/// Create a worker entry point that lazy-loads workers
+	/// Creates a worker entry-point script that lazy-loads workers.
 	pub fn generate_worker_loader(&self, workers:&[WorkerInfo]) -> String {
 		let mut code = String::new();
 
@@ -148,7 +158,11 @@ impl WorkerCompiler {
 	}
 }
 
-/// Simplified worker compilation function
+/// Simplified worker compilation function for a single file.
+///
+/// ## Errors
+///
+/// Returns an error if compilation fails.
 pub fn compile_worker_file(source_path:&Path, output_path:&Path, worker_type:WorkerType) -> anyhow::Result<()> {
 	let config = WorkerConfig::new();
 

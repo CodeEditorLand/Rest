@@ -1,37 +1,36 @@
-//! esbuild wrapper for complex builds
+//! Esbuild wrapper for complex builds.
 //!
-//! This module provides an optional wrapper that invokes esbuild for builds
-//! that Rest can't handle alone. It's designed as a fallback for complex
-//! scenarios:
+//! Provides an optional wrapper that invokes esbuild for builds that the
+//! Rest compiler cannot handle alone. Designed as a fallback for:
 //! - Large multi-file bundles
 //! - Complex module resolution
 //! - Advanced tree-shaking
 //! - AMD module output
 //!
-//! Note: This requires esbuild to be installed separately.
+//! **Note**: Requires esbuild to be installed separately.
 
 use std::{path::Path, process::Command};
 
 use super::{BundleConfig, BundleResult};
 
-/// Wrapper around esbuild for complex builds
+/// Wrapper around the esbuild CLI for complex builds.
 pub struct EsbuildWrapper {
-	/// Path to esbuild binary (defaults to node_modules/.bin/esbuild)
+	/// Path to the esbuild binary (defaults to `node_modules/.bin/esbuild`).
 	esbuild_path:Option<String>,
 }
 
 impl EsbuildWrapper {
-	/// Create a new [`EsbuildWrapper`] with default settings.
+	/// Creates a new [`EsbuildWrapper`] with default settings.
 	pub fn new() -> Self { Self { esbuild_path:None } }
 
-	/// Set the path to the `esbuild` binary.
+	/// Sets the path to the `esbuild` binary.
 	pub fn with_path(mut self, path:impl Into<String>) -> Self {
 		self.esbuild_path = Some(path.into());
 
 		self
 	}
 
-	/// Find esbuild in common locations
+	/// Searches for esbuild in common locations.
 	fn find_esbuild(&self) -> Option<String> {
 		// Check explicit path first
 		if let Some(ref path) = self.esbuild_path {
@@ -62,10 +61,14 @@ impl EsbuildWrapper {
 		None
 	}
 
-	/// Check if esbuild is available
+	/// Returns `true` if esbuild is available on the system.
 	pub fn is_available(&self) -> bool { self.find_esbuild().is_some() }
 
-	/// Build using esbuild
+	/// Builds using esbuild with the given configuration.
+	///
+	/// ## Errors
+	///
+	/// Returns an error if esbuild cannot be found or if the build fails.
 	pub fn build(&self, config:&BundleConfig) -> anyhow::Result<BundleResult> {
 		let esbuild_path = self
 			.find_esbuild()
@@ -171,7 +174,7 @@ impl EsbuildWrapper {
 		})
 	}
 
-	/// Build with TypeScript type checking
+	/// Builds with TypeScript type checking.
 	pub fn build_with_types(&self, config:&BundleConfig) -> anyhow::Result<BundleResult> {
 		let mut args = vec!["--bundle".to_string(), "--loader:.ts=ts".to_string()];
 
@@ -192,7 +195,10 @@ impl EsbuildWrapper {
 		self.build(config)
 	}
 
-	/// Watch mode with callback
+	/// Watch mode with a change callback.
+	///
+	/// Builds once; the caller is responsible for re-triggering builds on
+	/// file changes.
 	pub fn watch<F>(&self, config:&BundleConfig, _on_change:F) -> anyhow::Result<()>
 	where
 		F: Fn(&str) + Send + Sync, {
@@ -201,7 +207,7 @@ impl EsbuildWrapper {
 		// Build initial bundle
 		self.build(config)?;
 
-		// Set up file watcher (simplified - would use notify crate in production)
+		// Set up file watcher (simplified — would use notify crate in production)
 		// For now, just build once
 		tracing::info!("Watch mode enabled. Rebuilding on file changes...");
 
@@ -213,14 +219,18 @@ impl Default for EsbuildWrapper {
 	fn default() -> Self { Self::new() }
 }
 
-/// Check if esbuild is available
+/// Returns `true` if esbuild is available on the system.
 pub fn check_esbuild() -> bool {
 	let wrapper = EsbuildWrapper::new();
 
 	wrapper.is_available()
 }
 
-/// Install esbuild if not present
+/// Installs esbuild via npm if not present.
+///
+/// ## Errors
+///
+/// Returns an error if npm cannot be run or installation fails.
 pub fn install_esbuild() -> anyhow::Result<()> {
 	let output = Command::new("npm")
 		.args(&["install", "esbuild"])

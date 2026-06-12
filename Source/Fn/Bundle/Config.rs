@@ -1,52 +1,52 @@
-//! Bundle configuration
+//! Bundle configuration.
 //!
 //! Configuration options for the bundler.
 
 use super::BundleMode;
 
-/// Configuration for the bundler
+/// Configuration for the bundler.
 #[derive(Debug, Clone)]
 pub struct BundleConfig {
-	/// Bundling mode
+	/// Bundling mode.
 	pub mode:BundleMode,
 
-	/// Output directory for bundled files
+	/// Output directory for bundled files.
 	pub output_dir:String,
 
-	/// Output filename pattern (e.g., "{name}.js")
+	/// Output filename pattern (e.g., `"{name}.js"`).
 	pub output_file:String,
 
-	/// Enable source map generation
+	/// Enable source-map generation.
 	pub source_map:bool,
 
-	/// Inline source map in the output
+	/// Inline source map in the output.
 	pub inline_source_map:bool,
 
-	/// Enable minification
+	/// Enable minification.
 	pub minify:bool,
 
-	/// Enable tree-shaking
+	/// Enable tree-shaking.
 	pub tree_shaking:bool,
 
-	/// Target environment (es2022, es2024, etc.)
+	/// Target environment (e.g., `"es2022"`, `"es2024"`).
 	pub target:String,
 
-	/// Module format (commonjs, esmodule, amd, umd)
+	/// Module format (`"commonjs"`, `"esmodule"`, `"amd"`, `"umd"`).
 	pub format:String,
 
-	/// Whether to generate a declaration file
+	/// Whether to generate declaration files.
 	pub declarations:bool,
 
-	/// Whether to watch for changes
+	/// Whether to watch for changes.
 	pub watch:bool,
 
-	/// External modules (not to be bundled)
+	/// External modules (not to be bundled).
 	pub externals:Vec<String>,
 
-	/// Additional entry points
+	/// Additional entry points.
 	pub entries:Vec<String>,
 
-	/// Whether to split chunks (for code splitting)
+	/// Whether to split chunks (for code splitting).
 	pub split_chunks:bool,
 }
 
@@ -85,82 +85,82 @@ impl Default for BundleConfig {
 }
 
 impl BundleConfig {
-	/// Create a new config for simple single-file compilation
+	/// Creates a config for simple single-file compilation.
 	pub fn single_file() -> Self { Self { mode:BundleMode::SingleFile, ..Default::default() } }
 
-	/// Create a new config for bundling
+	/// Creates a config for bundling multiple files.
 	pub fn bundle() -> Self { Self { mode:BundleMode::Bundle, ..Default::default() } }
 
-	/// Create a new config for esbuild mode
+	/// Creates a config for esbuild mode.
 	pub fn esbuild() -> Self { Self { mode:BundleMode::Esbuild, ..Default::default() } }
 
-	/// Create a new config for watch mode
+	/// Creates a config for watch mode.
 	pub fn watch() -> Self { Self { mode:BundleMode::Watch, watch:true, ..Default::default() } }
 
-	/// Set the output directory
+	/// Sets the output directory.
 	pub fn with_output_dir(mut self, dir:impl Into<String>) -> Self {
 		self.output_dir = dir.into();
 
 		self
 	}
 
-	/// Set the output file pattern
+	/// Sets the output file pattern.
 	pub fn with_output_file(mut self, file:impl Into<String>) -> Self {
 		self.output_file = file.into();
 
 		self
 	}
 
-	/// Enable source maps
+	/// Enables or disables source maps.
 	pub fn with_source_map(mut self, enabled:bool) -> Self {
 		self.source_map = enabled;
 
 		self
 	}
 
-	/// Enable minification
+	/// Enables or disables minification.
 	pub fn with_minify(mut self, enabled:bool) -> Self {
 		self.minify = enabled;
 
 		self
 	}
 
-	/// Enable tree-shaking
+	/// Enables or disables tree-shaking.
 	pub fn with_tree_shaking(mut self, enabled:bool) -> Self {
 		self.tree_shaking = enabled;
 
 		self
 	}
 
-	/// Set the target
+	/// Sets the target environment.
 	pub fn with_target(mut self, target:impl Into<String>) -> Self {
 		self.target = target.into();
 
 		self
 	}
 
-	/// Set the format
+	/// Sets the module format.
 	pub fn with_format(mut self, format:impl Into<String>) -> Self {
 		self.format = format.into();
 
 		self
 	}
 
-	/// Add an external module
+	/// Adds an external module (excluded from the bundle).
 	pub fn add_external(mut self, external:impl Into<String>) -> Self {
 		self.externals.push(external.into());
 
 		self
 	}
 
-	/// Add an entry point
+	/// Adds an entry point.
 	pub fn add_entry(mut self, entry:impl Into<String>) -> Self {
 		self.entries.push(entry.into());
 
 		self
 	}
 
-	/// Check if this config requires bundling
+	/// Returns `true` if this config requires actual bundling.
 	pub fn requires_bundle(&self) -> bool { self.mode.requires_bundle() }
 }
 

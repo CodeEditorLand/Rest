@@ -1,6 +1,6 @@
-//! Rest binary entry point binary.
+//! Rest binary entry point.
 //!
-//! Provides the binary entry point for the Rest compiler tool.
+//! Provides the entry point for the Rest compiler binary tool.
 
 #[tokio::main]
 async fn main() { (crate::Binar::Binary::Command::Struct::Fn().Fn)().await }

@@ -1,31 +1,32 @@
-//! NLS key extraction from TypeScript source files
+//! NLS key extraction from TypeScript source files.
 //!
 //! Extracts localization keys from various patterns:
-//! - nls.localize('key', 'default')
-//! - nls.localize2('key', 'default1', 'default2')
-//! - nls.localizeWithFlattenedArgs(...)
-//! - localize('key', 'default')
+//! - `nls.localize('key', 'default')`
+//! - `nls.localize2('key', 'default1', 'default2')`
+//! - `nls.localizeWithFlattenedArgs(...)`
+//! - `localize('key', 'default')`
 
 use std::collections::HashMap;
 
 use regex::Regex;
 
-/// Extracts NLS keys from TypeScript source
+/// Extracts NLS keys from TypeScript source using regex patterns.
 pub struct NLSExtractor {
-	/// Extracted localization entries
+	/// Extracted localization entries (key → default value).
 	pub entries:HashMap<String, String>,
 
-	/// Current file being processed
+	/// Current file being processed.
 	pub current_file:Option<String>,
 
-	/// Regex patterns for different localize calls
+	/// Regex pattern for `localize('key', 'value')` calls.
 	localize_pattern:Regex,
 
+	/// Regex pattern for `localize2('key', 'v1', 'v2')` calls.
 	localize2_pattern:Regex,
 }
 
 impl NLSExtractor {
-	/// Create a new [`NLSExtractor`] with default settings.
+	/// Creates a new [`NLSExtractor`] with default regex patterns.
 	pub fn new() -> Self {
 		Self {
 			entries:HashMap::new(),
@@ -44,14 +45,14 @@ impl NLSExtractor {
 		}
 	}
 
-	/// Set the source file to extract localisation keys from.
+	/// Sets the source file to extract localization keys from.
 	pub fn with_file(mut self, file:impl Into<String>) -> Self {
 		self.current_file = Some(file.into());
 
 		self
 	}
 
-	/// Extract keys from source content
+	/// Extracts keys from source content.
 	pub fn extract(&mut self, source:&str) {
 		// Extract from localize() calls
 		for cap in self.localize_pattern.captures_iter(source) {
@@ -77,7 +78,11 @@ impl Default for NLSExtractor {
 	fn default() -> Self { Self::new() }
 }
 
-/// Extract NLS keys from source code using regex
+/// Extracts NLS keys from source code using regex patterns.
+///
+/// ## Returns
+///
+/// A `HashMap` mapping each extracted key to its default value.
 pub fn extract_nls_keys(source:&str) -> HashMap<String, String> {
 	let mut extractor = NLSExtractor::new();
 

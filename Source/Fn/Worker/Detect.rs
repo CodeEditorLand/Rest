@@ -1,6 +1,6 @@
-//! Worker file detection
+//! Worker file detection.
 //!
-//! Detects web worker files in the project and classifies them.
+//! Detects web worker files in the project and classifies them by type.
 
 use std::path::Path;
 
@@ -8,16 +8,20 @@ use walkdir::WalkDir;
 
 use super::{WorkerConfig, WorkerInfo, WorkerType};
 
-/// Detects worker files in a project
+/// Detects worker files in a project by naming conventions and content markers.
 pub struct WorkerDetector {
 	config:WorkerConfig,
 }
 
 impl WorkerDetector {
-	/// Create a new [`WorkerDetector`] for the given configuration.
+	/// Creates a new [`WorkerDetector`] for the given configuration.
 	pub fn new(config:WorkerConfig) -> Self { Self { config } }
 
-	/// Detect all worker files in a directory
+	/// Scans a directory for worker files.
+	///
+	/// ## Returns
+	///
+	/// A list of [`WorkerInfo`] describing each detected worker file.
 	pub fn detect_workers(&self, root_dir:&Path) -> Vec<WorkerInfo> {
 		let mut workers = Vec::new();
 
@@ -34,7 +38,8 @@ impl WorkerDetector {
 		workers
 	}
 
-	/// Check if a file is a worker file based on naming conventions
+	/// Returns `true` if the file matches known worker naming conventions or
+	/// contains worker-related markers.
 	pub fn is_worker_file(&self, path:&Path) -> bool {
 		if !path.is_file() {
 			return false;
@@ -70,7 +75,7 @@ impl WorkerDetector {
 		false
 	}
 
-	/// Create worker info from a file path
+	/// Creates [`WorkerInfo`] from a file path.
 	fn create_worker_info(&self, path:&Path) -> Option<WorkerInfo> {
 		let file_name = path.file_name()?.to_str()?;
 
@@ -95,7 +100,7 @@ impl WorkerDetector {
 		Some(WorkerInfo { source_path, output_path, name, worker_type, dependencies:Vec::new(), is_shared })
 	}
 
-	/// Check if the file contains a worker marker
+	/// Returns `true` if the file content contains worker-related markers.
 	fn contains_worker_marker(&self, content:&str) -> bool {
 		let markers = [
 			"new Worker(",
@@ -116,7 +121,8 @@ impl WorkerDetector {
 		false
 	}
 
-	/// Extract dependencies from a worker file
+	/// Extracts dependencies (import statements and `importScripts` calls)
+	/// from a worker file.
 	pub fn extract_dependencies(&self, path:&Path) -> Vec<String> {
 		let mut deps = Vec::new();
 

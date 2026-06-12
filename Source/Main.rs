@@ -1,6 +1,6 @@
-//! Rest application main entry point.
+//! Rest main entry point.
 //!
-//! Initializes telemetry and starts the CLI command dispatch loop.
+//! Initialises telemetry and starts the CLI command dispatch loop.
 
 #[tokio::main]
 async fn main() {

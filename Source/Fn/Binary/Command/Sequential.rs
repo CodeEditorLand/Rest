@@ -1,22 +1,18 @@
-/// Asynchronously processes entries to generate summaries and outputs the
-/// results sequentially.
+/// Processes entries sequentially: filters by pattern, spawns async tasks
+/// to generate summaries, collects results, and outputs them.
 ///
-/// This function performs the following steps:
-/// 1. Filters and processes the provided entries based on the given pattern and
-///    separator.
-/// 2. Spawns asynchronous tasks to generate summaries for each entry.
-/// 3. Collects the results and outputs them.
+/// ## Arguments
 ///
-/// # Argument
+/// * `Option` — A struct with:
+///   - `Entry`: Vector of file path component vectors.
+///   - `Separator`: Character joining path components.
+///   - `Pattern`: String to match against the last component of each entry.
 ///
-/// * `Option` - A struct containing the following fields:
-///   - `Entry`: A vector of vectors, where each inner vector contains the
-///     components of a file path.
-///   - `Separator`: A character used to join the components of the file path.
-///   - `Pattern`: A string pattern to match against the last element of each
-///     entry.
+/// ## Errors
 ///
-/// # Example
+/// Logs errors if summaries fail or results cannot be sent.
+///
+/// ## Example
 ///
 /// ```rust
 /// let options = Option {
@@ -26,11 +22,6 @@
 /// };
 /// Fn(options).await;
 /// ```
-///
-/// # Errors
-///
-/// This function will log errors if it fails to generate summaries or send
-/// results.
 pub async fn Fn(Option { Entry, Pattern, Separator, .. }:Option) {
 	let Queue = futures::future::join_all(
 		Entry

@@ -1,7 +1,7 @@
 //! Core bundling functions.
 //!
-//! Re-exports all top-level compiler function modules (Binary, OXC, SWC,
-//! Build, Transform, NLS, Worker, Bundle).
+//! Re-exports all top-level compiler function modules: Binary, OXC, SWC,
+//! Build, Transform, NLS, Worker, and Bundle.
 
 pub mod Binary;
 

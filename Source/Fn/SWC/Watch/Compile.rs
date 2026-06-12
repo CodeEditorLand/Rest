@@ -5,7 +5,12 @@
 use std::io::Write;
 
 #[tracing::instrument(skip(options))]
-/// Compile all watched files using SWC with the given options.
+/// Compiles all watched files using the OXC backend.
+///
+/// ## Parameters
+///
+/// * `options` — Compilation options including entry paths, pattern,
+///   config, and output directory.
 pub async fn Fn(options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
 	let compiler = std::sync::Arc::new(crate::Fn::OXC::Compiler::Compiler::new(options.config.clone()));
 

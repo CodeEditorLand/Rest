@@ -1,6 +1,7 @@
-//! Bundle builder
+//! Bundle builder.
 //!
-//! Orchestrates the bundling process using Rest compiler + optional esbuild.
+//! Orchestrates the bundling process using the Rest compiler with optional
+//! esbuild integration.
 
 use std::{
 	collections::{HashMap, hash_map::DefaultHasher},
@@ -10,29 +11,36 @@ use std::{
 
 use super::{BundleConfig, BundleEntry, BundleMode, BundleResult};
 
-/// Builds bundles from input files
+/// Builds bundles from input files.
+///
+/// Supports single-file, multi-file bundling, watch mode, and esbuild-backed
+/// builds.
 pub struct BundleBuilder {
 	config:BundleConfig,
 
-	/// Cached module graph
+	/// Cached module graph (file → dependency list).
 	module_graph:HashMap<String, Vec<String>>,
 
-	/// Processed files
+	/// Processed files.
 	processed:Vec<String>,
 }
 
 impl BundleBuilder {
-	/// Create a new [`BundleBuilder`] with the given configuration.
+	/// Creates a new [`BundleBuilder`] with the given configuration.
 	pub fn new(config:BundleConfig) -> Self { Self { config, module_graph:HashMap::new(), processed:Vec::new() } }
 
-	/// Add an entry point to the bundle
+	/// Adds an entry point to the bundle.
 	pub fn add_entry(&mut self, entry:BundleEntry) {
 		if entry.is_entry && !self.config.entries.contains(&entry.source) {
 			self.config.entries.push(entry.source.clone());
 		}
 	}
 
-	/// Build the bundle
+	/// Builds the bundle according to the configured mode.
+	///
+	/// ## Errors
+	///
+	/// Returns an error if compilation or file I/O fails.
 	pub fn build(&mut self) -> anyhow::Result<BundleResult> {
 		// Ensure output directory exists
 		std::fs::create_dir_all(&self.config.output_dir)?;
@@ -48,7 +56,7 @@ impl BundleBuilder {
 		}
 	}
 
-	/// Build in single-file mode (current behavior)
+	/// Builds in single-file mode.
 	fn build_single_file(&mut self) -> anyhow::Result<BundleResult> {
 		let mut bundled_files = Vec::new();
 
@@ -59,7 +67,7 @@ impl BundleBuilder {
 				continue;
 			}
 
-			// Compile using Rest compiler (simulated here - actual implementation
+			// Compile using Rest compiler (simulated here — actual implementation
 			// would use the Compiler from Struct/SWC.rs)
 			let output = self.compile_file(source_path)?;
 
@@ -85,7 +93,7 @@ impl BundleBuilder {
 		})
 	}
 
-	/// Build a bundle from multiple files
+	/// Builds a bundle from multiple files.
 	fn build_bundle(&mut self) -> anyhow::Result<BundleResult> {
 		let mut bundled_files = Vec::new();
 
@@ -142,22 +150,20 @@ impl BundleBuilder {
 		})
 	}
 
-	/// Build in watch mode
+	/// Builds in watch mode — builds once; actual watching is handled by the
+	/// caller.
 	fn build_watch(&mut self) -> anyhow::Result<BundleResult> {
-		// For watch mode, build once and set up file watching
-		// The actual watching would be handled by the caller
 		self.build_bundle()
 	}
 
-	/// Build using esbuild wrapper
+	/// Builds using the esbuild wrapper.
 	fn build_with_esbuild(&mut self) -> anyhow::Result<BundleResult> {
-		// Import and use the esbuild wrapper
 		let wrapper = super::ESBuild::EsbuildWrapper::new();
 
 		wrapper.build(&self.config)
 	}
 
-	/// Compile a single file using Rest
+	/// Compiles a single file using Rest.
 	fn compile_file(&self, source_path:&Path) -> anyhow::Result<String> {
 		let content = std::fs::read_to_string(source_path)?;
 
@@ -169,7 +175,7 @@ impl BundleBuilder {
 		Ok(content)
 	}
 
-	/// Build module graph for dependencies
+	/// Builds the module graph for dependency resolution.
 	fn build_module_graph(&mut self, entry:&Path) -> anyhow::Result<()> {
 		let content = std::fs::read_to_string(entry)?;
 
@@ -201,10 +207,9 @@ impl BundleBuilder {
 		Ok(())
 	}
 
-	/// Apply tree-shaking to bundle content
+	/// Applies tree-shaking to bundle content (simplified: removes comments
+	/// and empty lines).
 	fn apply_tree_shaking(&self, content:String) -> String {
-		// Simplified tree-shaking: remove comments and whitespace
-		// A full implementation would analyze the AST for used exports
 		let mut result = String::new();
 
 		for line in content.lines() {
@@ -223,9 +228,8 @@ impl BundleBuilder {
 		result
 	}
 
-	/// Generate output filename from config
+	/// Generates the output filename using the configured pattern.
 	fn generate_output_filename(&self) -> String {
-		// Use first entry name or default
 		let name = self
 			.config
 			.entries
@@ -237,7 +241,7 @@ impl BundleBuilder {
 		self.config.output_file.replace("{name}", name)
 	}
 
-	/// Compute hash of bundle for cache invalidation
+	/// Computes a hash of the bundle for cache invalidation.
 	fn compute_hash(&self) -> String {
 		let mut hasher = DefaultHasher::new();
 
@@ -248,14 +252,18 @@ impl BundleBuilder {
 		format!("{:x}", hasher.finish())
 	}
 
-	/// Get the module graph
+	/// Returns the module graph.
 	pub fn module_graph(&self) -> &HashMap<String, Vec<String>> { &self.module_graph }
 
-	/// Get processed files
+	/// Returns the list of processed files.
 	pub fn processed(&self) -> &[String] { &self.processed }
 }
 
-/// Convenience function to create and build a bundle
+/// Convenience function: creates a [`BundleBuilder`] and runs it.
+///
+/// ## Errors
+///
+/// Returns an error if building fails.
 pub fn build_bundle(config:BundleConfig) -> anyhow::Result<BundleResult> {
 	let mut builder = BundleBuilder::new(config);
 

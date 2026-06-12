@@ -1,19 +1,20 @@
-//! Worker bootstrap code generation
+//! Worker bootstrap code generation.
 //!
-//! Generates the bootstrap code needed to run web workers.
+//! Generates the bootstrap code needed to run web workers, including
+//! polyfills and entry-point wiring for module, classic, and shared workers.
 
 use super::{WorkerConfig, WorkerType};
 
-/// Generates bootstrap code for a web worker
+/// Generates bootstrap code for a web worker.
 pub struct WorkerBootstrap {
 	config:WorkerConfig,
 }
 
 impl WorkerBootstrap {
-	/// Create a new [`WorkerBootstrap`] for the given configuration.
+	/// Creates a new [`WorkerBootstrap`] for the given configuration.
 	pub fn new(config:WorkerConfig) -> Self { Self { config } }
 
-	/// Generate bootstrap code for a module worker
+	/// Generates bootstrap code for a module worker.
 	pub fn generate_module_worker(&self, entry_point:&str) -> String {
 		let mut code = String::new();
 
@@ -34,7 +35,7 @@ impl WorkerBootstrap {
 		code
 	}
 
-	/// Generate bootstrap code for a classic worker
+	/// Generates bootstrap code for a classic worker.
 	pub fn generate_classic_worker(&self, entry_point:&str) -> String {
 		let mut code = String::new();
 
@@ -55,7 +56,7 @@ impl WorkerBootstrap {
 		code
 	}
 
-	/// Generate bootstrap for a shared worker
+	/// Generates bootstrap code for a shared worker.
 	pub fn generate_shared_worker(&self, entry_point:&str) -> String {
 		let mut code = String::new();
 
@@ -87,7 +88,7 @@ self.onconnect = function(event) {
 		code
 	}
 
-	/// Generate polyfills for module workers
+	/// Generates polyfill code for module workers.
 	fn generate_polyfills(&self) -> String {
 		r#"
 // Polyfills for worker environment
@@ -130,7 +131,7 @@ self.onconnect = function(event) {
 		.to_string()
 	}
 
-	/// Generate polyfills for classic workers
+	/// Generates polyfill code for classic workers.
 	fn generate_classic_polyfills(&self) -> String {
 		r#"
 // Classic worker polyfills
@@ -145,7 +146,7 @@ self.onconnect = function(event) {
 		.to_string()
 	}
 
-	/// Generate a worker loader script that creates workers from modules
+	/// Generates a worker loader script that creates workers from modules.
 	pub fn generate_worker_loader(&self, worker_name:&str, module_url:&str) -> String {
 		format!(
 			r#"
@@ -173,7 +174,7 @@ self.onconnect = function(event) {
 	}
 }
 
-/// Generate inline worker code for small workers
+/// Generates inline worker code for small workers.
 pub fn generate_inline_worker(code:&str, worker_type:WorkerType) -> String {
 	match worker_type {
 		WorkerType::Module => {
@@ -193,7 +194,7 @@ pub fn generate_inline_worker(code:&str, worker_type:WorkerType) -> String {
 	}
 }
 
-/// Generate a TypeScript declaration for worker imports
+/// Generates a TypeScript declaration for a worker import.
 pub fn generate_worker_declaration(worker_name:&str) -> String {
 	format!(
 		r#"declare const {worker_name}: Worker;

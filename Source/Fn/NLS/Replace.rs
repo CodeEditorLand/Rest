@@ -1,28 +1,28 @@
-//! NLS key replacement transform
+//! NLS key replacement transform.
 //!
-//! Replaces NLS keys with actual localized strings at build time.
-//! This is used when inlining translations into the output.
+//! Replaces NLS keys with actual localized strings at build time, used when
+//! inlining translations into the output.
 
 use std::collections::HashMap;
 
 use regex::Regex;
 
-/// Replaces NLS localization calls with actual string values
+/// Replaces NLS localization calls with actual string values.
 pub struct NLSReplacer {
-	/// The localization bundle to use for replacements
+	/// The localization bundle to use for replacements.
 	bundle:HashMap<String, String>,
 
-	/// Whether to preserve the localize call structure
+	/// Whether to preserve the localize call structure.
 	preserve_calls:bool,
 
-	/// Regex patterns for localize calls
+	/// Regex pattern for `localize('key', ...)` calls.
 	localize_pattern:Regex,
 
 	_localize2_pattern:Regex,
 }
 
 impl NLSReplacer {
-	/// Create a new [`NLSReplacer`] with the given translation bundle.
+	/// Creates a new [`NLSReplacer`] with the given translation bundle.
 	pub fn new(bundle:HashMap<String, String>) -> Self {
 		Self {
 			bundle,
@@ -35,7 +35,7 @@ impl NLSReplacer {
 		}
 	}
 
-	/// Set whether to preserve original function call syntax during
+	/// Sets whether to preserve the original function call syntax during
 	/// replacement.
 	pub fn with_preserve_calls(mut self, preserve:bool) -> Self {
 		self.preserve_calls = preserve;
@@ -43,7 +43,11 @@ impl NLSReplacer {
 		self
 	}
 
-	/// Replace NLS keys in source code
+	/// Replaces NLS keys in source code with translated strings.
+	///
+	/// When `preserve_calls` is true, wraps replacements in a comment
+	/// showing the original key; otherwise, replaces the entire call
+	/// with the translated string literal.
 	pub fn replace(&self, source:&str) -> String {
 		let mut result = source.to_string();
 
@@ -53,7 +57,7 @@ impl NLSReplacer {
 				let key_str = key.as_str();
 
 				if let Some(value) = self.bundle.get(key_str) {
-					let pattern = format!(r#"nls.localize\s*\(\s*['"]{}.*?\)"#, regex::escape(key_str));
+					let pattern = format!(r#"nls\.localize\s*\(\s*['"]{}.*?\)"#, regex::escape(key_str));
 
 					let re = Regex::new(&pattern).unwrap();
 
@@ -74,7 +78,16 @@ impl NLSReplacer {
 	}
 }
 
-/// Replace NLS keys in source code with translations
+/// Replaces NLS keys in source code with translations from a bundle.
+///
+/// ## Parameters
+///
+/// * `source` — Source code containing NLS calls.
+/// * `bundle` — Map of keys to translated strings.
+///
+/// ## Returns
+///
+/// Source code with NLS calls replaced by translated values.
 pub fn replace_nls_keys(source:&str, bundle:&HashMap<String, String>) -> String {
 	let replacer = NLSReplacer::new(bundle.clone());
 

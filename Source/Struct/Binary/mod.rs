@@ -1,4 +1,6 @@
-//! SWC-compatible compiler configuration types.
+//! # Binary
+//!
+//! Binary command execution structures.
 //!
 //! Re-exports the Command type from the Binary command module.
 

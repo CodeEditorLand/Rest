@@ -11,12 +11,12 @@
 //! # Rest: JavaScript Bundler for VS Code Platform Code
 //!
 //! Rest compiles VS Code's TypeScript and JavaScript source into optimized
-//! bundles that Cocoon can load at runtime. Built on OXC (Oxidation Compiler)
+//! bundles that Cocoon can load at runtime. Uses OXC (Oxidation Compiler)
 //! for native-speed parsing, transformation, and minification.
 //!
 //! ## Architecture
 //!
-//! See [`Documentation/GitHub/Architecture.md`](https://github.com/editor-land/CodeEditorLand/blob/main/Documentation/GitHub/Architecture.md)
+//! See the [architecture documentation](https://github.com/editor-land/CodeEditorLand/blob/main/Documentation/GitHub/Architecture.md)
 //! for the full architectural overview.
 //!
 //! ## What Rest Produces
@@ -28,10 +28,10 @@
 //!
 //! The output lands in the `Output` Element, ready for production use.
 //!
-//! ## Why Not Webpack or esbuild
+//! ## Why Not Webpack or Esbuild
 //!
 //! Rest uses OXC because it runs at native speed as a Rust library. No Node.js
-//! process needed for bundling. The entire build pipeline stays in Rust.
+//! process is needed for bundling; the entire build pipeline stays in Rust.
 //!
 //! ## Modules
 //!
@@ -40,28 +40,27 @@
 
 #[allow(dead_code)]
 #[tokio::main]
-/// The main entry point for the application.
+/// Initialises the command structure and dispatches the asynchronous
+/// command pipeline.
 ///
-/// This function initializes the command structure and executes the
-/// asynchronous function defined within it. The function is marked with the
-/// `#[tokio::main]` attribute to enable asynchronous execution using the Tokio
-/// runtime.
+/// Sets up the CLI argument parser, resolves the subcommand (e.g.
+/// `compile`), and runs the selected operation through the Rest build
+/// pipeline.
 ///
 /// # Panics
 ///
-/// This function does not panic.
+/// Does not panic.
 ///
 /// # Example
 ///
-/// ```rust
+/// ```rust,no_run
 /// #[tokio::main]
 /// async fn main() { (Struct::Binary::Command::Struct::Fn().Fn)().await }
-
 /// ```
 async fn main() { (Struct::Binary::Command::Struct::Fn().Fn)().await }
 
-/// Core bundling functions and OXC integration
+/// Core bundling functions and OXC integration.
 pub mod Fn;
 
-/// Configuration structures and CLI command definitions
+/// Configuration structures and CLI command definitions.
 pub mod Struct;

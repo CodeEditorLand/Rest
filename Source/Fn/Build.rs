@@ -4,7 +4,7 @@
 
 use dashmap::DashMap;
 
-/// Execute the build entry point and return a map of build results.
+/// Executes the build entry point and returns a map of build results.
 pub async fn Fn(_Entry:&str) -> Result<DashMap<u64, (String, String)>, Box<dyn std::error::Error>> {
 	let Build = DashMap::new();
 
@@ -14,7 +14,7 @@ pub async fn Fn(_Entry:&str) -> Result<DashMap<u64, (String, String)>, Box<dyn s
 /// Group processing functions for build output.
 pub mod Group {
 
-	/// Process build output and print summary.
+	/// Processes build output and prints a summary.
 	pub fn Fn(output:Vec<(String, String)>) {
 		println!("Processed {} files", output.len());
 	}

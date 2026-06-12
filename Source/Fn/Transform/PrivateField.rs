@@ -1,46 +1,50 @@
-//! Private field conversion transform
+//! Private field conversion transform.
 //!
-//! Converts TypeScript private fields (#field) to regular properties (__field)
-//! for VSCode compatibility. VSCode does this for performance reasons.
+//! Converts TypeScript private fields (`#field`) to regular properties
+//! (`__field`) for VSCode compatibility. VSCode performs this conversion
+//! for performance reasons, as private fields using `Symbol` have more
+//! overhead than regular properties.
 
-/// Configuration for the private field transform
+/// Configuration for the private field transform.
 #[derive(Debug, Clone, Default)]
 pub struct Config {
-	/// Prefix to use for converted private fields
+	/// Prefix to use for converted private fields.
 	pub prefix:String,
 
-	/// Whether to preserve the original private identifier in comments
+	/// Whether to preserve the original private identifier in comments.
 	pub preserve_comments:bool,
 }
 
 impl Config {
-	/// Create a new Config with default values.
+	/// Creates a new `Config` with default values.
 	pub fn new() -> Self { Self { prefix:"__".to_string(), preserve_comments:true } }
 }
 
-/// Transform that converts TypeScript private fields (#field) to regular
-/// properties
+/// Transform that converts TypeScript private fields (`#field`) to regular
+/// properties.
 ///
 /// VSCode performs this conversion for performance reasons, as private fields
-/// using Symbol have more overhead than regular properties.
+/// using `Symbol` have more overhead than regular properties.
 ///
-/// This module provides the configuration and interface. The actual transform
-/// is applied during compilation using the SWC visitor pattern.
+/// Provides the configuration and interface. The actual transform is applied
+/// during compilation using the SWC visitor pattern.
 pub struct PrivateFieldTransform {
 	config:Config,
 }
 
 impl PrivateFieldTransform {
-	/// Create a new [`PrivateFieldTransform`] with default config.
+	/// Creates a new [`PrivateFieldTransform`] with default config.
 	pub fn new() -> Self { Self { config:Config::new() } }
 
-	/// Configure the private field transform with a custom config.
+	/// Configures the private field transform with a custom config.
 	pub fn with_config(config:Config) -> Self { Self { config } }
 
-	/// Convert a private identifier to a regular identifier name
+	/// Converts a private identifier to a regular identifier name.
+	///
+	/// Prepends the configured prefix to the given name.
 	pub fn convert_private_name(&self, name:&str) -> String { format!("{}{}", self.config.prefix, name) }
 
-	/// Check if a name is a private field
+	/// Checks if a name is a private field (starts with `#`).
 	pub fn is_private_field(&self, name:&str) -> bool { name.starts_with('#') }
 }
 
@@ -48,15 +52,15 @@ impl Default for PrivateFieldTransform {
 	fn default() -> Self { Self::new() }
 }
 
-/// Apply the private field conversion to source code
+/// Applies the private field conversion to source code.
 ///
-/// This is a simple string-based replacement for basic cases.
-/// For complex cases, the SWC AST transform should be used.
+/// This is a simple string-based replacement for basic cases. For complex
+/// cases, the SWC AST transform should be used instead.
 pub fn convert_private_fields(source:&str, prefix:&str) -> String {
 	let mut result = source.to_string();
 
 	// Simple pattern replacement for private field declarations
-	// This is a placeholder - full implementation would use AST
+	// This is a placeholder — full implementation would use AST
 	let patterns = [("#", prefix)];
 
 	for (old, new) in patterns {

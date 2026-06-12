@@ -11,13 +11,12 @@ pub struct FileInfo {
 	last_modified:SystemTime,
 }
 
-/// Module format options for code generation
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
-#[serde(rename_all = "lowercase")]
-/// Output module format for compiled JavaScript bundles.
+/// Module format options for code generation.
 ///
 /// Determines whether the compiler produces ESM (`import`/`export`),
 /// CommonJS (`require`/`module.exports`), or IIFE bundles.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "lowercase")]
 pub enum ModuleFormat {
 	/// CommonJS module format (default)
 	#[default]
@@ -37,7 +36,7 @@ pub enum ModuleFormat {
 }
 
 impl ModuleFormat {
-	/// Parse module format from string ("commonjs", "esmodule", "amd", "umd",
+	/// Parses module format from string ("commonjs", "esmodule", "amd", "umd",
 	/// "none").
 	pub fn from_str(s:&str) -> Self {
 		match s.to_lowercase().as_str() {
@@ -53,7 +52,7 @@ impl ModuleFormat {
 		}
 	}
 
-	/// Return the module format as a lowercase string.
+	/// Returns the module format as a lowercase string.
 	pub fn as_str(&self) -> &'static str {
 		match self {
 			ModuleFormat::CommonJs => "commonjs",
@@ -177,12 +176,12 @@ use std::{
 use serde::{Deserialize, Serialize};
 
 impl CompilerConfig {
-	/// Check if JSX is enabled
+	/// Checks if JSX is enabled from the target file extension.
 	pub fn jsx(&self) -> bool {
 		false // JSX is detected at parse time from file extension
 	}
 
-	/// Get module format as string
+	/// Returns the module format as a string.
 	pub fn module_format(&self) -> String {
 		match self.ModuleFormat {
 			ModuleFormat::CommonJs => "commonjs".to_string(),

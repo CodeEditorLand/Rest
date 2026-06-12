@@ -14,13 +14,16 @@ use crate::Fn::{Bundle::BundleConfig, NLS::NLSConfig, Worker::WorkerConfig};
 /// - Bundling/esbuild integration
 #[derive(Debug, Clone)]
 pub struct CompilerConfig {
-	/// Basic compiler settings
+	/// Target ECMAScript version (e.g., "es2024")
 	pub target:String,
 
+	/// Module system ("commonjs", "esmodule")
 	pub module:String,
 
+	/// Enables strict mode for compiled output
 	pub strict:bool,
 
+	/// Emits decorators metadata in compiled output
 	pub emit_decorators_metadata:bool,
 
 	// Phase 3: Advanced features
@@ -61,7 +64,7 @@ pub enum CompilationMode {
 }
 
 impl CompilerConfig {
-	/// Create default config for simple compilation
+	/// Creates a default config for simple single-file compilation.
 	pub fn simple() -> Self {
 		Self {
 			target:"es2024".to_string(),
@@ -86,7 +89,7 @@ impl CompilerConfig {
 		}
 	}
 
-	/// Create config for VSCode build pipeline
+	/// Creates a config for the VSCode build pipeline.
 	pub fn vscode() -> Self {
 		Self {
 			target:"es2024".to_string(),
@@ -111,28 +114,38 @@ impl CompilerConfig {
 		}
 	}
 
-	/// Enable private field conversion
+	/// Enables private field conversion in this config.
+	///
+	/// Sets `convert_private_fields` to the given value and returns
+	/// the config for chaining.
 	pub fn with_private_fields(mut self, enabled:bool) -> Self {
 		self.convert_private_fields = enabled;
 
 		self
 	}
 
-	/// Enable NLS processing
+	/// Enables NLS (localization) processing in this config.
+	///
+	/// Sets the NLS config and returns the config for chaining.
 	pub fn with_nls(mut self, config:NLSConfig) -> Self {
 		self.nls = Some(config);
 
 		self
 	}
 
-	/// Enable worker compilation
+	/// Enables worker compilation in this config.
+	///
+	/// Sets the worker config and returns the config for chaining.
 	pub fn with_workers(mut self, config:WorkerConfig) -> Self {
 		self.worker = Some(config);
 
 		self
 	}
 
-	/// Enable bundling
+	/// Enables bundling in this config.
+	///
+	/// If the given config requires bundling, the compilation mode is
+	/// automatically promoted to `Bundle`. Returns the config for chaining.
 	pub fn with_bundling(mut self, config:BundleConfig) -> Self {
 		let requires_bundle = config.requires_bundle();
 
@@ -145,16 +158,16 @@ impl CompilerConfig {
 		self
 	}
 
-	/// Check if private field conversion is enabled
+	/// Returns whether private field conversion is enabled.
 	pub fn should_convert_private_fields(&self) -> bool { self.convert_private_fields }
 
-	/// Check if NLS is enabled
+	/// Returns whether NLS processing is enabled.
 	pub fn is_nls_enabled(&self) -> bool { self.nls.is_some() }
 
-	/// Check if workers are enabled
+	/// Returns whether workers are enabled.
 	pub fn are_workers_enabled(&self) -> bool { self.worker.as_ref().map(|w| w.enabled).unwrap_or(false) }
 
-	/// Check if bundling is enabled
+	/// Returns whether bundling is enabled.
 	pub fn is_bundling_enabled(&self) -> bool { self.bundle.as_ref().map(|b| b.requires_bundle()).unwrap_or(false) }
 }
 

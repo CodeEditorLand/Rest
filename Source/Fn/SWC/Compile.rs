@@ -1,17 +1,18 @@
-//! SWC-compatible compilation module (using OXC backend)
+//! SWC-compatible compilation module (uses OXC backend).
 //!
-//! This module provides the same compilation functionality as the original
-//! SWC compiler but uses OXC for parsing and transformation.
+//! Provides the same compilation functionality as the original SWC compiler
+//! but uses OXC for parsing and transformation.
 
 #[tracing::instrument(skip(options))]
-/// Compiles TypeScript files from input directory to output directory
+/// Compiles TypeScript files from the input directory to the output directory
+/// using the OXC-backed compiler pipeline.
 ///
-/// # Arguments
+/// ## Parameters
 ///
-/// * `options` - Compilation options including entry, pattern, config, output
-///   directory
-/// * `_parallel` - Whether to use parallel compilation (currently unused - runs
-///   sequentially)
+/// * `options` — Compilation options including entry paths, pattern, config,
+///   and output directory.
+/// * `_parallel` — Whether to use parallel compilation (currently unused;
+///   runs sequentially).
 pub async fn Fn(options:crate::Struct::SWC::Option, _parallel:bool) -> anyhow::Result<()> {
 	tracing_subscriber::fmt::init();
 

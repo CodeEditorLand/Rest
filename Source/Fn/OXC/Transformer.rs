@@ -1,12 +1,13 @@
-//! OXC TypeScript Transformer module
+//! OXC TypeScript Transformer module.
 //!
-//! This module provides TypeScript to JavaScript transformation using the OXC
-//! transformer. It handles TypeScript type stripping, decorator transformation,
-//! and ECMAScript version transpilation.
+//! Provides TypeScript-to-JavaScript transformation using the OXC transformer.
+//! Handles TypeScript type stripping, decorator transformation, and
+//! ECMAScript version transpilation.
 //!
-//! DIAGNOSTIC LOGGING:
-//! - Tracks transformer lifecycle and memory access
-//! - Logs allocator addresses to detect use-after-free
+//! ## Diagnostic Logging
+//!
+//! Tracks the transformer lifecycle and memory access, logging allocator
+//! addresses to detect use-after-free issues.
 
 use std::{
 	path::Path,
@@ -28,28 +29,28 @@ use oxc_transformer::{
 };
 use tracing::{debug, info, trace, warn};
 
-/// Transformer configuration options
+/// Transformer configuration options.
 #[derive(Debug, Clone)]
 pub struct TransformerConfig {
-	/// Target ECMAScript version (e.g., "es2024")
+	/// Target ECMAScript version (e.g., `"es2024"`).
 	pub target:String,
 
-	/// Module format (commonjs, esmodule, etc.)
+	/// Module format (commonjs, esmodule, etc.).
 	pub module_format:String,
 
-	/// Whether to emit decorator metadata
+	/// Whether to emit decorator metadata.
 	pub emit_decorator_metadata:bool,
 
-	/// Whether to use define for class fields (VSCode compatibility)
+	/// Whether to use define for class fields (VSCode compatibility).
 	pub use_define_for_class_fields:bool,
 
-	/// Whether to support JSX
+	/// Whether to support JSX.
 	pub jsx:bool,
 
-	/// Whether to enable tree-shaking
+	/// Whether to enable tree-shaking.
 	pub tree_shaking:bool,
 
-	/// Whether to enable minification
+	/// Whether to enable minification.
 	pub minify:bool,
 }
 
@@ -74,7 +75,7 @@ impl Default for TransformerConfig {
 }
 
 impl TransformerConfig {
-	/// Create a new transformer configuration
+	/// Creates a new transformer configuration.
 	pub fn new(
 		target:String,
 
@@ -108,24 +109,25 @@ impl TransformerConfig {
 	}
 }
 
-/// Transform a parsed AST from TypeScript to JavaScript
-///
-/// # Arguments
-/// * `allocator` - The allocator used for the AST
-/// * `program` - The parsed program AST (mutable)
-/// * `source_path` - The source file path
-/// * `source_type` - The source type (TypeScript, JSX, etc.)
-/// * `config` - Transformer configuration options
-///
-/// # Returns
-/// Result containing transformation errors if any
 static TRANSFORM_COUNT:AtomicUsize = AtomicUsize::new(0);
 
 #[tracing::instrument(skip(allocator, program, config))]
-/// Transform an OXC AST, applying compiler transforms and optional
+/// Transforms an OXC AST, applying compiler transforms and optional
 /// private-field obfuscation.
 ///
-/// Returns the transformed AST program.
+/// Returns `Ok(())` on success, or a vector of error strings on failure.
+///
+/// ## Parameters
+///
+/// * `allocator` — The allocator used for the AST.
+/// * `program` — The parsed program AST (mutable, modified in-place).
+/// * `source_path` — The source file path.
+/// * `_source_type` — The source type (TypeScript, JSX, etc.).
+/// * `config` — Transformer configuration options.
+///
+/// ## Returns
+///
+/// `Ok(())` on success, or `Err(Vec<String>)` with error messages.
 pub fn transform<'a>(
 	allocator:&'a Allocator,
 

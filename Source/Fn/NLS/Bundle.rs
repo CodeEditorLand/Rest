@@ -1,4 +1,4 @@
-//! NLS bundle generation and management
+//! NLS bundle generation and management.
 //!
 //! Creates and manages localization bundles for different languages.
 
@@ -6,16 +6,16 @@ use std::{collections::HashMap, path::Path};
 
 use super::{LocalizationBundle, NLSConfig};
 
-/// Generates an NLS bundle from extracted keys
+/// Generates NLS bundles from extracted keys for multiple languages.
 pub struct NLSBundle {
 	_config:NLSConfig,
 
-	/// Bundle for each language
+	/// Bundle for each language.
 	bundles:HashMap<String, LocalizationBundle>,
 }
 
 impl NLSBundle {
-	/// Create a new [`NLSBundle`] with the given configuration.
+	/// Creates a new [`NLSBundle`] with the given configuration.
 	pub fn new(config:NLSConfig) -> Self {
 		let mut bundles = HashMap::new();
 
@@ -27,14 +27,14 @@ impl NLSBundle {
 		Self { _config:config, bundles }
 	}
 
-	/// Add a localization entry to a specific language
+	/// Adds a localization entry to a specific language.
 	pub fn add_entry(&mut self, language:&str, key:impl Into<String>, value:impl Into<String>) {
 		if let Some(bundle) = self.bundles.get_mut(language) {
 			bundle.add_entry(key, value);
 		}
 	}
 
-	/// Add entries from a key-value map
+	/// Adds entries from a key-value map to a language.
 	pub fn add_entries(&mut self, language:&str, entries:&HashMap<String, String>) {
 		if let Some(bundle) = self.bundles.get_mut(language) {
 			for (key, value) in entries {
@@ -45,7 +45,11 @@ impl NLSBundle {
 		}
 	}
 
-	/// Generate bundle files for all languages
+	/// Generates bundle JSON files for all languages in the output directory.
+	///
+	/// ## Errors
+	///
+	/// Returns `std::io::Error` if directory creation or file writing fails.
 	pub fn generate(&self, output_dir:&Path) -> std::io::Result<()> {
 		use std::fs;
 
@@ -66,13 +70,18 @@ impl NLSBundle {
 		Ok(())
 	}
 
-	/// Get a specific bundle
+	/// Returns the bundle for a specific language, if present.
 	pub fn get_bundle(&self, language:&str) -> Option<&LocalizationBundle> { self.bundles.get(language) }
 
-	/// Get all bundles
+	/// Returns all language bundles.
 	pub fn all_bundles(&self) -> &HashMap<String, LocalizationBundle> { &self.bundles }
 
-	/// Load a bundle from a file
+	/// Loads a bundle from a JSON file.
+	///
+	/// ## Errors
+	///
+	/// Returns `std::io::Error` if the file cannot be read, parsed, or if the
+	/// language in the file does not match the expected language.
 	pub fn load_bundle(language:&str, path:&Path) -> std::io::Result<LocalizationBundle> {
 		let content = std::fs::read_to_string(path)?;
 
@@ -90,7 +99,7 @@ impl NLSBundle {
 		Ok(bundle)
 	}
 
-	/// Create a HashMap from a bundle for use with NLSReplacer
+	/// Converts a bundle into a `HashMap` for use with `NLSReplacer`.
 	pub fn to_hashmap(&self, language:&str) -> HashMap<String, String> {
 		let mut map = HashMap::new();
 
@@ -104,7 +113,7 @@ impl NLSBundle {
 	}
 }
 
-/// Generate VSCode-compatible NLS bundle format
+/// Generates a VSCode-compatible NLS bundle from a key-value map.
 pub fn generate_vscode_bundle(entries:&HashMap<String, String>, language:&str) -> LocalizationBundle {
 	let mut bundle = LocalizationBundle::new(language);
 
@@ -117,7 +126,7 @@ pub fn generate_vscode_bundle(entries:&HashMap<String, String>, language:&str) -
 	bundle
 }
 
-/// Format bundle as VSCode's nls.metadata.json format
+/// Formats a bundle as a VSCode `nls.metadata.json`-style JSON value.
 pub fn format_metadata(bundle:&LocalizationBundle) -> serde_json::Value {
 	let mut metadata = serde_json::Map::new();
 

@@ -1,11 +1,17 @@
-//! OXC-based file watching module
+//! OXC-based file watching module.
 //!
-//! This module provides file watching functionality for the OXC compiler.
+//! Provides file watching functionality for the OXC compiler, recompiling
+//! TypeScript files on modification.
 
 use crate::Fn::OXC::Compile;
 
 #[tracing::instrument]
-/// Watch for TypeScript file changes and recompile.
+/// Watches for TypeScript file changes and recompiles on modification.
+///
+/// ## Parameters
+///
+/// * `path` — Directory path to watch for `.ts` file changes.
+/// * `options` — Compiler options for recompilation.
 pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
 	let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
 

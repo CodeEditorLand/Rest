@@ -1,10 +1,16 @@
-//! OXC TypeScript Parser module
+//! OXC TypeScript Parser module.
 //!
-//! This module provides TypeScript source code parsing using the OXC parser.
+//! Provides TypeScript source-code parsing using the OXC parser.
 //!
-//! DIAGNOSTIC LOGGING:
-//! - All operations log with tracing::debug! for memory lifecycle tracking
-//! - Use RUST_LOG=debug to see detailed parser operations
+//! ## Safety
+//!
+//! The `ParseResult` type uses a safe transmute to give the AST program a
+//! `'static` lifetime. This is safe because `ParseResult` owns both the
+//! `Program` and the `Allocator`, and both are dropped together.
+//!
+//! The original segfault occurred when code moved the `Program` out of
+//! `ParseResult` before the `Allocator` was freed. See the documentation on
+//! `ParseResult` for details.
 
 use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -13,49 +19,55 @@ use oxc_parser::{Parser, ParserReturn};
 use oxc_span::SourceType;
 use tracing::{debug, info, trace, warn};
 
-/// Result of parsing a TypeScript source file
+/// Result of parsing a TypeScript source file.
 ///
-/// CRITICAL FIX FOR SEGFAULT:
-/// The Program has 'static lifetime via safe transmute. ParseResult owns BOTH
-/// the Program AND the Allocator, ensuring they're dropped together.
+/// ## Safety
 ///
-/// The ORIGINAL segfault occurred when code did:
-///   let mut program = parse_result.program;  // Moves Program out!
-///   Transformer::transform(&parse_result.allocator, ...);
-///   // parse_result dropped here -> allocator freed -> program is dangling!
+/// The `Program` has a `'static` lifetime via a safe transmute. `ParseResult`
+/// owns both the `Program` AND the `Allocator`, ensuring they are dropped
+/// together.
 ///
-/// THE FIX in Compiler.rs - NEVER move Program out:
-///   let program = &mut parse_result.program;  // Borrow mutably
-///   Transformer::transform(&parse_result.allocator, program, ...);
-///   // parse_result stays in scope -> allocator stays alive -> no segfault!
+/// The original segfault occurred when code did:
+/// ```ignore
+/// let mut program = parse_result.program;  // Moves Program out!
+/// Transformer::transform(&parse_result.allocator, ...);
+/// // parse_result dropped here -> allocator freed -> program is dangling!
+/// ```
+///
+/// **Fix**: never move the `Program` out; borrow it mutably instead:
+/// ```ignore
+/// let program = &mut parse_result.program;  // Borrow mutably
+/// Transformer::transform(&parse_result.allocator, program, ...);
+/// // parse_result stays in scope -> allocator stays alive -> no segfault!
+/// ```
 pub struct ParseResult {
-	/// The parsed AST program with 'static lifetime (safe transmute)
+	/// The parsed AST program with `'static` lifetime (safe transmute).
 	pub program:oxc_ast::ast::Program<'static>,
 
-	/// The allocator used for the AST - owns the memory for the Program
-	/// CRITICAL: Must not be dropped separately from program
+	/// The allocator used for the AST — owns the memory for the `Program`.
+	/// **Critical**: must not be dropped separately from `program`.
 	pub allocator:Allocator,
 
-	/// Any parsing errors encountered
+	/// Parsing errors encountered during parse.
 	pub errors:Vec<String>,
 
-	/// File path for debugging
+	/// File path for debugging.
 	pub file_path:String,
 }
 
-/// Parser configuration options
+/// Parser configuration options.
 #[derive(Debug, Clone)]
 pub struct ParserConfig {
-	/// Target ECMAScript version (e.g., "es2024")
+	/// Target ECMAScript version (e.g., `"es2024"`).
 	pub target:String,
 
-	/// Whether to support JSX syntax
+	/// Whether to support JSX syntax.
 	pub jsx:bool,
 
-	/// Whether to support decorators
+	/// Whether to support decorators.
 	pub decorators:bool,
 
-	/// Whether to support TypeScript
+	/// Whether to support TypeScript.
 	pub typescript:bool,
 }
 
@@ -64,28 +76,29 @@ impl Default for ParserConfig {
 }
 
 impl ParserConfig {
-	/// Create a new parser configuration
+	/// Creates a new parser configuration.
 	pub fn new(target:String, jsx:bool, decorators:bool, typescript:bool) -> Self {
 		Self { target, jsx, decorators, typescript }
 	}
 }
 
-/// Parse TypeScript source code into an AST
-///
-/// # Arguments
-/// * `source_text` - The TypeScript source code to parse
-/// * `file_path` - The path to the source file (used for determining file type)
-/// * `config` - Parser configuration options
-///
-/// # Returns
-/// A ParseResult containing the parsed AST and any errors
 static PARSE_COUNT:AtomicUsize = AtomicUsize::new(0);
 
 #[tracing::instrument(skip(source_text, config))]
-/// Parse TypeScript/JavaScript source text into an OXC AST.
+/// Parses TypeScript/JavaScript source text into an OXC AST.
 ///
 /// Returns a [`ParseResult`] containing the module program and AST metadata,
 /// or a vector of error strings on failure.
+///
+/// ## Parameters
+///
+/// * `source_text` — The TypeScript source code to parse.
+/// * `file_path` — Path to the source file (used for source-type detection).
+/// * `config` — Parser configuration options.
+///
+/// ## Returns
+///
+/// `Ok(ParseResult)` on success, or `Err(Vec<String>)` with error messages.
 pub fn parse(source_text:&str, file_path:&str, config:&ParserConfig) -> Result<ParseResult, Vec<String>> {
 	let parse_id = PARSE_COUNT.fetch_add(1, Ordering::SeqCst);
 
@@ -153,7 +166,7 @@ pub fn parse(source_text:&str, file_path:&str, config:&ParserConfig) -> Result<P
 	Ok(ParseResult { program, allocator, errors:vec![], file_path:file_path.to_string() })
 }
 
-/// Determine the source type based on file path and configuration
+/// Determines the source type based on file path and configuration.
 fn determine_source_type(file_path:&str, _config:&ParserConfig) -> SourceType {
 	let path = std::path::Path::new(file_path);
 
