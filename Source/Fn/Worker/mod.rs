@@ -41,6 +41,7 @@ pub struct WorkerConfig {
 }
 
 impl WorkerConfig {
+	/// Create a new [`WorkerConfig`] with default settings.
 	pub fn new() -> Self {
 		Self {
 			enabled:true,
@@ -70,6 +71,7 @@ pub enum WorkerType {
 }
 
 impl WorkerType {
+	/// Return the worker type as a static string identifier.
 	pub fn as_str(&self) -> &'static str {
 		match self {
 			WorkerType::Classic => "classic",
@@ -102,6 +104,7 @@ pub struct WorkerInfo {
 }
 
 impl WorkerInfo {
+	/// Create a new [`WorkerInfo`] for the given source path and type.
 	pub fn new(source_path:impl Into<String>, worker_type:WorkerType) -> Self {
 		let source_path = source_path.into();
 

@@ -21,8 +21,10 @@ pub struct EsbuildWrapper {
 }
 
 impl EsbuildWrapper {
+	/// Create a new [`EsbuildWrapper`] with default settings.
 	pub fn new() -> Self { Self { esbuild_path:None } }
 
+	/// Set the path to the `esbuild` binary.
 	pub fn with_path(mut self, path:impl Into<String>) -> Self {
 		self.esbuild_path = Some(path.into());
 

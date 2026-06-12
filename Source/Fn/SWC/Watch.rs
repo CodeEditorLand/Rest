@@ -5,6 +5,7 @@
 pub mod Compile;
 
 #[tracing::instrument]
+/// Watch a single file for changes and recompile on modification.
 pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
 	let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
 

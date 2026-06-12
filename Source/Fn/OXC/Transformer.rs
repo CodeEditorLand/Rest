@@ -122,6 +122,10 @@ impl TransformerConfig {
 static TRANSFORM_COUNT:AtomicUsize = AtomicUsize::new(0);
 
 #[tracing::instrument(skip(allocator, program, config))]
+/// Transform an OXC AST, applying compiler transforms and optional
+/// private-field obfuscation.
+///
+/// Returns the transformed AST program.
 pub fn transform<'a>(
 	allocator:&'a Allocator,
 

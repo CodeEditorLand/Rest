@@ -10,6 +10,7 @@ pub struct WorkerBootstrap {
 }
 
 impl WorkerBootstrap {
+	/// Create a new [`WorkerBootstrap`] for the given configuration.
 	pub fn new(config:WorkerConfig) -> Self { Self { config } }
 
 	/// Generate bootstrap code for a module worker

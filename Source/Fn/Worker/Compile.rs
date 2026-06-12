@@ -19,6 +19,7 @@ pub struct WorkerCompiler {
 }
 
 impl WorkerCompiler {
+	/// Create a new [`WorkerCompiler`] for the given configuration.
 	pub fn new(config:WorkerConfig) -> Self {
 		Self {
 			config:config.clone(),

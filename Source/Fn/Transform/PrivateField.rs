@@ -14,6 +14,7 @@ pub struct Config {
 }
 
 impl Config {
+	/// Create a new Config with default values.
 	pub fn new() -> Self { Self { prefix:"__".to_string(), preserve_comments:true } }
 }
 
@@ -30,8 +31,10 @@ pub struct PrivateFieldTransform {
 }
 
 impl PrivateFieldTransform {
+	/// Create a new [`PrivateFieldTransform`] with default config.
 	pub fn new() -> Self { Self { config:Config::new() } }
 
+	/// Configure the private field transform with a custom config.
 	pub fn with_config(config:Config) -> Self { Self { config } }
 
 	/// Convert a private identifier to a regular identifier name

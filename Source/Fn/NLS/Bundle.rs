@@ -15,6 +15,7 @@ pub struct NLSBundle {
 }
 
 impl NLSBundle {
+	/// Create a new [`NLSBundle`] with the given configuration.
 	pub fn new(config:NLSConfig) -> Self {
 		let mut bundles = HashMap::new();
 

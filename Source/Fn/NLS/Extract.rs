@@ -25,6 +25,7 @@ pub struct NLSExtractor {
 }
 
 impl NLSExtractor {
+	/// Create a new [`NLSExtractor`] with default settings.
 	pub fn new() -> Self {
 		Self {
 			entries:HashMap::new(),
@@ -43,6 +44,7 @@ impl NLSExtractor {
 		}
 	}
 
+	/// Set the source file to extract localisation keys from.
 	pub fn with_file(mut self, file:impl Into<String>) -> Self {
 		self.current_file = Some(file.into());
 

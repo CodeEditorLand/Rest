@@ -84,6 +84,10 @@ fn transform_static_class_properties(code:&str) -> String {
 static CODEGEN_COUNT:AtomicUsize = AtomicUsize::new(0);
 
 #[tracing::instrument(skip(_allocator, program, config))]
+/// Generate JavaScript code from an OXC AST.
+///
+/// Takes a parsed AST and produces the final compiled JavaScript output
+/// using OXC's codegen pipeline.
 pub fn codegen<'a>(
 	_allocator:&Allocator,
 

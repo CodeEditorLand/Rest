@@ -38,6 +38,7 @@ pub struct NLSConfig {
 }
 
 impl NLSConfig {
+	/// Create a new [`NLSConfig`] with default settings.
 	pub fn new() -> Self {
 		Self {
 			source_lang:"en".to_string(),
@@ -80,8 +81,10 @@ pub struct LocalizationBundle {
 }
 
 impl LocalizationBundle {
+	/// Create a new [`LocalizationBundle`` for the given language.
 	pub fn new(language:&str) -> Self { Self { language:language.to_string(), hash:String::new(), entries:Vec::new() } }
 
+	/// Add a localisation entry to this bundle.
 	pub fn add_entry(&mut self, key:impl Into<String>, value:impl Into<String>) {
 		self.entries
 			.push(LocalizationEntry { key:key.into(), value:value.into(), comment:None });

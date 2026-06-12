@@ -5,6 +5,7 @@
 use crate::Fn::OXC::Compile;
 
 #[tracing::instrument]
+/// Watch for TypeScript file changes and recompile.
 pub async fn Fn(path:std::path::PathBuf, options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
 	let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
 

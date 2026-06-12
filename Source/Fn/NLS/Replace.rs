@@ -22,6 +22,7 @@ pub struct NLSReplacer {
 }
 
 impl NLSReplacer {
+	/// Create a new [`NLSReplacer`] with the given translation bundle.
 	pub fn new(bundle:HashMap<String, String>) -> Self {
 		Self {
 			bundle,
@@ -34,6 +35,8 @@ impl NLSReplacer {
 		}
 	}
 
+	/// Set whether to preserve original function call syntax during
+	/// replacement.
 	pub fn with_preserve_calls(mut self, preserve:bool) -> Self {
 		self.preserve_calls = preserve;
 

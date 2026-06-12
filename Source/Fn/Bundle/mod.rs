@@ -48,10 +48,13 @@ pub struct BundleEntry {
 }
 
 impl BundleEntry {
+	/// Create a new bundle entry with the given source path.
 	pub fn new(source:impl Into<String>) -> Self { Self { source:source.into(), module_name:None, is_entry:false } }
 
+	/// Create a new entry-point bundle entry.
 	pub fn entry(source:impl Into<String>) -> Self { Self { source:source.into(), module_name:None, is_entry:true } }
 
+	/// Set the module name for this bundle entry.
 	pub fn with_module_name(mut self, name:impl Into<String>) -> Self {
 		self.module_name = Some(name.into());
 
@@ -77,6 +80,7 @@ pub enum BundleMode {
 }
 
 impl BundleMode {
+	/// Returns `true` if this entry requires bundling (is an entry point).
 	pub fn requires_bundle(&self) -> bool {
 		matches!(self, BundleMode::Bundle | BundleMode::Esbuild | BundleMode::Watch)
 	}

@@ -1,3 +1,8 @@
+//! Core bundling functions.
+//!
+//! Re-exports all top-level compiler function modules (Binary, OXC, SWC,
+//! Build, Transform, NLS, Worker, Bundle).
+
 pub mod Binary;
 
 pub mod OXC;

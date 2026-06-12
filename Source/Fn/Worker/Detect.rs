@@ -14,6 +14,7 @@ pub struct WorkerDetector {
 }
 
 impl WorkerDetector {
+	/// Create a new [`WorkerDetector`] for the given configuration.
 	pub fn new(config:WorkerConfig) -> Self { Self { config } }
 
 	/// Detect all worker files in a directory

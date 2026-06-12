@@ -5,6 +5,7 @@
 use std::io::Write;
 
 #[tracing::instrument(skip(options))]
+/// Compile all watched files using SWC with the given options.
 pub async fn Fn(options:crate::Struct::SWC::Option) -> anyhow::Result<()> {
 	let compiler = std::sync::Arc::new(crate::Fn::OXC::Compiler::Compiler::new(options.config.clone()));
 

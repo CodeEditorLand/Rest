@@ -22,6 +22,7 @@ pub struct BundleBuilder {
 }
 
 impl BundleBuilder {
+	/// Create a new [`BundleBuilder`] with the given configuration.
 	pub fn new(config:BundleConfig) -> Self { Self { config, module_graph:HashMap::new(), processed:Vec::new() } }
 
 	/// Add an entry point to the bundle

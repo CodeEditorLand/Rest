@@ -82,6 +82,10 @@ impl ParserConfig {
 static PARSE_COUNT:AtomicUsize = AtomicUsize::new(0);
 
 #[tracing::instrument(skip(source_text, config))]
+/// Parse TypeScript/JavaScript source text into an OXC AST.
+///
+/// Returns a [`ParseResult`] containing the module program and AST metadata,
+/// or a vector of error strings on failure.
 pub fn parse(source_text:&str, file_path:&str, config:&ParserConfig) -> Result<ParseResult, Vec<String>> {
 	let parse_id = PARSE_COUNT.fetch_add(1, Ordering::SeqCst);
 
