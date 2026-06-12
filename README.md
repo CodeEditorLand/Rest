@@ -61,9 +61,11 @@ wasted cycles."_
 
 **Rest** is the HTTP/REST API server for the **Land** Code Editor. It provides
 the backend compilation and build API layer that serves the Land web application
+
 - orchestrating `OXC` and `SWC` compiler pipelines, handling
-`TypeScript`/`JavaScript` transformation, bundling via `ESBuild`, and language
-service operations through `Fn/` handler modules backed by `Struct/` data types.
+  `TypeScript`/`JavaScript` transformation, bundling via `ESBuild`, and language
+  service operations through `Fn/` handler modules backed by `Struct/` data
+  types.
 
 Rest was originally designed as a `TypeScript` compiler but has been rebranded
 as the unified compilation API server. It uses two compiler backends - `OXC`
