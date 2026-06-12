@@ -60,18 +60,17 @@ wasted cycles."_
 ## Overview
 
 **Rest** is the HTTP/REST API server for the **Land** Code Editor. It provides
-the backend compilation and build API layer that serves the Land web
-application — orchestrating `OXC` and `SWC` compiler pipelines, handling
+the backend compilation and build API layer that serves the Land web application
+— orchestrating `OXC` and `SWC` compiler pipelines, handling
 `TypeScript`/`JavaScript` transformation, bundling via `ESBuild`, and language
-service operations through `Fn/` handler modules backed by `Struct/` data
-types.
+service operations through `Fn/` handler modules backed by `Struct/` data types.
 
 Rest was originally designed as a `TypeScript` compiler but has been rebranded
 as the unified compilation API server. It uses two compiler backends — `OXC`
-(Oxidation Compiler) for fast `TypeScript` 5.x parsing, transformation, and
-code generation, and `SWC` (Speedy Web Compiler) as an alternative pipeline.
-Both backends share the same API surface through the `Fn/` handler layer,
-making them interchangeable for different compilation workloads.
+(Oxidation Compiler) for fast `TypeScript` 5.x parsing, transformation, and code
+generation, and `SWC` (Speedy Web Compiler) as an alternative pipeline. Both
+backends share the same API surface through the `Fn/` handler layer, making them
+interchangeable for different compilation workloads.
 
 **Rest is engineered to:**
 
@@ -79,14 +78,14 @@ making them interchangeable for different compilation workloads.
    pipelines through a consistent HTTP/REST interface with structured
    request/response types.
 2. **Enable Fast TypeScript Transformation** — Leverage `OXC`'s parser,
-   transformer, and codegen for `TypeScript` 5.x with decorator and JSX
-   support, plus `SWC` as a fallback pipeline.
+   transformer, and codegen for `TypeScript` 5.x with decorator and JSX support,
+   plus `SWC` as a fallback pipeline.
 3. **Support Build Workflows** — Handle directory compilation, `ESBuild`
    bundling, NLS (Native Language Service) extraction and replacement, and
    compilation worker management.
-4. **Integrate with Land Architecture** — Serve as the compilation backend
-   for `Maintain` (build system), `Cocoon` (extension host compilation),
-   and the Land web application through a type-safe HTTP API.
+4. **Integrate with Land Architecture** — Serve as the compilation backend for
+   `Maintain` (build system), `Cocoon` (extension host compilation), and the
+   Land web application through a type-safe HTTP API.
 
 ---
 
@@ -95,8 +94,8 @@ making them interchangeable for different compilation workloads.
 **Dual Compiler Backends** — `OXC` (`Source/Fn/OXC/`) and `SWC`
 (`Source/Fn/SWC/`) run side-by-side behind the same API. `OXC` handles
 `TypeScript` 5.x parsing, AST transformation (decorators, class fields, JSX),
-and code generation. `SWC` provides an alternative compilation pipeline with
-its own watch mode.
+and code generation. `SWC` provides an alternative compilation pipeline with its
+own watch mode.
 
 **Type-Safe API Layer** — Request and response types defined in `Struct/`
 provide compile-time validation of the entire API surface. Every endpoint is
@@ -116,8 +115,8 @@ extraction, replacement, and bundling of native language strings for
 internationalization workflows.
 
 **Compilation Workers** — Dedicated worker lifecycle management
-(`Source/Fn/Worker/`) with bootstrap, compilation, and capability detection
-for parallel compilation across multiple cores.
+(`Source/Fn/Worker/`) with bootstrap, compilation, and capability detection for
+parallel compilation across multiple cores.
 
 **Watch Mode** — Both `OXC` and `SWC` backends support file-system watch mode
 via `Source/Fn/OXC/Watch.rs` and `Source/Fn/SWC/Watch/` for incremental
@@ -127,12 +126,12 @@ recompilation on file changes.
 
 ## Core Architecture Principles&#x2001;🏗️
 
-| Principle | Description | Key Components |
-|-----------|-------------|----------------|
-| **Handler Modularity** | API logic is decomposed into focused `Fn/` handler modules, each responsible for a single compilation domain. Handlers are composable and independently testable. | `Fn/Build`, `Fn/Bundle`, `Fn/NLS`, `Fn/Worker`, `Fn/OXC`, `Fn/SWC`, `Fn/Transform`, `Fn/Binary` |
-| **Type Safety** | Request/response schemas live in `Struct/` for compile-time validation. Every endpoint is schema-checked through `Rust`'s type system. | `Struct/CompilerConfig`, `Struct/SWC`, `Struct/Binary` |
-| **Dual Compiler Strategy** | `OXC` and `SWC` run side-by-side behind the same API surface. The handler layer abstracts compiler selection so callers don't need to know which backend is active. | `Fn/OXC/Compiler`, `Fn/SWC/Compile` |
-| **Performance First** | `Rust`-native HTTP handling with zero-cost abstractions and parallel compilation via `rayon` for multi-core throughput. | `Source/Library.rs`, `Source/Main.rs`, `Fn/Binary/Command/Parallel` |
+| Principle                  | Description                                                                                                                                                         | Key Components                                                                                  |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Handler Modularity**     | API logic is decomposed into focused `Fn/` handler modules, each responsible for a single compilation domain. Handlers are composable and independently testable.   | `Fn/Build`, `Fn/Bundle`, `Fn/NLS`, `Fn/Worker`, `Fn/OXC`, `Fn/SWC`, `Fn/Transform`, `Fn/Binary` |
+| **Type Safety**            | Request/response schemas live in `Struct/` for compile-time validation. Every endpoint is schema-checked through `Rust`'s type system.                              | `Struct/CompilerConfig`, `Struct/SWC`, `Struct/Binary`                                          |
+| **Dual Compiler Strategy** | `OXC` and `SWC` run side-by-side behind the same API surface. The handler layer abstracts compiler selection so callers don't need to know which backend is active. | `Fn/OXC/Compiler`, `Fn/SWC/Compile`                                                             |
+| **Performance First**      | `Rust`-native HTTP handling with zero-cost abstractions and parallel compilation via `rayon` for multi-core throughput.                                             | `Source/Library.rs`, `Source/Main.rs`, `Fn/Binary/Command/Parallel`                             |
 
 ---
 
@@ -182,45 +181,45 @@ graph LR
 
 **Connection paths:**
 
-| Path | Protocol | Use Case |
-|------|----------|----------|
-| Rest → Maintain | HTTP/REST | Compilation and build operations API |
-| Rest → Cocoon | HTTP/REST | Extension host compilation services |
-| Land Web App → Rest | HTTP | Primary compilation API gateway |
+| Path                | Protocol    | Use Case                                          |
+| ------------------- | ----------- | ------------------------------------------------- |
+| Rest → Maintain     | HTTP/REST   | Compilation and build operations API              |
+| Rest → Cocoon       | HTTP/REST   | Extension host compilation services               |
+| Land Web App → Rest | HTTP        | Primary compilation API gateway                   |
 | Rest → OXC Compiler | Direct call | `TypeScript` 5.x parsing, transformation, codegen |
-| Rest → SWC Compiler | Direct call | Alternative compilation pipeline |
+| Rest → SWC Compiler | Direct call | Alternative compilation pipeline                  |
 
 ---
 
 ## Key Components
 
-| Component | Path | Description |
-|-----------|------|-------------|
-| Library (Entry) | `Source/Library.rs` | Library root — `rlib`, `cdylib`, and `staticlib` targets |
-| Binary Entry | `Source/Main.rs` | CLI binary entry point |
-| OXC Compiler | `Source/Fn/OXC/Compiler.rs` | Main OXC-based compiler orchestration |
-| OXC Parser | `Source/Fn/OXC/Parser.rs` | OXC parser wrapper for `TypeScript` 5.x |
-| OXC Transformer | `Source/Fn/OXC/Transformer.rs` | AST transformation (decorators, class fields, JSX) |
-| OXC Codegen | `Source/Fn/OXC/Codegen.rs` | Code generation from transformed AST |
-| OXC Compile | `Source/Fn/OXC/Compile.rs` | Full OXC compilation pipeline |
-| OXC Watch | `Source/Fn/OXC/Watch.rs` | Watch mode for OXC compilation |
-| SWC Compiler | `Source/Fn/SWC/Compile.rs` | SWC-based compilation pipeline |
-| SWC Watch | `Source/Fn/SWC/Watch.rs` | Watch mode for SWC compilation |
-| Build Mode | `Source/Fn/Build.rs` | Directory compilation handler |
-| Bundle Builder | `Source/Fn/Bundle/Builder.rs` | Bundle builder orchestration |
-| Bundle Config | `Source/Fn/Bundle/Config.rs` | Bundle configuration profiles |
-| ESBuild | `Source/Fn/Bundle/ESBuild.rs` | `ESBuild` integration for fast bundling |
-| NLS Extract | `Source/Fn/NLS/Extract.rs` | NLS string extraction |
-| NLS Replace | `Source/Fn/NLS/Replace.rs` | NLS string replacement |
-| NLS Bundle | `Source/Fn/NLS/Bundle.rs` | NLS bundling |
-| Worker Bootstrap | `Source/Fn/Worker/Bootstrap.rs` | Worker initialization |
-| Worker Compile | `Source/Fn/Worker/Compile.rs` | Worker compilation |
-| Worker Detect | `Source/Fn/Worker/Detect.rs` | Worker capability detection |
-| Transform PrivateField | `Source/Fn/Transform/PrivateField.rs` | Private field AST transforms |
-| Binary Commands | `Source/Fn/Binary/Command/` | CLI command handlers (Sequential, Parallel, Entry) |
-| Compiler Config | `Source/Struct/CompilerConfig.rs` | Compiler configuration types |
-| SWC Types | `Source/Struct/SWC.rs` | SWC-related type definitions |
-| Binary Command Types | `Source/Struct/Binary/Command/` | CLI argument and option types |
+| Component              | Path                                  | Description                                              |
+| ---------------------- | ------------------------------------- | -------------------------------------------------------- |
+| Library (Entry)        | `Source/Library.rs`                   | Library root — `rlib`, `cdylib`, and `staticlib` targets |
+| Binary Entry           | `Source/Main.rs`                      | CLI binary entry point                                   |
+| OXC Compiler           | `Source/Fn/OXC/Compiler.rs`           | Main OXC-based compiler orchestration                    |
+| OXC Parser             | `Source/Fn/OXC/Parser.rs`             | OXC parser wrapper for `TypeScript` 5.x                  |
+| OXC Transformer        | `Source/Fn/OXC/Transformer.rs`        | AST transformation (decorators, class fields, JSX)       |
+| OXC Codegen            | `Source/Fn/OXC/Codegen.rs`            | Code generation from transformed AST                     |
+| OXC Compile            | `Source/Fn/OXC/Compile.rs`            | Full OXC compilation pipeline                            |
+| OXC Watch              | `Source/Fn/OXC/Watch.rs`              | Watch mode for OXC compilation                           |
+| SWC Compiler           | `Source/Fn/SWC/Compile.rs`            | SWC-based compilation pipeline                           |
+| SWC Watch              | `Source/Fn/SWC/Watch.rs`              | Watch mode for SWC compilation                           |
+| Build Mode             | `Source/Fn/Build.rs`                  | Directory compilation handler                            |
+| Bundle Builder         | `Source/Fn/Bundle/Builder.rs`         | Bundle builder orchestration                             |
+| Bundle Config          | `Source/Fn/Bundle/Config.rs`          | Bundle configuration profiles                            |
+| ESBuild                | `Source/Fn/Bundle/ESBuild.rs`         | `ESBuild` integration for fast bundling                  |
+| NLS Extract            | `Source/Fn/NLS/Extract.rs`            | NLS string extraction                                    |
+| NLS Replace            | `Source/Fn/NLS/Replace.rs`            | NLS string replacement                                   |
+| NLS Bundle             | `Source/Fn/NLS/Bundle.rs`             | NLS bundling                                             |
+| Worker Bootstrap       | `Source/Fn/Worker/Bootstrap.rs`       | Worker initialization                                    |
+| Worker Compile         | `Source/Fn/Worker/Compile.rs`         | Worker compilation                                       |
+| Worker Detect          | `Source/Fn/Worker/Detect.rs`          | Worker capability detection                              |
+| Transform PrivateField | `Source/Fn/Transform/PrivateField.rs` | Private field AST transforms                             |
+| Binary Commands        | `Source/Fn/Binary/Command/`           | CLI command handlers (Sequential, Parallel, Entry)       |
+| Compiler Config        | `Source/Struct/CompilerConfig.rs`     | Compiler configuration types                             |
+| SWC Types              | `Source/Struct/SWC.rs`                | SWC-related type definitions                             |
+| Binary Command Types   | `Source/Struct/Binary/Command/`       | CLI argument and option types                            |
 
 ---
 
@@ -293,19 +292,19 @@ Element/Rest/
 ## In the Land Project
 
 Rest serves as the HTTP/REST API server for the Land ecosystem, providing the
-compilation and build API layer that the Land web application communicates
-with. It handles HTTP requests through `Fn/` handler modules, orchestrates
-`OXC` and `SWC` compiler pipelines, and backs all operations with `Struct/`
-type-safe data definitions.
+compilation and build API layer that the Land web application communicates with.
+It handles HTTP requests through `Fn/` handler modules, orchestrates `OXC` and
+`SWC` compiler pipelines, and backs all operations with `Struct/` type-safe data
+definitions.
 
 Rest is the compilation backend for the broader Land toolchain:
 
-| Consumer | Role | Integration |
-|----------|------|-------------|
-| **Maintain** 🔧 | Build system | Compilation, dead-code elimination, and build orchestration via HTTP API |
-| **Cocoon** 🦋 | Extension host | Extension compilation and transformation via HTTP API |
-| **Land Web App** 🏞️ | Frontend | Primary compilation gateway for the web-based editor |
-| **Air** 🪁 | Background daemon | Background compilation and watch-mode coordination |
+| Consumer            | Role              | Integration                                                              |
+| ------------------- | ----------------- | ------------------------------------------------------------------------ |
+| **Maintain** 🔧     | Build system      | Compilation, dead-code elimination, and build orchestration via HTTP API |
+| **Cocoon** 🦋       | Extension host    | Extension compilation and transformation via HTTP API                    |
+| **Land Web App** 🏞️ | Frontend          | Primary compilation gateway for the web-based editor                     |
+| **Air** 🪁          | Background daemon | Background compilation and watch-mode coordination                       |
 
 Rest depends on `Common` 🧩 for shared type definitions and utility functions
 used across the Land Rust infrastructure.
@@ -327,19 +326,19 @@ cargo build --release
 
 ### Key Dependencies
 
-| Dependency | Purpose |
-|-----------|---------|
-| `oxc_parser` | `TypeScript`/`JavaScript` parsing |
+| Dependency        | Purpose                                            |
+| ----------------- | -------------------------------------------------- |
+| `oxc_parser`      | `TypeScript`/`JavaScript` parsing                  |
 | `oxc_transformer` | AST transformation (decorators, JSX, class fields) |
-| `oxc_codegen` | Code generation from transformed AST |
-| `oxc_minifier` | Code minification |
-| `oxc_semantic` | Semantic analysis and type checking |
-| `oxc_ast` | AST type definitions |
-| `rayon` | Parallel compilation across CPU cores |
-| `tokio` | Async runtime for HTTP handling |
-| `clap` | CLI argument parsing |
-| `notify` | File-system watch notifications |
-| `Common` | Shared Land type definitions and utilities |
+| `oxc_codegen`     | Code generation from transformed AST               |
+| `oxc_minifier`    | Code minification                                  |
+| `oxc_semantic`    | Semantic analysis and type checking                |
+| `oxc_ast`         | AST type definitions                               |
+| `rayon`           | Parallel compilation across CPU cores              |
+| `tokio`           | Async runtime for HTTP handling                    |
+| `clap`            | CLI argument parsing                               |
+| `notify`          | File-system watch notifications                    |
+| `Common`          | Shared Land type definitions and utilities         |
 
 ### As a Library
 
@@ -354,12 +353,12 @@ Rest = { git = "https://github.com/CodeEditorLand/Rest.git", branch = "Current" 
 
 Rest enforces security at multiple layers:
 
-| Layer | Mechanism |
-|-------|-----------|
-| **Type safety** | `Rust`'s compile-time type system validates all request/response schemas through `Struct/` data types — malformed input is rejected before reaching handler logic |
-| **Memory safety** | `Rust`'s ownership model eliminates buffer overflows, use-after-free, and data races without a garbage collector |
-| **Input validation** | Structured deserialization via `serde` and `clap` ensures all API inputs and CLI arguments are validated at the boundary |
-| **Compiler sandboxing** | OXC and SWC compilers operate on in-memory ASTs — no file-system access beyond explicitly configured paths |
+| Layer                   | Mechanism                                                                                                                                                         |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Type safety**         | `Rust`'s compile-time type system validates all request/response schemas through `Struct/` data types — malformed input is rejected before reaching handler logic |
+| **Memory safety**       | `Rust`'s ownership model eliminates buffer overflows, use-after-free, and data races without a garbage collector                                                  |
+| **Input validation**    | Structured deserialization via `serde` and `clap` ensures all API inputs and CLI arguments are validated at the boundary                                          |
+| **Compiler sandboxing** | OXC and SWC compilers operate on in-memory ASTs — no file-system access beyond explicitly configured paths                                                        |
 
 ---
 
@@ -367,13 +366,13 @@ Rest enforces security at multiple layers:
 
 Rest is designed to be compatible with:
 
-| Target | Integration |
-|--------|-------------|
-| **Maintain** 🔧 | HTTP/REST API for build operations and compilation |
-| **Cocoon** 🦋 | HTTP/REST API for extension host compilation services |
-| **Air** 🪁 | Background compilation and watch-mode coordination |
-| **Land Web App** 🏞️ | Primary HTTP gateway for the Land frontend |
-| **Common** 🧩 | Shared trait implementations and type definitions |
+| Target              | Integration                                           |
+| ------------------- | ----------------------------------------------------- |
+| **Maintain** 🔧     | HTTP/REST API for build operations and compilation    |
+| **Cocoon** 🦋       | HTTP/REST API for extension host compilation services |
+| **Air** 🪁          | Background compilation and watch-mode coordination    |
+| **Land Web App** 🏞️ | Primary HTTP gateway for the Land frontend            |
+| **Common** 🧩       | Shared trait implementations and type definitions     |
 
 ---
 
@@ -385,12 +384,17 @@ Rest is designed to be compatible with:
 
 ## Related Documentation
 
-- [Architecture Overview](https://Editor.Land/Doc/architecture) — Land system architecture
-- [Why Rust](https://Editor.Land/Doc/why-rust) — Why `Rust` for Land infrastructure
-- [Maintain](https://github.com/CodeEditorLand/Maintain) 🔧 — Build system and development runner
-- [Cocoon](https://github.com/CodeEditorLand/Cocoon) 🦋 — `Node.js`/`Effect-TS` extension host
+- [Architecture Overview](https://Editor.Land/Doc/architecture) — Land system
+  architecture
+- [Why Rust](https://Editor.Land/Doc/why-rust) — Why `Rust` for Land
+  infrastructure
+- [Maintain](https://github.com/CodeEditorLand/Maintain) 🔧 — Build system and
+  development runner
+- [Cocoon](https://github.com/CodeEditorLand/Cocoon) 🦋 — `Node.js`/`Effect-TS`
+  extension host
 - [Air](https://github.com/CodeEditorLand/Air) 🪁 — Native background daemon
-- [Common](https://github.com/CodeEditorLand/Common) 🧩 — Shared abstract foundation
+- [Common](https://github.com/CodeEditorLand/Common) 🧩 — Shared abstract
+  foundation
 - [Land Documentation Index](https://Editor.Land/Doc) — Full documentation index
 
 ---
