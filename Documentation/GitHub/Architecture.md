@@ -1,7 +1,26 @@
-# Rest: OXC TypeScript Compiler ☕
+<table>
+	<tr>
+		<td colspan="1">
+			<h3 align="center">
+				<picture>
+					<source media="(prefers-color-scheme: dark)" srcset="https://editor.land/Dark/Image/GitHub/Land.svg">
+					<source media="(prefers-color-scheme: light)" srcset="https://editor.land/Image/GitHub/Land.svg">
+					<img width="28" alt="Land Logo" src="https://editor.land/Image/GitHub/Land.svg">
+				</picture>
+			</h3>
+		</td>
+		<td colspan="3" valign="top">
+			<h3 align="center"> Rest ☕</h3>
+		</td>
+	</tr>
+</table>
 
-This document describes `Rest`, a high-performance `TypeScript` compiler built
-on the OXC (Oxidation Compiler) toolchain:
+---
+
+# **Rest** ☕ Architecture
+
+`Rest` is a high-performance `TypeScript` compiler built on the OXC (Oxidation
+Compiler) toolchain:
 
 - Replaces `esbuild`'s `TypeScript` loader with a `Rust`-powered OXC pipeline
 - Produces VS Code-compatible output at 2-3x speed improvement

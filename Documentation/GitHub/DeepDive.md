@@ -1,6 +1,6 @@
 # Rest - Deep Dive
 
-This document provides the technical foundation for the Rest TypeScript compiler
+Rest provides the technical foundation TypeScript compiler
 within the Land ecosystem. **Rest** is a Rust binary that uses the OXC toolchain
 to compile TypeScript 2-3x faster than esbuild while producing output compatible
 with VSCode's build process.
