@@ -43,7 +43,7 @@ The HTTP/REST API Server for Land&#x2001;🏞️
 
 > **The Land editor needs to compile `TypeScript` and `JavaScript` with
 > predictable, high-performance results. Without a dedicated compilation API,
-> each build tool reinvents parsing, transformation, and codegen — leading to
+> each build tool reinvents parsing, transformation, and codegen - leading to
 > inconsistent output, duplicated work, and poor iteration times.**
 
 _"One compilation server, two battle-tested engines (`OXC` and `SWC`), zero
@@ -61,12 +61,12 @@ wasted cycles."_
 
 **Rest** is the HTTP/REST API server for the **Land** Code Editor. It provides
 the backend compilation and build API layer that serves the Land web application
-— orchestrating `OXC` and `SWC` compiler pipelines, handling
+- orchestrating `OXC` and `SWC` compiler pipelines, handling
 `TypeScript`/`JavaScript` transformation, bundling via `ESBuild`, and language
 service operations through `Fn/` handler modules backed by `Struct/` data types.
 
 Rest was originally designed as a `TypeScript` compiler but has been rebranded
-as the unified compilation API server. It uses two compiler backends — `OXC`
+as the unified compilation API server. It uses two compiler backends - `OXC`
 (Oxidation Compiler) for fast `TypeScript` 5.x parsing, transformation, and code
 generation, and `SWC` (Speedy Web Compiler) as an alternative pipeline. Both
 backends share the same API surface through the `Fn/` handler layer, making them
@@ -74,16 +74,16 @@ interchangeable for different compilation workloads.
 
 **Rest is engineered to:**
 
-1. **Provide a Unified Compilation API** — Expose `OXC` and `SWC` compilation
+1. **Provide a Unified Compilation API** - Expose `OXC` and `SWC` compilation
    pipelines through a consistent HTTP/REST interface with structured
    request/response types.
-2. **Enable Fast TypeScript Transformation** — Leverage `OXC`'s parser,
+2. **Enable Fast TypeScript Transformation** - Leverage `OXC`'s parser,
    transformer, and codegen for `TypeScript` 5.x with decorator and JSX support,
    plus `SWC` as a fallback pipeline.
-3. **Support Build Workflows** — Handle directory compilation, `ESBuild`
+3. **Support Build Workflows** - Handle directory compilation, `ESBuild`
    bundling, NLS (Native Language Service) extraction and replacement, and
    compilation worker management.
-4. **Integrate with Land Architecture** — Serve as the compilation backend for
+4. **Integrate with Land Architecture** - Serve as the compilation backend for
    `Maintain` (build system), `Cocoon` (extension host compilation), and the
    Land web application through a type-safe HTTP API.
 
@@ -91,34 +91,34 @@ interchangeable for different compilation workloads.
 
 ## Key Features&#x2001;🔧
 
-**Dual Compiler Backends** — `OXC` (`Source/Fn/OXC/`) and `SWC`
+**Dual Compiler Backends** - `OXC` (`Source/Fn/OXC/`) and `SWC`
 (`Source/Fn/SWC/`) run side-by-side behind the same API. `OXC` handles
 `TypeScript` 5.x parsing, AST transformation (decorators, class fields, JSX),
 and code generation. `SWC` provides an alternative compilation pipeline with its
 own watch mode.
 
-**Type-Safe API Layer** — Request and response types defined in `Struct/`
+**Type-Safe API Layer** - Request and response types defined in `Struct/`
 provide compile-time validation of the entire API surface. Every endpoint is
 schema-checked before it reaches production through `Rust`'s type system.
 
-**Modular Handler Architecture** — API logic is decomposed into `Fn/` handler
+**Modular Handler Architecture** - API logic is decomposed into `Fn/` handler
 modules (`Build`, `Bundle`, `NLS`, `Worker`, `OXC`, `SWC`, `Transform`,
 `Binary`) each responsible for a single compilation domain. Handlers are
 composable, testable, and independently maintainable.
 
-**`ESBuild` Bundling** — Integration with `ESBuild` via
+**`ESBuild` Bundling** - Integration with `ESBuild` via
 `Source/Fn/Bundle/ESBuild.rs` for fast production bundling with configurable
 build profiles through `Source/Fn/Bundle/Config.rs`.
 
-**Native Language Service** — NLS endpoints (`Source/Fn/NLS/`) provide
+**Native Language Service** - NLS endpoints (`Source/Fn/NLS/`) provide
 extraction, replacement, and bundling of native language strings for
 internationalization workflows.
 
-**Compilation Workers** — Dedicated worker lifecycle management
+**Compilation Workers** - Dedicated worker lifecycle management
 (`Source/Fn/Worker/`) with bootstrap, compilation, and capability detection for
 parallel compilation across multiple cores.
 
-**Watch Mode** — Both `OXC` and `SWC` backends support file-system watch mode
+**Watch Mode** - Both `OXC` and `SWC` backends support file-system watch mode
 via `Source/Fn/OXC/Watch.rs` and `Source/Fn/SWC/Watch/` for incremental
 recompilation on file changes.
 
@@ -195,7 +195,7 @@ graph LR
 
 | Component              | Path                                  | Description                                              |
 | ---------------------- | ------------------------------------- | -------------------------------------------------------- |
-| Library (Entry)        | `Source/Library.rs`                   | Library root — `rlib`, `cdylib`, and `staticlib` targets |
+| Library (Entry)        | `Source/Library.rs`                   | Library root - `rlib`, `cdylib`, and `staticlib` targets |
 | Binary Entry           | `Source/Main.rs`                      | CLI binary entry point                                   |
 | OXC Compiler           | `Source/Fn/OXC/Compiler.rs`           | Main OXC-based compiler orchestration                    |
 | OXC Parser             | `Source/Fn/OXC/Parser.rs`             | OXC parser wrapper for `TypeScript` 5.x                  |
@@ -355,10 +355,10 @@ Rest enforces security at multiple layers:
 
 | Layer                   | Mechanism                                                                                                                                                         |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Type safety**         | `Rust`'s compile-time type system validates all request/response schemas through `Struct/` data types — malformed input is rejected before reaching handler logic |
+| **Type safety**         | `Rust`'s compile-time type system validates all request/response schemas through `Struct/` data types - malformed input is rejected before reaching handler logic |
 | **Memory safety**       | `Rust`'s ownership model eliminates buffer overflows, use-after-free, and data races without a garbage collector                                                  |
 | **Input validation**    | Structured deserialization via `serde` and `clap` ensures all API inputs and CLI arguments are validated at the boundary                                          |
-| **Compiler sandboxing** | OXC and SWC compilers operate on in-memory ASTs — no file-system access beyond explicitly configured paths                                                        |
+| **Compiler sandboxing** | OXC and SWC compilers operate on in-memory ASTs - no file-system access beyond explicitly configured paths                                                        |
 
 ---
 
@@ -384,18 +384,18 @@ Rest is designed to be compatible with:
 
 ## Related Documentation
 
-- [Architecture Overview](https://Editor.Land/Doc/architecture) — Land system
+- [Architecture Overview](https://Editor.Land/Doc/architecture) - Land system
   architecture
-- [Why Rust](https://Editor.Land/Doc/why-rust) — Why `Rust` for Land
+- [Why Rust](https://Editor.Land/Doc/why-rust) - Why `Rust` for Land
   infrastructure
-- [Maintain](https://github.com/CodeEditorLand/Maintain) 🔧 — Build system and
+- [Maintain](https://github.com/CodeEditorLand/Maintain) 🔧 - Build system and
   development runner
-- [Cocoon](https://github.com/CodeEditorLand/Cocoon) 🦋 — `Node.js`/`Effect-TS`
+- [Cocoon](https://github.com/CodeEditorLand/Cocoon) 🦋 - `Node.js`/`Effect-TS`
   extension host
-- [Air](https://github.com/CodeEditorLand/Air) 🪁 — Native background daemon
-- [Common](https://github.com/CodeEditorLand/Common) 🧩 — Shared abstract
+- [Air](https://github.com/CodeEditorLand/Air) 🪁 - Native background daemon
+- [Common](https://github.com/CodeEditorLand/Common) 🧩 - Shared abstract
   foundation
-- [Land Documentation Index](https://Editor.Land/Doc) — Full documentation index
+- [Land Documentation Index](https://Editor.Land/Doc) - Full documentation index
 
 ---
 
