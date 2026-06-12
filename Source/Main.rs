@@ -1,3 +1,7 @@
+//! Rest application main entry point.
+//!
+//! Initializes telemetry and starts the CLI command dispatch loop.
+
 #[tokio::main]
 async fn main() {
 	// [Boot] [Telemetry] Bring up shared dual-pipe (PostHog + OTLP). No-op

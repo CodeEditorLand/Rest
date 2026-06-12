@@ -1,3 +1,9 @@
+//! SWC-compatible compiler configuration and option types.
+//!
+//! Defines compiler configuration, option, and metrics structures used by the
+//! Rest compiler's SWC-compatible (OXC-backed) pipeline.
+
+/// Information about compiled files
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileInfo {
 	path:PathBuf,
@@ -8,6 +14,10 @@ pub struct FileInfo {
 /// Module format options for code generation
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "lowercase")]
+/// Output module format for compiled JavaScript bundles.
+///
+/// Determines whether the compiler produces ESM (`import`/`export`),
+/// CommonJS (`require`/`module.exports`), or IIFE bundles.
 pub enum ModuleFormat {
 	/// CommonJS module format (default)
 	#[default]
@@ -27,6 +37,8 @@ pub enum ModuleFormat {
 }
 
 impl ModuleFormat {
+	/// Parse module format from string ("commonjs", "esmodule", "amd", "umd",
+	/// "none").
 	pub fn from_str(s:&str) -> Self {
 		match s.to_lowercase().as_str() {
 			"esmodule" | "esm" | "esnext" | "es" => ModuleFormat::EsModule,
@@ -41,6 +53,7 @@ impl ModuleFormat {
 		}
 	}
 
+	/// Return the module format as a lowercase string.
 	pub fn as_str(&self) -> &'static str {
 		match self {
 			ModuleFormat::CommonJs => "commonjs",
@@ -56,14 +69,19 @@ impl ModuleFormat {
 	}
 }
 
+/// SWC-compatible compiler configuration for OXC-backed compilation.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CompilerConfig {
+	/// Target ECMAScript version (e.g., "es2024")
 	pub Target:String,
 
+	/// Module system ("commonjs", "esmodule")
 	pub Module:String,
 
+	/// Enable strict mode
 	pub Strict:bool,
 
+	/// Emit decorators metadata
 	pub EmitDecoratorsMetadata:bool,
 
 	/// Enable tree-shaking to remove unused code
@@ -76,14 +94,19 @@ pub struct CompilerConfig {
 	pub ModuleFormat:ModuleFormat,
 }
 
+/// Compilation options passed through the Rest build pipeline.
 #[derive(Debug, Clone)]
 pub struct Option {
+	/// Entry points for compilation
 	pub entry:Vec<Vec<String>>,
 
+	/// File path separator character
 	pub separator:char,
 
+	/// File pattern to match (e.g., "**/*.ts")
 	pub pattern:String,
 
+	/// Compiler configuration
 	pub config:CompilerConfig,
 
 	/// Output directory for compiled files
@@ -113,12 +136,16 @@ impl Default for Option {
 	}
 }
 
+/// Compiler metrics tracking count, elapsed time, and error count.
 #[derive(Debug, Default)]
 pub struct CompilerMetrics {
+	/// Total files processed
 	pub Count:usize,
 
+	/// Total elapsed time
 	pub Elapsed:Duration,
 
+	/// Total error count
 	pub Error:usize,
 }
 

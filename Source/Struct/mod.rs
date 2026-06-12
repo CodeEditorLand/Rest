@@ -1,3 +1,8 @@
+//! Configuration structures and CLI types.
+//!
+//! Re-exports Binary command options, SWC compiler config, and advanced
+//! CompilerConfig types used throughout the Rest crate.
+
 pub mod Binary;
 
 pub mod SWC;

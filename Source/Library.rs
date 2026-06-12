@@ -14,6 +14,11 @@
 //! bundles that Cocoon can load at runtime. Built on OXC (Oxidation Compiler)
 //! for native-speed parsing, transformation, and minification.
 //!
+//! ## Architecture
+//!
+//! See [`Documentation/GitHub/Architecture.md`](https://github.com/editor-land/CodeEditorLand/blob/main/Documentation/GitHub/Architecture.md)
+//! for the full architectural overview.
+//!
 //! ## What Rest Produces
 //!
 //! VS Code's source code is a massive TypeScript/JavaScript codebase. Rest
