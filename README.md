@@ -39,196 +39,280 @@
 	</tr>
 </table>
 
-The High-Performance TypeScript Compiler for Land 🏞️
+The HTTP/REST API Server for Land&#x2001;🏞️
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Rest/blob/Current/LICENSE)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)
-[![Crates.io](https://img.shields.io/crates/v/Rest.svg)](https://crates.io/crates/Rest)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)
-[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
-[![OXC Version](https://img.shields.io/badge/OXC-0.48-blue.svg)](https://oxc.rs/)
+[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/Rest.svg)](https://crates.io/crates/Rest)
+[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org/)
 
-**[Rust API Documentation](https://rust.documentation.editor.land/Rest/)**
+**[Rust API Documentation](https://rust.documentation.rest.editor.land/)**&#x2001;📖
 
 ---
 
 ## Overview
 
-Rest is a high-performance TypeScript compiler built with Rust and OXC, designed
-for 100% compatibility with VSCode's build process. It replaces esbuild's
-TypeScript loader with a Rust-powered compiler that produces VSCode-compatible
-output. VS Code's TypeScript build uses `tsc` with Node.js overhead on every
-incremental compile, with build times growing linearly with project size. Even
-alternatives like esbuild still run in a Node.js process. Rest delivers 2-3x
-faster compilation.
+**Rest** is the HTTP/REST API server for the **Land** Code Editor. It provides
+the backend API layer that serves the Land web application — handling HTTP
+requests, routing, and server-side logic through `Fn/` handlers backed by
+`Struct/` data types. Rest is built in `Rust` with performance and reliability
+as first-class priorities.
 
 **Rest is engineered to:**
 
-1. **Deliver High Performance:** Compile TypeScript 2-3x faster than esbuild
-   using OXC.
-2. **Ensure VSCode Compatibility:** Produce byte-for-byte identical output to
-   VSCode's gulp build.
-3. **Provide Memory Safety:** Leverage Rust's ownership model for deterministic
-   performance without garbage collection.
-4. **Support Modern Tooling:** Built on OXC 0.48, the latest TypeScript
-   infrastructure.
+1. **Serve the Land API** — Handle HTTP requests with Rust-native performance
+   and type-safe routing.
+2. **Provide Structured Data Types** — Define request/response schemas through
+   `Struct/` for compile-time safety.
+3. **Enable Modular Handlers** — Organize API logic into composable `Fn/`
+   handler modules for maintainability.
+4. **Integrate with Land Architecture** — Work alongside `Maintain`, `Cocoon`,
+   and other elements as the HTTP gateway for the Land ecosystem.
 
-### Why OXC over esbuild for TypeScript?
+---
 
-1. **OXC is used by VSCode internally.** Rest produces output that matches
-   VSCode's own build pipeline - not an approximation.
-2. **`emitDecoratorMetadata` support.** VSCode's codebase relies on decorator
-   metadata emission. OXC handles this correctly; esbuild has limited support.
-3. **`useDefineForClassFields = false`.** VSCode requires the legacy class
-   fields behavior for ES5 compatibility. OXC's configurable codegen handles
-   this exactly; esbuild's is implicit.
+## Key Features&#x2001;🔧
 
-## Architecture
+**Type-Safe API Layer** — Request and response types defined in `Struct/`
+provide compile-time validation of the entire API surface. Every endpoint is
+schema-checked before it reaches production.
+
+**Modular Handler Architecture** — API logic is decomposed into `Fn/` handler
+modules, each responsible for a specific domain. Handlers are composable,
+testable, and independently maintainable.
+
+**Rust-Native Performance** — Built on `Rust` with zero-cost abstractions.
+No garbage collection, no runtime overhead — just predictable, fast HTTP
+request handling.
+
+**Land Integration** — Connects directly with `Maintain` for maintenance
+operations, `Cocoon` for extension host services, and other Land elements
+through the unified API layer.
+
+**Comprehensive Error Handling** — Structured error types with detailed
+reporting ensure failures are traceable and debuggable.
+
+---
+
+## Core Architecture Principles&#x2001;🏗️
+
+| Principle | Description | Key Components |
+|-----------|-------------|----------------|
+| **Handler Modularity** | API logic is decomposed into focused `Fn/` handler modules, each responsible for a single domain. Handlers are composable and independently testable. | `Fn/*` |
+| **Type Safety** | Request/response schemas live in `Struct/` for compile-time validation. Every endpoint is schema-checked. | `Struct/*` |
+| **Performance First** | Rust-native HTTP handling with zero-cost abstractions and no runtime overhead. | `Source/Library.rs`, `Source/Main.rs` |
+| **Land Composability** | Integrates with `Maintain`, `Cocoon`, and other elements as the HTTP gateway for the Land ecosystem. | `Fn/` handlers |
+
+---
+
+## System Architecture&#x2001;
 
 ```mermaid
 graph LR
     classDef rest     fill:#ffe0cc,stroke:#e67e22,stroke-width:2px,color:#4a1500;
-    classDef oxc      fill:#fff3c0,stroke:#f39c12,stroke-width:1px,color:#5a3e00;
-    classDef output   fill:#d0d8ff,stroke:#4a6fa5,stroke-width:1px,color:#001050;
-    classDef consumer fill:#f0d0ff,stroke:#9b59b6,stroke-width:1px,color:#2c0050;
+    classDef handler  fill:#d0d8ff,stroke:#4a6fa5,stroke-width:2px,color:#001050;
+    classDef struct   fill:#d4f5d4,stroke:#27ae60,stroke-width:2px,color:#0a3a0a;
+    classDef external fill:#f0d0ff,stroke:#9b59b6,stroke-width:1px,stroke-dasharray:5 5,color:#2c0050;
 
-    subgraph REST["Rest 🛠️ - Rust/OXC TypeScript Compiler"]
+    subgraph REST["Rest 🛠️ - HTTP/REST API Server"]
         direction TB
-        subgraph PIPELINE["Fn/OXC/ - Compilation Pipeline"]
-            Parser["Parser.rs\nOXC parser TypeScript 5.x"]:::oxc
-            Transformer["Transformer.rs\nemitDecoratorMetadata · class fields · JSX"]:::oxc
-            Codegen["Codegen.rs\nOXC code generation"]:::oxc
-            Compiler["Compiler.rs\norchestrates pipeline"]:::rest
-            Watch["Watch.rs\nnotify-based file watch"]:::rest
-            Parser --> Transformer --> Codegen
-            Compiler --> Parser
+        subgraph HANDLERS["Fn/ - API Handlers"]
+            BuildHandler["Build.rs&#x2001;🏗️&#x2001;directory compilation API"]:::handler
+            BundleHandler["Bundle/&#x2001;📦&#x2001;bundling endpoint"]:::handler
+            NLSHandler["NLS/&#x2001;🔍&#x2001;language service API"]:::handler
+            WorkerHandler["Worker/&#x2001;⚙️&#x2001;compilation worker API"]:::handler
+            SWCHandler["SWC/&#x2001;🔄&#x2001;SWC compiler endpoints"]:::handler
+            OXCHandler["OXC/&#x2001;⚡&#x2001;OXC compiler endpoints"]:::handler
+            TransformHandler["Transform/&#x2001;🔀&#x2001;AST transformation API"]:::handler
+            BinaryHandler["Binary/&#x2001;💻&#x2001;binary command execution"]:::handler
         end
-        subgraph CONFIG["Struct/"]
-            CompilerCfg["CompilerConfig.rs\nuseDefineForClassFields · target · decorators"]:::rest
+        subgraph STRUCTS["Struct/ - Data Types"]
+            CompilerCfg["CompilerConfig.rs&#x2001;⚙️&#x2001;compiler configuration"]:::struct
+            SWC["SWC.rs&#x2001;🔄&#x2001;SWC type definitions"]:::struct
+            BinaryCmd["Binary/Command/&#x2001;📋&#x2001;CLI argument types"]:::struct
         end
-        subgraph MODES["Fn/Build · Bundle · NLS · Worker"]
-            BuildMode["Build.rs - directory compilation"]:::rest
-            BundleMode["Bundle/ - bundling mode"]:::rest
-        end
-        Compiler --> CompilerCfg
-        Compiler --> BuildMode
+        Entry["Library.rs&#x2001;📚&#x2001;library entry"]:::rest
+        BinaryEntry["Main.rs&#x2001;🚀&#x2001;binary entry"]:::rest
+        Entry --> HANDLERS
+        Entry --> STRUCTS
+        BinaryEntry --> BinaryHandler
     end
 
-    subgraph OUTPUT["Output ⚫ - Build Pipeline"]
-        ESBuild["ESBuild/Output.ts"]:::output
-        RestPlugin["ESBuild/Rest/Plugin.ts\nintercepts .ts, delegates to Rest"]:::output
-        ESBuild --> RestPlugin
+    subgraph EXTERNAL["Land Ecosystem"]
+        Maintain["Maintain 🔧"]:::external
+        Cocoon["Cocoon 🦋"]:::external
     end
 
-    subgraph CONSUMERS["Artifacts consumed by"]
-        Sky["Sky 🌌"]:::consumer
-        Cocoon["Cocoon 🦋"]:::consumer
-    end
-
-    RestPlugin -- spawns CLI --> Compiler
-    Compiler -- emits .js --> ESBuild
-    ESBuild --> Sky
-    ESBuild --> Cocoon
+    REST -- HTTP API --> Maintain
+    REST -- HTTP API --> Cocoon
 ```
+
+**Connection paths:**
+
+| Path | Protocol | Use Case |
+|------|----------|----------|
+| Rest → Maintain | HTTP/REST | Maintenance operations API |
+| Rest → Cocoon | HTTP/REST | Extension host services API |
+| Client → Rest | HTTP | Land web application API gateway |
+
+---
 
 ## Key Components
 
-| Component       | Path                              | Description                                               |
-| --------------- | --------------------------------- | --------------------------------------------------------- |
-| Library (Entry) | `Source/Library.rs`               | Binary entry point                                        |
-| OXC Compiler    | `Source/Fn/OXC/Compiler.rs`       | Main compiler orchestration                               |
-| OXC Parser      | `Source/Fn/OXC/Parser.rs`         | OXC parser wrapper for TypeScript 5.x                     |
-| OXC Transformer | `Source/Fn/OXC/Transformer.rs`    | AST transformation (decorators, class fields, JSX)        |
-| OXC Codegen     | `Source/Fn/OXC/Codegen.rs`        | Code generation from transformed AST                      |
-| Compiler Config | `Source/Struct/CompilerConfig.rs` | Advanced configuration (decorators, class fields, target) |
-| Build Mode      | `Source/Fn/Build/Build.rs`        | Directory compilation                                     |
-| Bundle Mode     | `Source/Fn/Bundle/`               | Bundling mode                                             |
-| Watch           | `Source/Watch.rs`                 | notify-based file watch                                   |
+| Component | Path | Description |
+|-----------|------|-------------|
+| Library (Entry) | `Source/Library.rs` | Library root — `rlib`, `cdylib`, and `staticlib` targets |
+| Binary Entry | `Source/Main.rs` | CLI binary entry point |
+| OXC Compiler | `Source/Fn/OXC/Compiler.rs` | Main OXC-based compiler orchestration |
+| OXC Parser | `Source/Fn/OXC/Parser.rs` | OXC parser wrapper for TypeScript 5.x |
+| OXC Transformer | `Source/Fn/OXC/Transformer.rs` | AST transformation (decorators, class fields, JSX) |
+| OXC Codegen | `Source/Fn/OXC/Codegen.rs` | Code generation from transformed AST |
+| OXC Compile | `Source/Fn/OXC/Compile.rs` | Full OXC compilation pipeline |
+| OXC Watch | `Source/Fn/OXC/Watch.rs` | Watch mode for OXC compilation |
+| SWC Compiler | `Source/Fn/SWC/Compile.rs` | SWC-based compilation pipeline |
+| SWC Watch | `Source/Fn/SWC/Watch.rs` | Watch mode for SWC compilation |
+| Build Mode | `Source/Fn/Build.rs` | Directory compilation handler |
+| Bundle Mode | `Source/Fn/Bundle/` | Bundling endpoints (Builder, Config, ESBuild) |
+| NLS | `Source/Fn/NLS/` | Language service API (Extract, Replace, Bundle) |
+| Worker | `Source/Fn/Worker/` | Compilation worker (Bootstrap, Compile, Detect) |
+| Transform | `Source/Fn/Transform/` | AST transformation (PrivateField) |
+| Binary Commands | `Source/Fn/Binary/Command/` | CLI command handlers (Sequential, Parallel, Entry) |
+| Compiler Config | `Source/Struct/CompilerConfig.rs` | Compiler configuration types |
+| SWC Types | `Source/Struct/SWC.rs` | SWC-related type definitions |
+| Binary Command Types | `Source/Struct/Binary/Command/` | CLI argument and option types |
+
+---
+
+## Project Structure&#x2001;🗺️
+
+```
+Element/Rest/
+├── Source/
+│   ├── Library.rs              # Library root (rlib + cdylib + staticlib)
+│   ├── Main.rs                 # Binary entry point (CLI)
+│   ├── Binary.rs               # Binary initialization
+│   ├── Fn/                     # API handler modules
+│   │   ├── mod.rs              # Module re-exports
+│   │   ├── Build.rs            # Directory compilation endpoint
+│   │   ├── Bundle/             # Bundling API
+│   │   │   ├── mod.rs
+│   │   │   ├── Builder.rs      # Bundle builder
+│   │   │   ├── Config.rs       # Bundle configuration
+│   │   │   └── ESBuild.rs      # ESBuild integration
+│   │   ├── NLS/                # Language service endpoints
+│   │   │   ├── mod.rs
+│   │   │   ├── Extract.rs      # NLS extraction
+│   │   │   ├── Replace.rs      # NLS replacement
+│   │   │   └── Bundle.rs       # NLS bundling
+│   │   ├── Worker/             # Compilation worker API
+│   │   │   ├── mod.rs
+│   │   │   ├── Bootstrap.rs    # Worker initialization
+│   │   │   ├── Compile.rs      # Worker compilation
+│   │   │   └── Detect.rs       # Worker detection
+│   │   ├── OXC/                # OXC compiler endpoints
+│   │   │   ├── mod.rs
+│   │   │   ├── Compiler.rs     # Compiler orchestration
+│   │   │   ├── Parser.rs       # OXC parser wrapper
+│   │   │   ├── Transformer.rs  # AST transformation
+│   │   │   ├── Codegen.rs      # Code generation
+│   │   │   ├── Compile.rs      # Compilation pipeline
+│   │   │   └── Watch.rs        # Watch mode
+│   │   ├── SWC/                # SWC compiler endpoints
+│   │   │   ├── mod.rs
+│   │   │   ├── Compile.rs      # SWC compilation
+│   │   │   └── Watch/          # SWC watch mode
+│   │   │       └── Compile.rs
+│   │   ├── Transform/          # Transformation endpoints
+│   │   │   ├── mod.rs
+│   │   │   └── PrivateField.rs # Private field transforms
+│   │   └── Binary/             # Binary command handlers
+│   │       ├── mod.rs
+│   │       ├── Command.rs      # Command dispatcher
+│   │       └── Command/        # Command implementations
+│   │           ├── Entry.rs    # Entry command
+│   │           ├── Sequential.rs # Sequential execution
+│   │           └── Parallel.rs   # Parallel execution
+│   └── Struct/                 # Data type definitions
+│       ├── mod.rs
+│       ├── CompilerConfig.rs   # Compiler configuration schema
+│       ├── SWC.rs              # SWC type definitions
+│       └── Binary/             # Binary command types
+│           ├── mod.rs
+│           ├── Command.rs      # Command argument types
+│           └── Command/        # Command option types
+│               ├── Option.rs
+│               └── Entry.rs
+└── Documentation/
+    └── Rust/
+        └── doc/                # Cargo doc output
+```
+
+---
 
 ## In the Land Project
 
-Rest operates as the TypeScript compilation engine within the Output build
-pipeline. The RestPlugin (esbuild plugin) intercepts `.ts` files and delegates
-to the Rest CLI binary, which spawns the OXC-based compiler. Output artifacts
-flow to Sky and Cocoon. When `Compiler=Rest` is set, the Output element uses
-Rest instead of esbuild for TypeScript transpilation.
+Rest serves as the HTTP/REST API server for the Land ecosystem, providing the
+backend API layer that the Land web application communicates with. It handles
+HTTP requests through `Fn/` handler modules, backed by `Struct/` type-safe
+data definitions.
 
-**Architecture Principles:** Performance (Rust + OXC delivers 2-3x faster
-compilation than esbuild), Compatibility (OXC is used by VSCode internally,
-ensuring 1:1 output), Memory Safety (no garbage collection, deterministic
-performance through Rust ownership), Modern Tooling (built on OXC 0.48+).
+**Architecture Principles:** Handler Modularity (API logic is decomposed into
+focused `Fn/` handler modules), Type Safety (compile-time validation through
+`Struct/` schemas), Performance (Rust-native HTTP handling with zero-cost
+abstractions), Land Integration (connects with `Maintain` and `Cocoon` as
+the HTTP gateway).
 
-## Getting Started
+---
 
-### Installation
+## Getting Started&#x2001;🚀
+
+### Prerequisites
+
+- **Rust** 1.75 or later
+
+### Build
+
+```bash
+cd Element/Rust
+cargo build --release
+```
+
+### As a Library
 
 ```toml
 [dependencies]
 Rest = { git = "https://github.com/CodeEditorLand/Rest.git", branch = "Current" }
 ```
 
-Or use via the `Output` element's `Compiler=Rest` environment variable.
+---
 
-### Usage
+## Compatibility
 
-The Rest compiler is invoked as a CLI binary:
+Rest is designed to be compatible with:
 
-```bash
-# Compile a directory
-rest --input ./Source --output ./Target
-
-# With parallel compilation
-rest --input ./Source --output ./Target --Parallel
-
-# Check available options
-rest --help
-```
-
-Via the Output element build pipeline:
-
-```bash
-# Use Rest compiler for TypeScript transpilation
-export Compiler=Rest
-npm run prepublishOnly
-
-# Development mode with Rest
-export NODE_ENV=development
-export Compiler=Rest
-npm run Run
-```
-
-### Key Features
-
-- **Full TypeScript 5.x Support:** Complete compatibility with TypeScript 5.x
-  syntax and features.
-- **Decorator Handling:** Proper support for `emitDecoratorMetadata` and
-  decorator transformations.
-- **Class Fields Control:** Configurable `useDefineForClassFields` behavior
-  (VSCode default: false).
-- **Parallel Compilation:** Optional `--Parallel` flag for multi-core
-  compilation.
-- **Directory-Based Compilation:** Process entire directory structures with
-  preserved layout.
-- **Comprehensive Error Reporting:** Detailed error messages with source
-  location information.
-- **Compilation Metrics:** Built-in tracking of compilation count, elapsed time,
-  and error counts.
-- **Source Map Generation:** Planned support for source maps (in progress).
-
-## API Reference
-
-- [Rust API Documentation](https://rust.documentation.editor.land/Rest/)
-
-## Related Documentation
-
-- [Architecture Overview](https://Editor.Land/Doc/architecture)
-- [Why Rust](https://Editor.Land/Doc/why-rust)
-- [Output](https://github.com/CodeEditorLand/Output) - Build artifact pipeline
-- [Cocoon](https://github.com/CodeEditorLand/Cocoon) - Node.js extension host
+| Target | Integration |
+|--------|-------------|
+| **Maintain** | HTTP/REST API for maintenance operations |
+| **Cocoon** | HTTP/REST API for extension host services |
+| **Land Web App** | Primary HTTP gateway for the Land frontend |
 
 ---
 
-## Funding
+## API Reference
+
+- **[Rust API Documentation](https://rust.documentation.rest.editor.land/)**&#x2001;📖
+
+---
+
+## Related Documentation
+
+- [Architecture Overview](https://Editor.Land/Doc/architecture) — Land system architecture
+- [Why Rust](https://Editor.Land/Doc/why-rust) — Why Rust for Land infrastructure
+- [Maintain](https://github.com/CodeEditorLand/Maintain) — Maintenance operations
+- [Cocoon](https://github.com/CodeEditorLand/Cocoon) — `Node.js`/`Effect-TS` extension host
+
+---
+
+## Funding & Acknowledgements&#x2001;🙏🏻
 
 This project is funded through
 [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
