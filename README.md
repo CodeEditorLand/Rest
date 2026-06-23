@@ -5,17 +5,17 @@
 		<td>
 			<a href="https://GitHub.Com/CodeEditorLand/Rest" target="_blank">
 				<picture>
-					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Rest?label=Last-commit&color=black&labelColor=black&logoColor=white&logoWidth=0" />
-					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Rest?label=Last-commit&color=white&labelColor=white&logoColor=black&logoWidth=0" />
-					<img src="https://img.shields.io/github/last-commit/CodeEditorLand/Rest?label=Last-commit&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Last-commit" title="Last-commit" />
+					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Rest?label=Update&color=black&labelColor=black&logoColor=white&logoWidth=0" />
+					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Rest?label=Update&color=white&labelColor=white&logoColor=black&logoWidth=0" />
+					<img src="https://img.shields.io/github/last-commit/CodeEditorLand/Rest?label=Update&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Update" title="Update" />
 				</picture>
 			</a>
 			<br />
 			<a href="https://GitHub.Com/CodeEditorLand/Rest" target="_blank">
 				<picture>
-					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Rest?label=Issues&color=black&labelColor=black&logoColor=white&logoWidth=0" />
-					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Rest?label=Issues&color=white&labelColor=white&logoColor=black&logoWidth=0" />
-					<img src="https://img.shields.io/github/issues/CodeEditorLand/Rest?label=Issues&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Issues" title="Issues" />
+					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Rest?label=Issue&color=black&labelColor=black&logoColor=white&logoWidth=0" />
+					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Rest?label=Issue&color=white&labelColor=white&logoColor=black&logoWidth=0" />
+					<img src="https://img.shields.io/github/issues/CodeEditorLand/Rest?label=Issue&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Issue" title="Issue" />
 				</picture>
 			</a>
 		</td>
@@ -30,9 +30,9 @@
 			<br />
 			<a href="https://GitHub.Com/CodeEditorLand/Rest" target="_blank">
 				<picture>
-					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Rest?label=Downloads&color=black&labelColor=black&logoColor=white&logoWidth=0" />
-					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Rest?label=Downloads&color=white&labelColor=white&logoColor=black&logoWidth=0" />
-					<img src="https://img.shields.io/github/downloads/CodeEditorLand/Rest?label=Downloads&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Downloads" title="Downloads" />
+					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Rest/total?label=Download&color=black&labelColor=black&logoColor=white&logoWidth=0" />
+					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Rest/total?label=Download&color=white&labelColor=white&logoColor=black&logoWidth=0" />
+					<img src="https://img.shields.io/github/downloads/CodeEditorLand/Rest/total?label=Download&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Download" title="Download" />
 				</picture>
 			</a>
 		</td>
@@ -59,20 +59,21 @@ wasted cycles."_
 
 ## Overview
 
-**Rest** is the HTTP/REST API server for the **Land** Code Editor. It provides
-the backend compilation and build API layer that serves the Land web application
+**Rest** is the compilation server for the **Land** Code Editor. When the
+editor needs to compile TypeScript, transform JavaScript, bundle production
+assets, or provide language service operations, it sends an HTTP request to
+Rest.
 
-- orchestrating `OXC` and `SWC` compiler pipelines, handling
-  `TypeScript`/`JavaScript` transformation, bundling via `ESBuild`, and language
-  service operations through `Fn/` handler modules backed by `Struct/` data
-  types.
+Rest runs two compiler backends side by side: **OXC** (a fast Rust-based
+TypeScript 5.x compiler handling parsing, AST transformation, and code
+generation) and **SWC** (an alternative pipeline with its own watch mode).
+Both backends sit behind the same API, so callers don't need to know which
+compiler is active.
 
-Rest was originally designed as a `TypeScript` compiler but has been rebranded
-as the unified compilation API server. It uses two compiler backends - `OXC`
-(Oxidation Compiler) for fast `TypeScript` 5.x parsing, transformation, and code
-generation, and `SWC` (Speedy Web Compiler) as an alternative pipeline. Both
-backends share the same API surface through the `Fn/` handler layer, making them
-interchangeable for different compilation workloads.
+The API is organized into handler modules under `Fn/` — one for builds, one
+for bundling, one for the native language service, one for each compiler, and
+so on. Every request and response type lives in `Struct/`, giving the entire
+API compile-time type checking through Rust's type system.
 
 **Rest is engineered to:**
 
