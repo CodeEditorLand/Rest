@@ -1,4 +1,4 @@
-# **Rest**&#x2001;🛠️
+# **Rest**&#x2001;⛱️
 
 <table>
 	<tr>
@@ -147,7 +147,7 @@ graph LR
     classDef struct   fill:#d4f5d4,stroke:#27ae60,stroke-width:2px,color:#0a3a0a;
     classDef external fill:#f0d0ff,stroke:#9b59b6,stroke-width:1px,stroke-dasharray:5 5,color:#2c0050;
 
-    subgraph REST["Rest 🛠️ - HTTP/REST API Server"]
+    subgraph REST["Rest ⛱️ - HTTP/REST API Server"]
         direction TB
         subgraph HANDLERS["Fn/ - API Handlers"]
             BuildHandler["Build.rs 🏗️ directory compilation API"]:::handler
@@ -172,7 +172,7 @@ graph LR
     end
 
     subgraph EXTERNAL["Land Ecosystem"]
-        Maintain["Maintain 🔧"]:::external
+        Maintain["Maintain 💪🏻"]:::external
         Cocoon["Cocoon 🦋"]:::external
         LandWeb["Land Web App 🏞️"]:::external
     end
@@ -304,7 +304,7 @@ Rest is the compilation backend for the broader Land toolchain:
 
 | Consumer            | Role              | Integration                                                              |
 | ------------------- | ----------------- | ------------------------------------------------------------------------ |
-| **Maintain** 🔧     | Build system      | Compilation, dead-code elimination, and build orchestration via HTTP API |
+| **Maintain** 💪🏻     | Build system      | Compilation, dead-code elimination, and build orchestration via HTTP API |
 | **Cocoon** 🦋       | Extension host    | Extension compilation and transformation via HTTP API                    |
 | **Land Web App** 🏞️ | Frontend          | Primary compilation gateway for the web-based editor                     |
 | **Air** 🪁          | Background daemon | Background compilation and watch-mode coordination                       |
@@ -371,11 +371,11 @@ Rest is designed to be compatible with:
 
 | Target              | Integration                                           |
 | ------------------- | ----------------------------------------------------- |
-| **Maintain** 🔧     | HTTP/REST API for build operations and compilation    |
+| **Maintain** 💪🏻     | HTTP/REST API for build operations and compilation    |
 | **Cocoon** 🦋       | HTTP/REST API for extension host compilation services |
 | **Air** 🪁          | Background compilation and watch-mode coordination    |
 | **Land Web App** 🏞️ | Primary HTTP gateway for the Land frontend            |
-| **Common** 🧩       | Shared trait implementations and type definitions     |
+| **Common** 🧑🏻‍🏭       | Shared trait implementations and type definitions     |
 
 ---
 
