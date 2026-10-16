@@ -768,7 +768,8 @@ fn test_codegen_import_type() {
 	let output = result.unwrap();
 
 	// Type-only imports should be removed or leave empty
-	// Since they're erased, output might be empty or contain only non-type imports
+	// Since they're erased, output might be empty or contain only non-type
+	// imports
 	assert!(
 		output.is_empty() || !output.contains("import type"),
 		"Type-only imports should be erased"

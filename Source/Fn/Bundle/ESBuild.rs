@@ -207,8 +207,8 @@ impl EsbuildWrapper {
 		// Build initial bundle
 		self.build(config)?;
 
-		// Set up file watcher (simplified — would use notify crate in production)
-		// For now, just build once
+		// Set up file watcher (simplified — would use notify crate in
+		// production) For now, just build once
 		tracing::info!("Watch mode enabled. Rebuilding on file changes...");
 
 		Ok(())

@@ -67,8 +67,9 @@ impl BundleBuilder {
 				continue;
 			}
 
-			// Compile using Rest compiler (simulated here — actual implementation
-			// would use the Compiler from Struct/SWC.rs)
+			// Compile using Rest compiler (simulated here — actual
+			// implementation would use the Compiler from
+			// Struct/SWC.rs)
 			let output = self.compile_file(source_path)?;
 
 			// Write output

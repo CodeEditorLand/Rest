@@ -178,7 +178,8 @@ fn test_transform_use_define_for_class_fields_false() {
 
 	let output = result.unwrap();
 
-	// With useDefineForClassFields = false, static properties should use assignment
+	// With useDefineForClassFields = false, static properties should use
+	// assignment
 	assert!(output.contains("VERSION"), "Static property should be present");
 
 	// Check for assignment pattern (could be direct or within static block)
@@ -460,8 +461,8 @@ fn test_transform_static_class_properties_vscode_format() {
 
 	let output = result.unwrap();
 
-	// VSCode compatibility: static properties should be in initializer block format
-	// Expected: static { this.error = ...; }
+	// VSCode compatibility: static properties should be in initializer block
+	// format Expected: static { this.error = ...; }
 	assert!(
 		output.contains("static {") && output.contains("this.error"),
 		"Static properties should be in VSCode initializer block format"
@@ -935,7 +936,8 @@ fn test_transform_ambient_declarations() {
 
 	let output = result.unwrap();
 
-	// Ambient declarations should be removed or preserved as-is depending on target
+	// Ambient declarations should be removed or preserved as-is depending on
+	// target
 	assert!(
 		output.is_empty() || output.contains("declare") || output.contains("module"),
 		"Ambient declarations should be handled"

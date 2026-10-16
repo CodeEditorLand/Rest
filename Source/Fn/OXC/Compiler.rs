@@ -78,7 +78,8 @@ impl Compiler {
 
 		trace!("[Compile #{compile_id}] Input size: {} bytes", input.len());
 
-		// All compilation steps happen in one scope to ensure allocator stays alive
+		// All compilation steps happen in one scope to ensure allocator stays
+		// alive
 		let (codegen_result, output_path) = {
 			info!("[Compile #{compile_id}] Step 1: Parsing TypeScript source");
 
@@ -109,11 +110,11 @@ impl Compiler {
 
 			let transformer_config = self.get_transformer_config();
 
-			// SAFETY: We borrow program with 'static lifetime from parse_result.
-			// This is safe because:
+			// SAFETY: We borrow program with 'static lifetime from
+			// parse_result. This is safe because:
 			// 1. parse_result stays in scope for the entire inner block
-			// 2. The program and allocator are dropped together when parse_result is
-			//    dropped
+			// 2. The program and allocator are dropped together when
+			//    parse_result is dropped
 			// 3. We never use program after parse_result is dropped
 			let program = unsafe {
 				std::mem::transmute::<&mut oxc_ast::ast::Program<'static>, &mut oxc_ast::ast::Program<'_>>(
@@ -265,10 +266,11 @@ impl Compiler {
 
 			transformer_config.use_define_for_class_fields = use_define_for_class_fields;
 
-			// SAFETY: We borrow program with 'static lifetime from parse_result.
-			// This is safe because:
+			// SAFETY: We borrow program with 'static lifetime from
+			// parse_result. This is safe because:
 			// 1. parse_result stays in scope for the entire inner block
-			// 2. The program and allocator are dropped together when parse_result is
+			// 2. The program and allocator are dropped together when
+			//    parse_result is
 			// dropped
 			// 3. We never use program after parse_result is dropped
 			let program = unsafe {

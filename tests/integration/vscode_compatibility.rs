@@ -236,8 +236,8 @@ mod tests {
 
 		std::fs::write(&input_path, source).unwrap();
 
-		// Note: Current Compiler.rs doesn't expose source map option in compile_file
-		// This will need to be added to test properly
+		// Note: Current Compiler.rs doesn't expose source map option in
+		// compile_file This will need to be added to test properly
 		let result = compiler.compile_file(input_path.to_str().unwrap(), source.to_string());
 
 		assert!(result.is_ok());

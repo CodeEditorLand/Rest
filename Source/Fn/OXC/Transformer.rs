@@ -192,7 +192,8 @@ pub fn transform<'a>(
 
 	// Configure TypeScript transformation
 	// Set only_remove_type_imports to true to preserve all value exports
-	// This ensures modules with runtime code (like profiling.ts) emit JavaScript
+	// This ensures modules with runtime code (like profiling.ts) emit
+	// JavaScript
 	let mut typescript_options = TypeScriptOptions::default();
 
 	typescript_options.only_remove_type_imports = true;
@@ -222,7 +223,8 @@ pub fn transform<'a>(
 
 	// Configure compiler assumptions for VSCode compatibility.
 	// The `use_define_for_class_fields` flag from TypeScript:
-	// - false => loose mode (direct assignment) => set_public_class_fields = true
+	// - false => loose mode (direct assignment) => set_public_class_fields =
+	//   true
 	// - true => strict mode (defineProperty) => set_public_class_fields = false
 	let mut assumptions = CompilerAssumptions::default();
 

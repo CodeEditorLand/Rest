@@ -143,9 +143,9 @@ pub fn parse(source_text:&str, file_path:&str, config:&ParserConfig) -> Result<P
 	//   // parse_result dropped -> allocator freed -> program is dangling!
 	//
 	// THE FIX in Compiler.rs:
-	//   let program = &mut parse_result.program;  // Borrow mutably, don't move!
-	//   Transformer::transform(&parse_result.allocator, program, ...);
-	//   // parse_result stays in scope -> allocator stays alive
+	//   let program = &mut parse_result.program;  // Borrow mutably, don't
+	// move!   Transformer::transform(&parse_result.allocator, program,
+	// ...);   // parse_result stays in scope -> allocator stays alive
 	let program = unsafe {
 		std::mem::transmute::<oxc_ast::ast::Program<'_>, oxc_ast::ast::Program<'static>>(parser_return.program)
 	};
