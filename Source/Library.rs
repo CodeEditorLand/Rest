@@ -37,27 +37,13 @@
 //!
 //! - [`Fn`]: Core bundling functions and OXC integration
 //! - [`Struct`]: Configuration structures and CLI command definitions
-
-#[allow(dead_code)]
-#[tokio::main]
-/// Initialises the command structure and dispatches the asynchronous
-/// command pipeline.
-///
-/// Sets up the CLI argument parser, resolves the subcommand (e.g.
-/// `compile`), and runs the selected operation through the Rest build
-/// pipeline.
-///
-/// # Panics
-///
-/// Does not panic.
-///
-/// # Example
-///
-/// ```rust,no_run
-/// #[tokio::main]
-/// async fn main() { (Struct::Binary::Command::Struct::Fn().Fn)().await }
-/// ```
-async fn main() { (Struct::Binary::Command::Struct::Fn().Fn)().await }
+//!
+//! ## Binary target
+//!
+//! The `Rest` binary (`Source/Main.rs`) brings up dual-pipe telemetry and
+//! dispatches the CLI through `Struct::Binary::Command`. This library
+//! deliberately exposes no `main` - command dispatch belongs to the binary
+//! target, so the two targets cannot drift apart.
 
 /// Core bundling functions and OXC integration.
 pub mod Fn;
